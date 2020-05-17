@@ -1,4 +1,4 @@
-from src import *
+from pyate import *
 
 if __name__ == "__main__":
     corpus = "Hello world! I am a term extractor"

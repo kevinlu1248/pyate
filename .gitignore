@@ -4,3 +4,8 @@ MANIFEST
 setup.py
 setup.cfg
 dist
+pyate.egg-info
+src/pyate.egg-info
+src/pyate/__pycache__
+src/pyate/pyate.egg-info
+*.whl
