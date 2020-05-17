@@ -7,7 +7,7 @@ Python implementation of term extraction algorithms such as C-Value, Basic, Comb
 ## Installation
 Using pip:
 ```bash
-pip install pyate
+pip install pyate https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-2.2.5/en_core_web_sm-2.2.5.tar.gz
 ```
 
 ## Quickstart

@@ -32,7 +32,9 @@ class TermExtraction:
     nlp = spacy.load("en_core_web_sm", parser=False, entity=False)
     matcher = Matcher(nlp.vocab)
     MAX_WORD_LENGTH = 6
-    DEFAULT_GENERAL_DOMAIN = pd.read_csv('pyate/default_general_domain.csv')['SECTION_TEXT']
+    DEFAULT_GENERAL_DOMAIN = pd.read_csv("pyate/default_general_domain.csv")[
+        "SECTION_TEXT"
+    ]
     DEFAULT_GENERAL_DOMAIN_SIZE = 300
 
     noun, adj, prep = (

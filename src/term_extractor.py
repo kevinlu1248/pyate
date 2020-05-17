@@ -66,6 +66,7 @@ def term_extractor(
         technical_corpus, term_words
     ).count_terms_from_documents()
     lexical_cohesion = technical_counts
+
     def lexical_cohesion_function(row):
         word, freq = row.iloc
         return (

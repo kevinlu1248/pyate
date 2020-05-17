@@ -6,6 +6,7 @@ from tqdm import tqdm
 import pandas as pd
 from .term_extraction import TermExtraction, add_term_extraction_method
 
+
 def helper_get_subsequences(s):
     sequence = s.split()
     if len(sequence) <= 2:
@@ -26,7 +27,7 @@ def cvalues(
     verbose=False,
     have_single_word=False,
     technical_counts=None,
-    threshold=0
+    threshold=0,
 ):
 
     if technical_counts is None:

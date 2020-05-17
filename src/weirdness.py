@@ -24,7 +24,9 @@ def weirdness(
         general_corpus = TermExtraction.DEFAULT_GENERAL_DOMAIN[:general_corpus_size]
 
     if technical_counts is None:
-        technical_counts = TermExtraction(technical_corpus).count_terms_from_documents(verbose=verbose)
+        technical_counts = TermExtraction(technical_corpus).count_terms_from_documents(
+            verbose=verbose
+        )
     general_counts = TermExtraction(
         general_corpus, technical_counts.index
     ).count_terms_from_documents()

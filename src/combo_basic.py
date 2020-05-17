@@ -5,6 +5,7 @@ import numpy as np
 from tqdm import tqdm
 from .term_extraction import TermExtraction, add_term_extraction_method
 
+
 def helper_get_subsequences(s):
     sequence = s.split()
     if len(sequence) <= 2:
