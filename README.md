@@ -25,17 +25,18 @@ relationship between cancer and inflammation with particular focus on how consid
 processes such as the maintenance of tissue homeostasis and repair may provide a logical framework for understanding the 
 connection between the inflammatory response and cancer."""
 
-combo_basic(string) 
+combo_basic(s).sort_values(ascending=False) 
 """ (Output)
-dysfunctional tumor suppressors    1.298612                                                                   
-genetic changes                    1.386294                                                                   
-cancer cells                       1.386294                                                                   
-sufficient growth                  0.693147                                                                   
-death signals                      0.693147                                                                   
-dysfunctional tumor                1.443147                                                                   
-tumor suppressors                  1.443147                                                                   
-many aspects                       0.693147                                                                   
-cancer development                 0.693147                                                                   
+dysfunctional tumor                1.443147
+tumor suppressors                  1.443147
+genetic changes                    1.386294
+cancer cells                       1.386294
+dysfunctional tumor suppressors    1.298612
+logical framework                  0.693147
+sufficient growth                  0.693147
+death signals                      0.693147
+many aspects                       0.693147
+inflammatory response              0.693147
 tumor promotion                    0.693147
 ancillary processes                0.693147
 tumor environment                  0.693147
@@ -43,8 +44,7 @@ reflexive relationship             0.693147
 particular focus                   0.693147
 physiologic processes              0.693147
 tissue homeostasis                 0.693147
-logical framework                  0.693147
-inflammatory response              0.693147
+cancer development                 0.693147
 dtype: float64
 """
 ```
