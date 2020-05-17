@@ -4,28 +4,7 @@ import time
 import math
 from tqdm import tqdm
 import pandas as pd
-from term_extraction import TermExtraction, add_term_extraction_method
-
-start_ = 0
-tmp = 0
-# TOTAL_WORK = 27768
-# success = 27768
-# pbar = tqdm(total=27768)
-
-
-def start():
-    global start_
-    start_ = time.time()
-
-
-def end():
-    global start_
-    print(time.time() - start_)
-
-
-MAX_WORD_LENGTH = 6
-THRESHOLD = 0
-
+from .term_extraction import TermExtraction, add_term_extraction_method
 
 def helper_get_subsequences(s):
     sequence = s.split()
@@ -41,12 +20,13 @@ def helper_get_subsequences(s):
 
 
 @add_term_extraction_method
-def c_values(
+def cvalues(
     technical_corpus,
     smoothing=0.01,
     verbose=False,
     have_single_word=False,
     technical_counts=None,
+    threshold=0
 ):
 
     if technical_counts is None:
@@ -84,31 +64,24 @@ def c_values(
     for candidate, row in iterator:
         f, t, n, h = row
         length = TermExtraction.word_length(candidate)
-        if length == MAX_WORD_LENGTH:
+        if length == TermExtraction.MAX_WORD_LENGTH:
             c_val = math.log(length + smoothing) * f
         else:
             c_val = math.log(length + smoothing) * f
             if h:
                 c_val -= t / n
-        if c_val >= THRESHOLD:
+        if c_val >= threshold:
             output.append((candidate, c_val))
-            nstart = time.time()  # TODO: optimize
             for substring in helper_get_subsequences(candidate):
                 if substring in indices:
                     df.loc[substring, "times_nested"] += 1
                     df.loc[substring, "number_of_nested"] += f
                     df.loc[substring, "has_been_evaluated"] = True
-            global tmp
-            tmp += time.time() - nstart
 
     srs = pd.Series(map(lambda s: s[1], output), index=map(lambda s: s[0], output))
     return srs.sort_values(ascending=False)
 
 
 if __name__ == "__main__":
-    import pickle
-
-    pkl = pickle.load(open("../data/pmc_testing.pkl", "rb"))
-    corpus = pkl
-    print(list(TermExtraction(pkl[0]).c_values(verbose=True).index))
-    print(pkl[0])
+    corpus = "Hello, I am a term extractor."
+    print(TermExtraction(corpus).cvalues(verbose=True))

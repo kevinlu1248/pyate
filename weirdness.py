@@ -5,29 +5,8 @@ import pickle
 import time
 import math
 import json
-from tqdm import tqdm
 import pandas as pd
-
-# from pathos.multiprocessing import ProcessingPool as Pool
-from multiprocessing import Pool
-from spacy.matcher import Matcher
-from collections import defaultdict
-from multiprocessing.pool import Pool
-import ahocorasick
-from term_extraction import TermExtraction
-
-start_ = 0
-tmp = 0
-
-
-def start():
-    global start_
-    start_ = time.time()
-
-
-def end():
-    global start_
-    print(time.time() - start_)
+from pyate.term_extraction import TermExtraction, add_term_extraction_method
 
 @add_term_extraction_method
 def weirdness(technical_corpus, general_corpus, normalized=False, technical_counts=None):

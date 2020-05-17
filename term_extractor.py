@@ -6,23 +6,7 @@ import time
 import math
 import pandas as pd
 import numpy as np
-from term_extraction import TermExtraction
-
-# from sklearn import preprocessing
-
-start_ = 0
-tmp = 0
-
-
-def start():
-    global start_
-    start_ = time.time()
-
-
-def end():
-    global start_
-    print(time.time() - start_)
-
+from pyate.term_extraction import TermExtraction, add_term_extraction_method
 
 def domain_pertinence(technical_corpus, general_corpus):
     # http://ceur-ws.org/Vol-1031/paper3.pdf
@@ -85,7 +69,6 @@ def term_extractor(technical_corpus, general_corpus, weights=None, verbose=False
 
     def lexical_cohesion_function(row):
         word, freq = row.iloc
-        # print(word, freq)
         return (
             TermExtraction.word_length(word)
             * XLOGX(freq)  # remove plus 1 later

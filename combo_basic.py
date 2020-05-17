@@ -1,9 +1,9 @@
 # combo basic
 import math
-from tqdm import tqdm
 import pandas as pd
 import numpy as np
-from term_extraction import TermExtraction, add_term_extraction_method
+from tqdm import tqdm
+from .term_extraction import TermExtraction, add_term_extraction_method
 
 def helper_get_subsequences(s):
     sequence = s.split()
@@ -35,6 +35,9 @@ def combo_basic(
             .reindex()
         )
 
+    if len(technical_counts) == 0:
+        return pd.Series()
+
     order = sorted(
         list(technical_counts.keys()), key=TermExtraction.word_length, reverse=True
     )
@@ -59,19 +62,9 @@ def combo_basic(
     )
 
     indices = set(technical_counts.index)
+    iterator = tqdm(technical_counts.index) if verbose else technical_counts.index
 
-    def score_of_children(candidate):
-        df.at[candidate, "times_subset"] += 1
-        if TermExtraction.word_length(candidate) is 1:
-            return 1
-        sm = 1
-        for substring in helper_get_subsequences(candidate):
-            if substring in indices:
-                df.at[substring, "times_subset"] += 1
-                df.at[substring, "times_subset"] += 1
-        return sm
-
-    for index in technical_counts.index:
+    for index in iterator:
         for substring in helper_get_subsequences(index):
             if substring in indices:
                 df.at[substring, "times_subset"] += 1
@@ -83,10 +76,5 @@ def combo_basic(
 
 
 if __name__ == "__main__":
-    # import pickle
-
-    # pkl = pickle.load(open("../data/pmc_testing.pkl", "rb"))
-    # print(len(pkl))
-    # corpus = pkl
-    pkl = "Hello I am a good extractor."
-    print(TermExtraction(pkl).combo_basic().sort_values(ascending=False).head(50))
+    corpus = "Hello I am a term extractor."
+    print(TermExtraction(corpus).combo_basic().sort_values(ascending=False).head(50))

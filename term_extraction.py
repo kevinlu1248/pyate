@@ -103,8 +103,12 @@ class TermExtraction:
         return term_counter
 
     def count_terms_from_documents(self, seperate=False, verbose=False):
+        if hasattr(self, "_TermExtraction__term_counts"):
+            return self.__term_counts
+
         if type(self.corpus) is str:
-            term_counter = pd.Series(self.count_terms_from_document(self.corpus))
+            self.__term_counts = pd.Series(self.count_terms_from_document(self.corpus))
+            return self.__term_counts
         elif type(self.corpus) is list or type(self.corpus) is pd.Series:
             if seperate:
                 term_counters = []
@@ -160,14 +164,14 @@ class TermExtraction:
             def counter_to_series(counter):
                 return pd.Series(data=counter[1], index=counter[0], dtype="int8")
 
-            return (
-                pd.DataFrame(data=map(counter_to_series, term_counters))
+            self.__term_counter = pd.DataFrame(data=map(counter_to_series, term_counters))
                 .fillna(0)
                 .astype("int8")
                 .T
-            )
+            return self.__term_counter
         else:
-            return term_counter
+            self.__term_counter = term_counter
+            return self.__term_counter
 
 
 def add_term_extraction_method(extractor):
@@ -181,7 +185,6 @@ if __name__ == "__main__":
     PATH_TO_TECHNICAL_DOMAIN = "../data/pmc_testing.pkl"
     wiki = pd.read_pickle(PATH_TO_GENERAL_DOMAIN)
     pmc = pd.read_pickle(PATH_TO_TECHNICAL_DOMAIN)
-    # print(pmc, '\n', wiki)
     vocab = ["Cutaneous melanoma", "cancer", "secondary clusters", "bio"]
     start()
     print(
@@ -190,4 +193,3 @@ if __name__ == "__main__":
         )
     )
     end()
-    # print(domain_pertinence(pmc[0], wiki[0]))
