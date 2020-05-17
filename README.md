@@ -4,6 +4,8 @@
 
 Python implementation of term extraction algorithms such as C-Value, Basic, Combo Basic, Weirdness and Term Extractor using Spacy POS tagging.
 
+Warning: Weirdness and Term Extractor doesn't work through pip at the moment due to errors with upload CSV files.
+
 ## Installation
 Using pip:
 ```bash
