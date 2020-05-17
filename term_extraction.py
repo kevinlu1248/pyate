@@ -6,8 +6,6 @@ import time
 import math
 from tqdm import tqdm
 import pandas as pd
-
-# from pathos.multiprocessing import ProcessingPool as Pool
 from multiprocessing import Pool
 from spacy.matcher import Matcher
 from collections import defaultdict
@@ -105,7 +103,6 @@ class TermExtraction:
         return term_counter
 
     def count_terms_from_documents(self, seperate=False, verbose=False):
-
         if type(self.corpus) is str:
             term_counter = pd.Series(self.count_terms_from_document(self.corpus))
         elif type(self.corpus) is list or type(self.corpus) is pd.Series:
@@ -155,7 +152,6 @@ class TermExtraction:
             P.terminate()
             if verbose:
                 pbar.close()
-            # print(term_counter)
         else:
             raise TypeError()
 

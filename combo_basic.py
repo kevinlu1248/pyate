@@ -5,27 +5,6 @@ import pandas as pd
 import numpy as np
 from term_extraction import TermExtraction, add_term_extraction_method
 
-start_ = 0
-tmp = 0
-# TOTAL_WORK = 27768
-# success = 27768
-# pbar = tqdm(total=27768)
-
-
-def start():
-    global start_
-    start_ = time.time()
-
-
-def end():
-    global start_
-    print(time.time() - start_)
-
-
-MAX_WORD_LENGTH = 6
-THRESHOLD = 0
-
-
 def helper_get_subsequences(s):
     sequence = s.split()
     if len(sequence) <= 2:
@@ -48,8 +27,6 @@ def combo_basic(
     technical_counts=None,
     weights=None,
 ):
-
-    # TODO
 
     if technical_counts is None:
         technical_counts = (
@@ -106,9 +83,10 @@ def combo_basic(
 
 
 if __name__ == "__main__":
-    import pickle
+    # import pickle
 
-    pkl = pickle.load(open("../data/pmc_testing.pkl", "rb"))
-    print(len(pkl))
-    corpus = pkl
-    print(TermExtraction(pkl[0]).combo_basic().sort_values(ascending=False).head(50))
+    # pkl = pickle.load(open("../data/pmc_testing.pkl", "rb"))
+    # print(len(pkl))
+    # corpus = pkl
+    pkl = "Hello I am a good extractor."
+    print(TermExtraction(pkl).combo_basic().sort_values(ascending=False).head(50))

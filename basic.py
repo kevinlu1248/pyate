@@ -12,8 +12,5 @@ def basic(technical_corpus, *args, **kwargs):
     return combo_basic(technical_corpus, weights=weights, *args, **kwargs)
 
 if __name__ == "__main__":
-    import pickle
-    pkl = pickle.load(open("../data/pmc_testing.pkl", "rb"))
-    print(len(pkl))
-    corpus = pkl
-    print(TermExtraction(pkl[0]).basic().sort_values(ascending=False).head(50))
+    pkl = "hello world"
+    print(TermExtraction(pkl).basic().sort_values(ascending=False).head(50))
