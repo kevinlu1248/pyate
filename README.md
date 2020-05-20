@@ -13,6 +13,7 @@ pip install pyate https://github.com/explosion/spacy-models/releases/download/en
 ```
 
 ## Quickstart
+To get started, simply call one of the implemented algorithms. According to studies, `combo_basic` is the most precise, though `basic` and `cvalue` is not too far behind.
 ```python3
 from pyate import combo_basic
 
@@ -27,7 +28,7 @@ relationship between cancer and inflammation with particular focus on how consid
 processes such as the maintenance of tissue homeostasis and repair may provide a logical framework for understanding the 
 connection between the inflammatory response and cancer."""
 
-combo_basic(string).sort_values(ascending=False) 
+print(combo_basic(string).sort_values(ascending=False))
 """ (Output)
 dysfunctional tumor                1.443147
 tumor suppressors                  1.443147
@@ -50,9 +51,31 @@ cancer development                 0.693147
 dtype: float64
 """
 ```
+If you would like to add this to a spacy pipeline, simply use add Spacy's `add_pipe` method.
+```python3
+import spacy
+from pyate.term_extraction_pipeline import TermExtractionPipeline
+
+nlp = spacy.load("en_core_web_sm")
+nlp.add_pipeline(TermExtractionPipeline())
+doc = nlp(string)
+print(doc._.combo_basic.sort_values(ascending=False).head(5))
+""" (Output)
+dysfunctional tumor                1.443147
+tumor suppressors                  1.443147
+genetic changes                    1.386294
+cancer cells                       1.386294
+dysfunctional tumor suppressors    1.298612
+dtype: float64
+"""
+```
 
 ## Summary of functions 
-Each of ```c_value, basic, combo_basic, weirdness``` and ```term_extractor``` take in a string, list or Pandas Series and outputs a Pandas Series of term-value pairs, where higher values indicate higher chance of being a domain specific term. 
+Each of `cvalue, basic, combo_basic, weirdness` and `term_extractor` take in a string or an iterator of strings and outputs a Pandas Series of term-value pairs, where higher values indicate higher chance of being a domain specific term. Furthermore, `weirdness` and `term_extractor` take a `general_corpus` key word argument which must be an iterator of strings.
+
+## Todo
+* Add PU-ATR algorithm since its precision is a lot higher, though more computationally expensive
+* Add sources
 
 ## Sources
 * TODO
