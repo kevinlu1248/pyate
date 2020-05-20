@@ -69,6 +69,16 @@ dysfunctional tumor suppressors    1.298612
 dtype: float64
 """
 ```
+Also, `TermExtractionPipeline.__init__` is defined as follows
+```
+__init__(
+  self,
+  func: Callable[..., pd.Series] = combo_basic,
+  *args,
+  **kwargs
+)
+```
+where `func` is essentially your term extracting algorithm that takes in a corpus (either a string or iterator of strings) and outputs a Pandas Series of term-value pairs of terms and their respective termhoods. `func` is by default `combo_basic`.
 
 ## Summary of functions 
 Each of `cvalue, basic, combo_basic, weirdness` and `term_extractor` take in a string or an iterator of strings and outputs a Pandas Series of term-value pairs, where higher values indicate higher chance of being a domain specific term. Furthermore, `weirdness` and `term_extractor` take a `general_corpus` key word argument which must be an iterator of strings.
