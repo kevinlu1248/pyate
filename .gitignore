@@ -9,3 +9,5 @@ src/pyate.egg-info
 src/pyate/__pycache__
 src/pyate/pyate.egg-info
 *.whl
+*/RECORD
+venv

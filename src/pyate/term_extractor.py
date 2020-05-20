@@ -1,26 +1,30 @@
 # c_value
 
-import spacy
-import pickle
 import time
 import math
+from typing import Mapping, Sequence
+
+import spacy
+import pickle
 import pandas as pd
 import numpy as np
-from .term_extraction import TermExtraction, add_term_extraction_method
+
+from .term_extraction import TermExtraction, add_term_extraction_method, Corpus
 
 
 @add_term_extraction_method
 def term_extractor(
-    technical_corpus,
-    general_corpus=None,
-    general_corpus_size=TermExtraction.DEFAULT_GENERAL_DOMAIN_SIZE,
-    weights=None,
-    verbose=False,
-    technical_counts=None,
+    technical_corpus: Corpus,
+    general_corpus: Corpus,
+    # general_corpus_size=TermExtraction.DEFAULT_GENERAL_DOMAIN_SIZE,
+    weights: Sequence[float] = None,
+    verbose: bool = False,
+    technical_counts: Mapping[str, int] = None,
 ):
 
-    if general_corpus is None:
-        general_corpus = TermExtraction.DEFAULT_GENERAL_DOMAIN[:100]
+    # if general_corpus is None:
+    # general_corpus = TermExtraction.DEFAULT_GENERAL_DOMAIN[:100]
+
     # reused initializations
     technical_counts_seperate = TermExtraction(
         technical_corpus

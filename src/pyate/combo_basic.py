@@ -1,12 +1,15 @@
 # combo basic
 import math
+from typing import List, Mapping, Sequence
+
 import pandas as pd
 import numpy as np
 from tqdm import tqdm
-from .term_extraction import TermExtraction, add_term_extraction_method
+
+from .term_extraction import TermExtraction, add_term_extraction_method, Corpus
 
 
-def helper_get_subsequences(s):
+def helper_get_subsequences(s: str) -> List[str]:
     sequence = s.split()
     if len(sequence) <= 2:
         return []
@@ -21,12 +24,12 @@ def helper_get_subsequences(s):
 
 @add_term_extraction_method
 def combo_basic(
-    technical_corpus,
-    smoothing=0.01,
-    verbose=False,
-    have_single_word=False,
-    technical_counts=None,
-    weights=None,
+    technical_corpus: Corpus,
+    smoothing: float=0.01,
+    verbose: bool=False,
+    have_single_word: bool=False,
+    technical_counts: Mapping[str, int]=None,
+    weights: Sequence[float]=None,
 ):
 
     if technical_counts is None:

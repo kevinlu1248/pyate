@@ -1,27 +1,30 @@
-# c_value
+# weirdness.py
 
-import spacy
 import pickle
 import time
 import math
 import json
+from typing import Mapping
+
+import spacy
 import pandas as pd
-from .term_extraction import TermExtraction, add_term_extraction_method
+
+from .term_extraction import TermExtraction, add_term_extraction_method, Corpus
 
 
 @add_term_extraction_method
 def weirdness(
-    technical_corpus,
-    general_corpus=None,
-    general_corpus_size=TermExtraction.DEFAULT_GENERAL_DOMAIN_SIZE,
-    normalized=False,
-    technical_counts=None,
-    verbose=False,
-):
+    technical_corpus: Corpus,
+    general_corpus: Corpus,
+    # general_corpus_size=TermExtraction.DEFAULT_GENERAL_DOMAIN_SIZE, TODO
+    normalized: bool=False,
+    technical_counts: Mapping[str, int]=None,
+    verbose: bool=False,
+) -> pd.Series:
     # http://ceur-ws.org/Vol-1031/paper3.pdf
 
-    if general_corpus is None:
-        general_corpus = TermExtraction.DEFAULT_GENERAL_DOMAIN[:general_corpus_size]
+    # if general_corpus is None:
+    #     general_corpus = TermExtraction.DEFAULT_GENERAL_DOMAIN[:general_corpus_size]
 
     if technical_counts is None:
         technical_counts = TermExtraction(technical_corpus).count_terms_from_documents(
@@ -51,6 +54,5 @@ if __name__ == "__main__":
     PATH_TO_TECHNICAL_DOMAIN = "../data/pmc_testing.pkl"
     wiki = pd.read_pickle(PATH_TO_GENERAL_DOMAIN)
     pmc = pd.read_pickle(PATH_TO_TECHNICAL_DOMAIN)
-    # print(pmc, '\n', wiki)
     pairdf = weirdness(pmc[:200], wiki[:500])
     print(pairdf.sort_values(ascending=False).head(50))

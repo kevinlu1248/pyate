@@ -4,3 +4,4 @@ from .combo_basic import combo_basic
 from .cvalues import cvalues
 from .term_extractor import term_extractor
 from .weirdness import weirdness
+from .term_extraction_pipeline import TermExtractionPipeline

@@ -1,21 +1,24 @@
 # c_value
 
-import spacy
 import pickle
 import time
 import math
+from collections import Iterable
+from multiprocessing import Pool
+from typing import Iterable, Union, Sequence, Callable
+
+import spacy
+from spacy.matcher import Matcher
 from tqdm import tqdm
 import pandas as pd
-from multiprocessing import Pool
-from spacy.matcher import Matcher
 from collections import defaultdict
-from multiprocessing.pool import Pool
 import ahocorasick
 import numpy as np
 
 start_ = 0
 tmp = 0
 doctime, matchertime = 0, 0
+Corpus = Union[str, Sequence[str]] 
 
 
 def start():
@@ -32,9 +35,10 @@ class TermExtraction:
     nlp = spacy.load("en_core_web_sm", parser=False, entity=False)
     matcher = Matcher(nlp.vocab)
     MAX_WORD_LENGTH = 6
-    DEFAULT_GENERAL_DOMAIN = pd.read_csv("pyate/default_general_domain.csv")[
-        "SECTION_TEXT"
-    ]
+    # DEFAULT_GENERAL_DOMAIN = pd.read_csv("pyate/default_general_domain.csv")[
+    #     "SECTION_TEXT"
+    # ] TODO: FIX
+    DEFAULT_GENERAL_DOMAIN = None
     DEFAULT_GENERAL_DOMAIN_SIZE = 300
 
     noun, adj, prep = (
@@ -55,7 +59,13 @@ class TermExtraction:
         ],
     ]
 
-    def __init__(self, corpus, vocab=None, patterns=patterns, do_parallelize=True):
+    def __init__(
+        self,
+        corpus: Union[str, Iterable[str]],
+        vocab: Sequence[str] = None,
+        patterns=patterns,
+        do_parallelize: bool = True,
+    ):
         """
         If corpus is a string, then find vocab sequentially, but if the corpus is an iterator,
         compute in parallel. If there is a vocab list, only search for frequencies from the vocab list, 
@@ -69,7 +79,7 @@ class TermExtraction:
         self.do_parallelize = do_parallelize
 
     @staticmethod
-    def word_length(string):
+    def word_length(string: str):
         return string.count(" ") + 1
 
     @property
@@ -81,7 +91,7 @@ class TermExtraction:
             self.__trie.make_automaton()
         return self.__trie
 
-    def count_terms_from_document(self, document):
+    def count_terms_from_document(self, document: str):
         # for single documents
         term_counter = defaultdict(int)
         if self.vocab is None:
@@ -107,14 +117,15 @@ class TermExtraction:
                 term_counter[original_value] += 1
         return term_counter
 
-    def count_terms_from_documents(self, seperate=False, verbose=False):
+    def count_terms_from_documents(self, seperate: bool = False, verbose: bool = False):
         if hasattr(self, "_TermExtraction__term_counts"):
             return self.__term_counts
 
         if type(self.corpus) is str:
             self.__term_counts = pd.Series(self.count_terms_from_document(self.corpus))
             return self.__term_counts
-        elif type(self.corpus) is list or type(self.corpus) is pd.Series:
+        # elif type(self.corpus) is list or type(self.corpus) is pd.Series:
+        elif isinstance(self.corpus, Iterable):
             if seperate:
                 term_counters = []
             else:
@@ -146,7 +157,6 @@ class TermExtraction:
 
             P = Pool()
 
-            # start_ = time.time()
             for document in self.corpus:
                 P.apply_async(
                     self.count_terms_from_document,
@@ -156,7 +166,6 @@ class TermExtraction:
                 )
             P.close()
             P.join()
-            # print(time.time() - start_)
 
             P.terminate()
             if verbose:
@@ -181,8 +190,8 @@ class TermExtraction:
             return self.__term_counter
 
 
-def add_term_extraction_method(extractor):
-    def decorated(self, *args, **kwargs):
+def add_term_extraction_method(extractor: Callable[..., pd.Series]):
+    def term_extraction_decoration(self, *args, **kwargs):
         return extractor(
             self.corpus,
             technical_counts=self.count_terms_from_documents(),
@@ -190,7 +199,7 @@ def add_term_extraction_method(extractor):
             **kwargs
         )
 
-    setattr(TermExtraction, extractor.__name__, decorated)
+    setattr(TermExtraction, extractor.__name__, term_extraction_decoration)
     return extractor
 
 

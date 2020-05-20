@@ -1,8 +1,13 @@
-from pyate import *
+from src import *
+import spacy
 
 if __name__ == "__main__":
     corpus = "Hello world! I am a term extractor"
-    term_extraction = TermExtraction(corpus)
-    functions = (basic, combo_basic, cvalues, term_extractor, weirdness)
-    for f in functions:
-        print(f.__name__, "\n", f(corpus), "\n")
+    nlp = spacy.load("en_core_web_sm")
+
+    functions = (basic, combo_basic, cvalues)
+    for func in functions:
+        nlp.add_pipe(TermExtractionPipeline(func), func.__name__)
+    doc = nlp(corpus)
+    for func in functions:
+        print(func.__name__, "\n", getattr(doc._, func.__name__), "\n")
