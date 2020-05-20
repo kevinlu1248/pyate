@@ -94,6 +94,11 @@ I can not seem to find the original Basic and Combo Basic papers but I found pap
 * [Domain-independent term extraction through domain modelling](https://aran.library.nuigalway.ie/handle/10379/4130)
 * [ATR4S: Toolkit with State-of-the-art Automatic Terms Recognition Methods in Scala](https://arxiv.org/abs/1611.07804)
 * [TermExtractor: a Web Application to Learn the Shared Terminology of Emergent Web Communities](https://link.springer.com/chapter/10.1007/978-1-84628-858-6_32)
+* [Learning Domain Ontologies from
+Document Warehouses and Dedicated
+Web Sites](https://www.aclweb.org/anthology/J04-2002.pdf)
 * [A Comparative Evaluation of Term Recognition Algorithms](https://www.aclweb.org/anthology/L08-1281/)
 * [SemRe-Rank: Improving Automatic Term Extraction By Incorporating
 Semantic Relatedness With Personalised PageRank](https://arxiv.org/pdf/1711.03373.pdf)
+* [Term extraction: A Review
+Draft Version 091221](https://www.ida.liu.se/~larah03/Publications/tereview_v2.pdf)
