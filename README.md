@@ -78,14 +78,22 @@ __init__(
   **kwargs
 )
 ```
-where `func` is essentially your term extracting algorithm that takes in a corpus (either a string or iterator of strings) and outputs a Pandas Series of term-value pairs of terms and their respective termhoods. `func` is by default `combo_basic`.
+where `func` is essentially your term extracting algorithm that takes in a corpus (either a string or iterator of strings) and outputs a Pandas Series of term-value pairs of terms and their respective termhoods. `func` is by default `combo_basic`. `args` and `kwargs` are for you to overide default values for the function, which you can find by running `help` (might document later on).
 
 ## Summary of functions 
 Each of `cvalue, basic, combo_basic, weirdness` and `term_extractor` take in a string or an iterator of strings and outputs a Pandas Series of term-value pairs, where higher values indicate higher chance of being a domain specific term. Furthermore, `weirdness` and `term_extractor` take a `general_corpus` key word argument which must be an iterator of strings.
 
 ## Todo
 * Add PU-ATR algorithm since its precision is a lot higher, though more computationally expensive
+* Page Rank algorithm
 * Add sources
 
 ## Sources
-* TODO
+I can not seem to find the original Basic and Combo Basic papers but I found papers that referenced them.
+* [Automatic Recognition of Multi-word Terms: The C-value/ NC-value Method](https://www.researchgate.net/publication/220387502_Automatic_Recognition_of_Multi-word_Terms_The_C-value_NC-value_Method)
+* [Domain-independent term extraction through domain modelling](https://aran.library.nuigalway.ie/handle/10379/4130)
+* [ATR4S: Toolkit with State-of-the-art Automatic Terms Recognition Methods in Scala](https://arxiv.org/abs/1611.07804)
+* [TermExtractor: a Web Application to Learn the Shared Terminology of Emergent Web Communities](https://link.springer.com/chapter/10.1007/978-1-84628-858-6_32)
+* [A Comparative Evaluation of Term Recognition Algorithms](https://www.aclweb.org/anthology/L08-1281/)
+* [SemRe-Rank: Improving Automatic Term Extraction By Incorporating
+Semantic Relatedness With Personalised PageRank](https://arxiv.org/pdf/1711.03373.pdf)
