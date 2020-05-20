@@ -4,6 +4,8 @@
 
 Python implementation of term extraction algorithms such as C-Value, Basic, Combo Basic, Weirdness and Term Extractor using Spacy POS tagging.
 
+Warning: Weirdness and Term Extractor doesn't work through pip at the moment due to errors with upload CSV files.
+
 ## Installation
 Using pip:
 ```bash
@@ -25,7 +27,7 @@ relationship between cancer and inflammation with particular focus on how consid
 processes such as the maintenance of tissue homeostasis and repair may provide a logical framework for understanding the 
 connection between the inflammatory response and cancer."""
 
-combo_basic(s).sort_values(ascending=False) 
+combo_basic(string).sort_values(ascending=False) 
 """ (Output)
 dysfunctional tumor                1.443147
 tumor suppressors                  1.443147
