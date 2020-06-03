@@ -51,6 +51,9 @@ def combo_basic(
 
     technical_counts = technical_counts[order]
 
+    if len(technical_counts) == 0:
+        return pd.Series()
+
     df = pd.DataFrame(
         {
             "xlogx_score": technical_counts.reset_index()
