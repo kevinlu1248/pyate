@@ -15,7 +15,7 @@ pip install pyate https://github.com/explosion/spacy-models/releases/download/en
 ```
 
 ## Quickstart
-To get started, simply call one of the implemented algorithms. According to studies, `combo_basic` is the most precise, though `basic` and `cvalue` is not too far behind.
+To get started, simply call one of the implemented algorithms. According to Astrakhantsev 2016, `combo_basic` is the most precise of the five algorithms, though `basic` and `cvalue` is not too far behind. The same study shows that PU-ATR and KeyConceptRel have higher precision than `combo_basic` but are not implemented and PU-ATR take significantly more time since it uses machine learning.
 ```python3
 from pyate import combo_basic
 
@@ -107,9 +107,11 @@ Name: SECTION_TEXT, dtype: object
 * Add PU-ATR algorithm since its precision is a lot higher, though more computationally expensive
 * Page Rank algorithm
 * Add sources
+* Add voting algorithm and capabilities
+* Optimize perhaps using Cython, however, the bottleneck is POS tagging by Spacy so this will not help much
 
 ## Sources
-I can not seem to find the original Basic and Combo Basic papers but I found papers that referenced them.
+I can not seem to find the original Basic and Combo Basic papers but I found papers that referenced them. "ATR4S: Toolkit with State-of-the-art Automatic Terms Recognition Methods in Scala" more or less summarizes everything and incorporates several algorithms not incorporated in this package.
 * [Automatic Recognition of Multi-word Terms: The C-value/ NC-value Method](https://www.researchgate.net/publication/220387502_Automatic_Recognition_of_Multi-word_Terms_The_C-value_NC-value_Method)
 * [Domain-independent term extraction through domain modelling](https://aran.library.nuigalway.ie/handle/10379/4130)
 * [ATR4S: Toolkit with State-of-the-art Automatic Terms Recognition Methods in Scala](https://arxiv.org/abs/1611.07804)
