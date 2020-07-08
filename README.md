@@ -1,4 +1,7 @@
 # PYthon Automated Term Extraction
+[![PyPI pyversions](https://img.shields.io/pypi/pyversions/pyate.svg)](https://pypi.python.org/pypi/pyate/)
+[![PyPI version fury.io](https://badge.fury.io/py/pyate.svg)](https://pypi.python.org/pypi/pyate/)
+[![PyPI download month](https://img.shields.io/pypi/dm/pyate.svg)](https://pypi.python.org/pypi/pyate/)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 [![Built with spaCy](https://img.shields.io/badge/made%20with%20❤%20and-spaCy-09a3d5.svg)](https://spacy.io)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
