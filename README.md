@@ -105,6 +105,11 @@ Name: SECTION_TEXT, dtype: object
 """
 ```
 
+## Motivation
+This project was planned to be a tool to be connected to a Google Chrome Extension that highlights and defines key terms that the reader probably does not know of. Furthermore, term extraction is an area where there is not a lot of focused research on in comparison to other areas of NLP and especially recently is not viewed to be very practical due to the more general tool of NER tagging. However, modern NER tagging usually incorporates some combination of memorized words and deep learning which are spatially and computationally heavy. Furthermore, to generalize an algorithm to recognize terms to the ever growing areas of medical and AI research, a list of memorized words will not do.
+
+Of the five implemented algorithms, none are expensive and most rely simply on POS patterns, word frequencies, and the existence of embedded term candidates. For example, the term candidate "breast cancer" implies that "malignant breast cancer" is probably not a term and simply a form of "breast cancer" that is "malignant" (implemented in C-Value). In fact, the bottleneck of the space allocation is from the spaCy model and spaCy POS tagging.
+
 ## Todo
 * Add PU-ATR algorithm since its precision is a lot higher, though more computationally expensive
 * Page Rank algorithm
