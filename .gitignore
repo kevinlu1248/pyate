@@ -1,7 +1,6 @@
 __pycache__
 pyate
 MANIFEST
-setup.py
 setup.cfg
 dist
 pyate.egg-info

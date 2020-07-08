@@ -1,12 +1,12 @@
 from setuptools import setup, find_packages, find_namespace_packages
 
-with open("README.md", "r") as f:
+with open("README.md", "r", encoding="utf8") as f:
     long_description = f.read()
 
 setup(
     name="pyate",
     # packages=["pyate"],
-    version="0.3.2",  # Start with a small number and increase it with every change you make
+    version="0.3.6",  # Start with a small number and increase it with every change you make
     license="MIT",  # Chose a license from here: https://help.github.com/articles/licensing-a-repository
     description="PYthon Automated Term Extraction",  # Give a short description about your library
     long_description=long_description,
@@ -21,8 +21,12 @@ setup(
         "spacy",
         "term_extraction",
     ],  # Keywords that define your package best
+    # include_package_data=True,
     packages=find_packages(where="src"),
     package_dir={"": "src"},
+    package_data={
+        '': ['*.csv']
+    },
     install_requires=[
         "pandas==1.0.3",
         "numpy==1.18.4",

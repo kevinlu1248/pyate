@@ -15,16 +15,16 @@ from .term_extraction import TermExtraction, add_term_extraction_method, Corpus
 @add_term_extraction_method
 def weirdness(
     technical_corpus: Corpus,
-    general_corpus: Corpus,
-    # general_corpus_size=TermExtraction.DEFAULT_GENERAL_DOMAIN_SIZE, TODO
+    general_corpus: Corpus = None,
+    general_corpus_size=TermExtraction.DEFAULT_GENERAL_DOMAIN_SIZE,
     normalized: bool=False,
     technical_counts: Mapping[str, int]=None,
     verbose: bool=False,
 ) -> pd.Series:
     # http://ceur-ws.org/Vol-1031/paper3.pdf
 
-    # if general_corpus is None:
-    #     general_corpus = TermExtraction.DEFAULT_GENERAL_DOMAIN[:general_corpus_size]
+    if general_corpus is None:
+        general_corpus = TermExtraction.DEFAULT_GENERAL_DOMAIN[:general_corpus_size]
 
     if technical_counts is None:
         technical_counts = TermExtraction(technical_corpus).count_terms_from_documents(
