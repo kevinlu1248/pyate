@@ -89,9 +89,18 @@ Each of `cvalue, basic, combo_basic, weirdness` and `term_extractor` take in a s
 Under `path/to/site-packages/pyate/default_general_domain.csv`, there is a general CSV file of a general corpus, specifically, 3000 random sentences from Wikipedia. The source of it can be found at https://www.kaggle.com/mikeortman/wikipedia-sentences. Access it using it using the following after installing `pyate`.
 
 ```python3
+import pandas as pd
 from distutils.sysconfig import get_python_lib  
-df = pd.read_csv(get_python_lib() + "/pyate/default_general_domain.csv")
+df = pd.read_csv(get_python_lib() + "/pyate/default_general_domain.csv")["SECTION_TEXT"]
 print(df.head())
+""" (Output)
+0    '''Anarchism''' is a political philosophy that...
+1    The term ''anarchism'' is a compound word comp...
+2    ===Origins===\nWoodcut from a Diggers document...
+3    Portrait of philosopher Pierre-Joseph Proudhon...
+4    consistent with anarchist values is a controve...
+Name: SECTION_TEXT, dtype: object
+"""
 ```
 
 ## Todo
