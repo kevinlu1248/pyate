@@ -85,6 +85,15 @@ where `func` is essentially your term extracting algorithm that takes in a corpu
 ## Summary of functions 
 Each of `cvalue, basic, combo_basic, weirdness` and `term_extractor` take in a string or an iterator of strings and outputs a Pandas Series of term-value pairs, where higher values indicate higher chance of being a domain specific term. Furthermore, `weirdness` and `term_extractor` take a `general_corpus` key word argument which must be an iterator of strings.
 
+## General Corpus
+Under `path/to/site-packages/pyate/default_general_domain.csv`, there is a general CSV file of a general corpus, specifically, 3000 random sentences from Wikipedia. The source of it can be found at https://www.kaggle.com/mikeortman/wikipedia-sentences. Access it using it using the following after installing `pyate`.
+
+```python3
+from distutils.sysconfig import get_python_lib  
+df = pd.read_csv(get_python_lib() + "/pyate/default_general_domain.csv")
+print(df.head())
+```
+
 ## Todo
 * Add PU-ATR algorithm since its precision is a lot higher, though more computationally expensive
 * Page Rank algorithm
