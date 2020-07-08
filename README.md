@@ -83,7 +83,9 @@ __init__(
 where `func` is essentially your term extracting algorithm that takes in a corpus (either a string or iterator of strings) and outputs a Pandas Series of term-value pairs of terms and their respective termhoods. `func` is by default `combo_basic`. `args` and `kwargs` are for you to overide default values for the function, which you can find by running `help` (might document later on).
 
 ## Summary of functions 
-Each of `cvalue, basic, combo_basic, weirdness` and `term_extractor` take in a string or an iterator of strings and outputs a Pandas Series of term-value pairs, where higher values indicate higher chance of being a domain specific term. Furthermore, `weirdness` and `term_extractor` take a `general_corpus` key word argument which must be an iterator of strings.
+Each of `cvalue, basic, combo_basic, weirdness` and `term_extractor` take in a string or an iterator of strings and outputs a Pandas Series of term-value pairs, where higher values indicate higher chance of being a domain specific term. Furthermore, `weirdness` and `term_extractor` take a `general_corpus` key word argument which must be an iterator of strings which defaults to the General Corpus described below. 
+
+All functions only take the string of which you would like to extract terms from as the mandatory input (the `technical_corpus`), as well as other tweakable settings, including `general_corpus` (contrasting corpus for `weirdness` and `term_extractor`), `general_corpus_size`, `verbose` (whether to print a progress bar), `weights`, `smoothing`, `have_single_word` (whether to have a single word count as a phrase) and `threshold`. If you have not read the papers and are unfamiliar with the algorithms, I recommend just using the default settings. Again, use `help` to find the details regarding each algorithm since they are all different.
 
 ## General Corpus
 Under `path/to/site-packages/pyate/default_general_domain.csv`, there is a general CSV file of a general corpus, specifically, 3000 random sentences from Wikipedia. The source of it can be found at https://www.kaggle.com/mikeortman/wikipedia-sentences. Access it using it using the following after installing `pyate`.
@@ -109,6 +111,7 @@ Name: SECTION_TEXT, dtype: object
 * Add sources
 * Add voting algorithm and capabilities
 * Optimize perhaps using Cython, however, the bottleneck is POS tagging by Spacy so this will not help much
+* Clearer documentation
 
 ## Sources
 I can not seem to find the original Basic and Combo Basic papers but I found papers that referenced them. "ATR4S: Toolkit with State-of-the-art Automatic Terms Recognition Methods in Scala" more or less summarizes everything and incorporates several algorithms not incorporated in this package.
