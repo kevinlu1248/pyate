@@ -10,7 +10,11 @@ from .term_extraction import TermExtraction
 
 class TermExtractionPipeline:
     def __init__(
-        self, func: Callable[..., pd.Series] = combo_basic, force=True, *args, **kwargs
+        self,
+        func: Callable[..., pd.Series] = combo_basic,
+        force: bool = True,
+        *args,
+        **kwargs
     ) -> None:
         self.func = func
         self.args = args

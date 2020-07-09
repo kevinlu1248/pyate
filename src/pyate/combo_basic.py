@@ -25,11 +25,11 @@ def helper_get_subsequences(s: str) -> List[str]:
 @add_term_extraction_method
 def combo_basic(
     technical_corpus: Corpus,
-    smoothing: float=0.01,
-    verbose: bool=False,
-    have_single_word: bool=False,
-    technical_counts: Mapping[str, int]=None,
-    weights: Sequence[float]=None,
+    smoothing: float = 0.01,
+    verbose: bool = False,
+    have_single_word: bool = False,
+    technical_counts: Mapping[str, int] = None,
+    weights: Sequence[float] = None,
 ):
 
     if technical_counts is None:

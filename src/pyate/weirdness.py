@@ -17,9 +17,9 @@ def weirdness(
     technical_corpus: Corpus,
     general_corpus: Corpus = None,
     general_corpus_size=TermExtraction.DEFAULT_GENERAL_DOMAIN_SIZE,
-    normalized: bool=False,
-    technical_counts: Mapping[str, int]=None,
-    verbose: bool=False,
+    normalized: bool = False,
+    technical_counts: Mapping[str, int] = None,
+    verbose: bool = False,
 ) -> pd.Series:
     # http://ceur-ws.org/Vol-1031/paper3.pdf
 
