@@ -1,10 +1,12 @@
 # PYthon Automated Term Extraction
+[![PyPI pyversions](https://img.shields.io/pypi/pyversions/pyate.svg)](https://pypi.python.org/pypi/pyate/)
+[![PyPI version fury.io](https://badge.fury.io/py/pyate.svg)](https://pypi.python.org/pypi/pyate/)
+[![PyPI download month](https://img.shields.io/pypi/dm/pyate.svg)](https://pypi.python.org/pypi/pyate/)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 [![Built with spaCy](https://img.shields.io/badge/made%20with%20❤%20and-spaCy-09a3d5.svg)](https://spacy.io)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 Python implementation of term extraction algorithms such as C-Value, Basic, Combo Basic, Weirdness and Term Extractor using Spacy POS tagging.
-
-Warning: Weirdness and Term Extractor doesn't work through pip at the moment due to errors with upload CSV files.
 
 ## Installation
 Using pip:
@@ -13,7 +15,7 @@ pip install pyate https://github.com/explosion/spacy-models/releases/download/en
 ```
 
 ## Quickstart
-To get started, simply call one of the implemented algorithms. According to studies, `combo_basic` is the most precise, though `basic` and `cvalue` is not too far behind.
+To get started, simply call one of the implemented algorithms. According to Astrakhantsev 2016, `combo_basic` is the most precise of the five algorithms, though `basic` and `cvalue` is not too far behind. The same study shows that PU-ATR and KeyConceptRel have higher precision than `combo_basic` but are not implemented and PU-ATR take significantly more time since it uses machine learning.
 ```python3
 from pyate import combo_basic
 
@@ -81,15 +83,38 @@ __init__(
 where `func` is essentially your term extracting algorithm that takes in a corpus (either a string or iterator of strings) and outputs a Pandas Series of term-value pairs of terms and their respective termhoods. `func` is by default `combo_basic`. `args` and `kwargs` are for you to overide default values for the function, which you can find by running `help` (might document later on).
 
 ## Summary of functions 
-Each of `cvalue, basic, combo_basic, weirdness` and `term_extractor` take in a string or an iterator of strings and outputs a Pandas Series of term-value pairs, where higher values indicate higher chance of being a domain specific term. Furthermore, `weirdness` and `term_extractor` take a `general_corpus` key word argument which must be an iterator of strings.
+Each of `cvalue, basic, combo_basic, weirdness` and `term_extractor` take in a string or an iterator of strings and outputs a Pandas Series of term-value pairs, where higher values indicate higher chance of being a domain specific term. Furthermore, `weirdness` and `term_extractor` take a `general_corpus` key word argument which must be an iterator of strings which defaults to the General Corpus described below. 
+
+All functions only take the string of which you would like to extract terms from as the mandatory input (the `technical_corpus`), as well as other tweakable settings, including `general_corpus` (contrasting corpus for `weirdness` and `term_extractor`), `general_corpus_size`, `verbose` (whether to print a progress bar), `weights`, `smoothing`, `have_single_word` (whether to have a single word count as a phrase) and `threshold`. If you have not read the papers and are unfamiliar with the algorithms, I recommend just using the default settings. Again, use `help` to find the details regarding each algorithm since they are all different.
+
+## General Corpus
+Under `path/to/site-packages/pyate/default_general_domain.csv`, there is a general CSV file of a general corpus, specifically, 3000 random sentences from Wikipedia. The source of it can be found at https://www.kaggle.com/mikeortman/wikipedia-sentences. Access it using it using the following after installing `pyate`.
+
+```python3
+import pandas as pd
+from distutils.sysconfig import get_python_lib  
+df = pd.read_csv(get_python_lib() + "/pyate/default_general_domain.csv")["SECTION_TEXT"]
+print(df.head())
+""" (Output)
+0    '''Anarchism''' is a political philosophy that...
+1    The term ''anarchism'' is a compound word comp...
+2    ===Origins===\nWoodcut from a Diggers document...
+3    Portrait of philosopher Pierre-Joseph Proudhon...
+4    consistent with anarchist values is a controve...
+Name: SECTION_TEXT, dtype: object
+"""
+```
 
 ## Todo
 * Add PU-ATR algorithm since its precision is a lot higher, though more computationally expensive
 * Page Rank algorithm
 * Add sources
+* Add voting algorithm and capabilities
+* Optimize perhaps using Cython, however, the bottleneck is POS tagging by Spacy so this will not help much
+* Clearer documentation
 
 ## Sources
-I can not seem to find the original Basic and Combo Basic papers but I found papers that referenced them.
+I can not seem to find the original Basic and Combo Basic papers but I found papers that referenced them. "ATR4S: Toolkit with State-of-the-art Automatic Terms Recognition Methods in Scala" more or less summarizes everything and incorporates several algorithms not incorporated in this package.
 * [Automatic Recognition of Multi-word Terms: The C-value/ NC-value Method](https://www.researchgate.net/publication/220387502_Automatic_Recognition_of_Multi-word_Terms_The_C-value_NC-value_Method)
 * [Domain-independent term extraction through domain modelling](https://aran.library.nuigalway.ie/handle/10379/4130)
 * [ATR4S: Toolkit with State-of-the-art Automatic Terms Recognition Methods in Scala](https://arxiv.org/abs/1611.07804)
