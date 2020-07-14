@@ -111,7 +111,7 @@ Name: SECTION_TEXT, dtype: object
 ## :stars: Motivation
 This project was planned to be a tool to be connected to a Google Chrome Extension that highlights and defines key terms that the reader probably does not know of. Furthermore, term extraction is an area where there is not a lot of focused research on in comparison to other areas of NLP and especially recently is not viewed to be very practical due to the more general tool of NER tagging. However, modern NER tagging usually incorporates some combination of memorized words and deep learning which are spatially and computationally heavy. Furthermore, to generalize an algorithm to recognize terms to the ever growing areas of medical and AI research, a list of memorized words will not do.
 
-Of the five implemented algorithms, none are expensive, in fact, the bottleneck of the space allocation and computation expense is from the spaCy model and spaCy POS taggingeIn fact, the bottleneck of the space allocation and computation expense is from the spaCy model and spaCy POS tagging. This is because they most rely simply on POS patterns, word frequencies, and the existence of embedded term candidates. For example, the term candidate "breast cancer" implies that "malignant breast cancer" is probably not a term and simply a form of "breast cancer" that is "malignant" (implemented in C-Value).
+Of the five implemented algorithms, none are expensive, in fact, the bottleneck of the space allocation and computation expense is from the spaCy model and spaCy POS tagging. This is because they most rely simply on POS patterns, word frequencies, and the existence of embedded term candidates. For example, the term candidate "breast cancer" implies that "malignant breast cancer" is probably not a term and simply a form of "breast cancer" that is "malignant" (implemented in C-Value).
 
 ## :pushpin: Todo
 * Add PU-ATR algorithm since its precision is a lot higher, though more computationally expensive
@@ -122,7 +122,7 @@ Of the five implemented algorithms, none are expensive, in fact, the bottleneck 
 * Clearer documentation
 
 ## :bookmark_tabs: Sources
-I can not seem to find the original Basic and Combo Basic papers but I found papers that referenced them. "ATR4S: Toolkit with State-of-the-art Automatic Terms Recognition Methods in Scala" more or less summarizes everything and incorporates several algorithms not incorporated in this package.
+I cannot seem to find the original Basic and Combo Basic papers but I found papers that referenced them. "ATR4S: Toolkit with State-of-the-art Automatic Terms Recognition Methods in Scala" more or less summarizes everything and incorporates several algorithms not incorporated in this package.
 * [Automatic Recognition of Multi-word Terms: The C-value/ NC-value Method](https://www.researchgate.net/publication/220387502_Automatic_Recognition_of_Multi-word_Terms_The_C-value_NC-value_Method)
 * [Domain-independent term extraction through domain modelling](https://aran.library.nuigalway.ie/handle/10379/4130)
 * [ATR4S: Toolkit with State-of-the-art Automatic Terms Recognition Methods in Scala](https://arxiv.org/abs/1611.07804)
