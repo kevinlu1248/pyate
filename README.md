@@ -111,7 +111,7 @@ Name: SECTION_TEXT, dtype: object
 ```
 
 ## :dart: Precision
-Here is the average precision of some of the implemented algorithms using the Average Precision (AvP) metric, as tested in Astrakhantsev 2016.
+Here is the average precision of some of the implemented algorithms using the Average Precision (AvP) metric on seven distinct databases, as tested in Astrakhantsev 2016.
 ![Evaluation](evaluation.png)
 
 ## :stars: Motivation
