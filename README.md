@@ -11,6 +11,8 @@ Python implementation of term extraction algorithms such as C-Value, Basic, Comb
 
 If you have a suggestion for another ATE algorithm you would like implemented in this package feel free to file it as an issue with the paper the algorithm is based on.
 
+For ATE packages implemented in Scala and Java, see https://github.com/ispras/atr4s and https://github.com/ziqizhang/jate, respectively.
+
 ## :tada: Installation
 Using pip:
 ```bash
