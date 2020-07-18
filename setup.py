@@ -6,7 +6,7 @@ with open("README.md", "r", encoding="utf8") as f:
 setup(
     name="pyate",
     # packages=["pyate"],
-    version="0.3.6",  # Start with a small number and increase it with every change you make
+    version="0.3.8",  # Start with a small number and increase it with every change you make
     license="MIT",  # Chose a license from here: https://help.github.com/articles/licensing-a-repository
     description="PYthon Automated Term Extraction",  # Give a short description about your library
     long_description=long_description,

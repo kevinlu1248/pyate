@@ -6,7 +6,7 @@ import math
 from collections import Iterable
 from multiprocessing import Pool
 from typing import Iterable, Union, Sequence, Callable
-from distutils.sysconfig import get_python_lib  
+from distutils.sysconfig import get_python_lib
 
 import spacy
 from spacy.matcher import Matcher
@@ -15,15 +15,17 @@ import pandas as pd
 from collections import defaultdict
 import ahocorasick
 import numpy as np
+import pkg_resources
 
 start_ = 0
 tmp = 0
 doctime, matchertime = 0, 0
-Corpus = Union[str, Sequence[str]] 
+Corpus = Union[str, Sequence[str]]
 
 # import glob
 # print(get_python_lib())
 # print(glob.glob("/home/kevin/PycharmProjects/pyate/venv/lib/python3.6/site-packages/*.csv"))
+
 
 def start():
     global start_
@@ -39,7 +41,7 @@ class TermExtraction:
     nlp = spacy.load("en_core_web_sm", parser=False, entity=False)
     matcher = Matcher(nlp.vocab)
     MAX_WORD_LENGTH = 6
-    DEFAULT_GENERAL_DOMAIN = pd.read_csv(get_python_lib() + "/pyate/default_general_domain.csv") #TODO: FIX
+    DEFAULT_GENERAL_DOMAIN = pd.read_csv(pkg_resources.resource_stream(__name__, 'default_general_domain.csv'))
     DEFAULT_GENERAL_DOMAIN_SIZE = 300
 
     noun, adj, prep = (
