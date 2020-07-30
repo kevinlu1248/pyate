@@ -20,7 +20,7 @@ pip install pyate https://github.com/explosion/spacy-models/releases/download/en
 ```
 
 ## :rocket: Quickstart
-To get started, simply call one of the implemented algorithms. According to Astrakhantsev 2016, `combo_basic` is the most precise of the five algorithms, though `basic` and `cvalue` is not too far behind (see Precision). The same study shows that PU-ATR and KeyConceptRel have higher precision than `combo_basic` but are not implemented and PU-ATR take significantly more time since it uses machine learning.
+To get started, simply call one of the implemented algorithms. According to Astrakhantsev 2016, `combo_basic` is the most precise of the five algorithms, though `basic` and `cvalues` is not too far behind (see Precision). The same study shows that PU-ATR and KeyConceptRel have higher precision than `combo_basic` but are not implemented and PU-ATR take significantly more time since it uses machine learning.
 ```python3
 from pyate import combo_basic
 
@@ -88,7 +88,7 @@ __init__(
 where `func` is essentially your term extracting algorithm that takes in a corpus (either a string or iterator of strings) and outputs a Pandas Series of term-value pairs of terms and their respective termhoods. `func` is by default `combo_basic`. `args` and `kwargs` are for you to overide default values for the function, which you can find by running `help` (might document later on).
 
 ### Summary of functions 
-Each of `cvalue, basic, combo_basic, weirdness` and `term_extractor` take in a string or an iterator of strings and outputs a Pandas Series of term-value pairs, where higher values indicate higher chance of being a domain specific term. Furthermore, `weirdness` and `term_extractor` take a `general_corpus` key word argument which must be an iterator of strings which defaults to the General Corpus described below. 
+Each of `cvalues, basic, combo_basic, weirdness` and `term_extractor` take in a string or an iterator of strings and outputs a Pandas Series of term-value pairs, where higher values indicate higher chance of being a domain specific term. Furthermore, `weirdness` and `term_extractor` take a `general_corpus` key word argument which must be an iterator of strings which defaults to the General Corpus described below. 
 
 All functions only take the string of which you would like to extract terms from as the mandatory input (the `technical_corpus`), as well as other tweakable settings, including `general_corpus` (contrasting corpus for `weirdness` and `term_extractor`), `general_corpus_size`, `verbose` (whether to print a progress bar), `weights`, `smoothing`, `have_single_word` (whether to have a single word count as a phrase) and `threshold`. If you have not read the papers and are unfamiliar with the algorithms, I recommend just using the default settings. Again, use `help` to find the details regarding each algorithm since they are all different.
 
