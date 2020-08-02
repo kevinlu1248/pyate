@@ -1,7 +1,7 @@
 # c_value
 
 import time
-from collections import Iterable
+import collections
 from multiprocessing import Pool
 from typing import Iterable, Union, Sequence, Callable
 
@@ -125,7 +125,7 @@ class TermExtraction:
             self.__term_counts = pd.Series(self.count_terms_from_document(self.corpus))
             return self.__term_counts
         # elif type(self.corpus) is list or type(self.corpus) is pd.Series:
-        elif isinstance(self.corpus, Iterable):
+        elif isinstance(self.corpus, collections.Iterable):
             if seperate:
                 term_counters = []
             else:
