@@ -1,12 +1,9 @@
 # c_value
 
-import pickle
 import time
-import math
 from collections import Iterable
 from multiprocessing import Pool
 from typing import Iterable, Union, Sequence, Callable
-from distutils.sysconfig import get_python_lib
 
 import spacy
 from spacy.matcher import Matcher
