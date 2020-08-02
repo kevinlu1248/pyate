@@ -2,6 +2,8 @@
 
 import time
 import collections
+from collections import defaultdict
+import pkg_resources
 from multiprocessing import Pool
 from typing import Iterable, Union, Sequence, Callable
 
@@ -9,29 +11,13 @@ import spacy
 from spacy.matcher import Matcher
 from tqdm import tqdm
 import pandas as pd
-from collections import defaultdict
 import ahocorasick
 import numpy as np
-import pkg_resources
 
 start_ = 0
 tmp = 0
 doctime, matchertime = 0, 0
 Corpus = Union[str, Sequence[str]]
-
-# import glob
-# print(get_python_lib())
-# print(glob.glob("/home/kevin/PycharmProjects/pyate/venv/lib/python3.6/site-packages/*.csv"))
-
-
-def start():
-    global start_
-    start_ = time.time()
-
-
-def end():
-    global start_
-    print(time.time() - start_)
 
 
 class TermExtraction:
