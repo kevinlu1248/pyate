@@ -1,6 +1,5 @@
-# c_value
+# term_extraction.py
 
-import time
 import collections
 from collections import defaultdict
 import pkg_resources
