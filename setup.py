@@ -1,4 +1,4 @@
-from setuptools import setup, find_packages, find_namespace_packages
+from setuptools import setup, find_packages
 
 with open("README.md", "r", encoding="utf8") as f:
     long_description = f.read()
