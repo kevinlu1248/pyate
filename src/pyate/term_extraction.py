@@ -41,7 +41,9 @@ class TermExtraction:
     nlp = spacy.load("en_core_web_sm", parser=False, entity=False)
     matcher = Matcher(nlp.vocab)
     MAX_WORD_LENGTH = 6
-    DEFAULT_GENERAL_DOMAIN = pd.read_csv(pkg_resources.resource_stream(__name__, 'default_general_domain.csv'))
+    DEFAULT_GENERAL_DOMAIN = pd.read_csv(
+        pkg_resources.resource_stream(__name__, "default_general_domain.en.csv")
+    )
     DEFAULT_GENERAL_DOMAIN_SIZE = 300
 
     noun, adj, prep = (
@@ -80,6 +82,16 @@ class TermExtraction:
         self.vocab = vocab
         self.patterns = patterns
         self.do_parallelize = do_parallelize
+
+    @staticmethod
+    def set_language(language: str):
+        """
+        For changing the language. Currently, the DEFAULT_GENERAL_DOMAIN is still in English only. 
+        If you have a good dataset in another language please put it in an issue on Github. 
+        """
+        TermExtraction.nlp = spacy.load(language)
+        TermExtraction.matcher = Matcher(TermExtraction.nlp.vocab)
+        # TermExtraction.DEFAULT_GENERAL_DOMAIN = pd.read_csv(pkg_resources.resource_stream(__name__, f'default_general_domain.{language}.csv'))
 
     @staticmethod
     def word_length(string: str):
