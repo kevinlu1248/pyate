@@ -1,12 +1,6 @@
 # weirdness.py
 
-import pickle
-import time
-import math
-import json
 from typing import Mapping
-
-import spacy
 import pandas as pd
 
 from .term_extraction import TermExtraction, add_term_extraction_method, Corpus

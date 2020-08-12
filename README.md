@@ -20,7 +20,7 @@ pip install pyate https://github.com/explosion/spacy-models/releases/download/en
 ```
 
 ## :rocket: Quickstart
-To get started, simply call one of the implemented algorithms. According to Astrakhantsev 2016, `combo_basic` is the most precise of the five algorithms, though `basic` and `cvalue` is not too far behind (see Precision). The same study shows that PU-ATR and KeyConceptRel have higher precision than `combo_basic` but are not implemented and PU-ATR take significantly more time since it uses machine learning.
+To get started, simply call one of the implemented algorithms. According to Astrakhantsev 2016, `combo_basic` is the most precise of the five algorithms, though `basic` and `cvalues` is not too far behind (see Precision). The same study shows that PU-ATR and KeyConceptRel have higher precision than `combo_basic` but are not implemented and PU-ATR take significantly more time since it uses machine learning.
 ```python3
 from pyate import combo_basic
 
@@ -88,7 +88,7 @@ __init__(
 where `func` is essentially your term extracting algorithm that takes in a corpus (either a string or iterator of strings) and outputs a Pandas Series of term-value pairs of terms and their respective termhoods. `func` is by default `combo_basic`. `args` and `kwargs` are for you to overide default values for the function, which you can find by running `help` (might document later on).
 
 ### Summary of functions 
-Each of `cvalue, basic, combo_basic, weirdness` and `term_extractor` take in a string or an iterator of strings and outputs a Pandas Series of term-value pairs, where higher values indicate higher chance of being a domain specific term. Furthermore, `weirdness` and `term_extractor` take a `general_corpus` key word argument which must be an iterator of strings which defaults to the General Corpus described below. 
+Each of `cvalues, basic, combo_basic, weirdness` and `term_extractor` take in a string or an iterator of strings and outputs a Pandas Series of term-value pairs, where higher values indicate higher chance of being a domain specific term. Furthermore, `weirdness` and `term_extractor` take a `general_corpus` key word argument which must be an iterator of strings which defaults to the General Corpus described below. 
 
 All functions only take the string of which you would like to extract terms from as the mandatory input (the `technical_corpus`), as well as other tweakable settings, including `general_corpus` (contrasting corpus for `weirdness` and `term_extractor`), `general_corpus_size`, `verbose` (whether to print a progress bar), `weights`, `smoothing`, `have_single_word` (whether to have a single word count as a phrase) and `threshold`. If you have not read the papers and are unfamiliar with the algorithms, I recommend just using the default settings. Again, use `help` to find the details regarding each algorithm since they are all different.
 
@@ -117,7 +117,7 @@ Here is the average precision of some of the implemented algorithms using the Av
 ## :stars: Motivation
 This project was planned to be a tool to be connected to a Google Chrome Extension that highlights and defines key terms that the reader probably does not know of. Furthermore, term extraction is an area where there is not a lot of focused research on in comparison to other areas of NLP and especially recently is not viewed to be very practical due to the more general tool of NER tagging. However, modern NER tagging usually incorporates some combination of memorized words and deep learning which are spatially and computationally heavy. Furthermore, to generalize an algorithm to recognize terms to the ever growing areas of medical and AI research, a list of memorized words will not do.
 
-Of the five implemented algorithms, none are expensive, in fact, the bottleneck of the space allocation and computation expense is from the spaCy model and spaCy POS tagging. This is because they most rely simply on POS patterns, word frequencies, and the existence of embedded term candidates. For example, the term candidate "breast cancer" implies that "malignant breast cancer" is probably not a term and simply a form of "breast cancer" that is "malignant" (implemented in C-Value).
+Of the five implemented algorithms, none are expensive, in fact, the bottleneck of the space allocation and computation expense is from the spaCy model and spaCy POS tagging. This is because they mostly rely simply on POS patterns, word frequencies, and the existence of embedded term candidates. For example, the term candidate "breast cancer" implies that "malignant breast cancer" is probably not a term and simply a form of "breast cancer" that is "malignant" (implemented in C-Value).
 
 ## :pushpin: Todo
 * Add PU-ATR algorithm since its precision is a lot higher, though more computationally expensive

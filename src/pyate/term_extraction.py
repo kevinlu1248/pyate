@@ -1,40 +1,22 @@
-# c_value
+# term_extraction.py
 
-import pickle
-import time
-import math
-from collections import Iterable
+import collections
+from collections import defaultdict
+import pkg_resources
 from multiprocessing import Pool
 from typing import Iterable, Union, Sequence, Callable
-from distutils.sysconfig import get_python_lib
 
 import spacy
 from spacy.matcher import Matcher
 from tqdm import tqdm
 import pandas as pd
-from collections import defaultdict
 import ahocorasick
 import numpy as np
-import pkg_resources
 
 start_ = 0
 tmp = 0
 doctime, matchertime = 0, 0
 Corpus = Union[str, Sequence[str]]
-
-# import glob
-# print(get_python_lib())
-# print(glob.glob("/home/kevin/PycharmProjects/pyate/venv/lib/python3.6/site-packages/*.csv"))
-
-
-def start():
-    global start_
-    start_ = time.time()
-
-
-def end():
-    global start_
-    print(time.time() - start_)
 
 
 class TermExtraction:
@@ -140,7 +122,7 @@ class TermExtraction:
             self.__term_counts = pd.Series(self.count_terms_from_document(self.corpus))
             return self.__term_counts
         # elif type(self.corpus) is list or type(self.corpus) is pd.Series:
-        elif isinstance(self.corpus, Iterable):
+        elif isinstance(self.corpus, collections.Iterable):
             if seperate:
                 term_counters = []
             else:
@@ -224,10 +206,10 @@ if __name__ == "__main__":
     wiki = pd.read_pickle(PATH_TO_GENERAL_DOMAIN)
     pmc = pd.read_pickle(PATH_TO_TECHNICAL_DOMAIN)
     vocab = ["Cutaneous melanoma", "cancer", "secondary clusters", "bio"]
-    start()
+#     start()
     print(
         TermExtraction(pmc[:100]).count_terms_from_documents(
             seperate=True, verbose=True
         )
     )
-    end()
+#     end()

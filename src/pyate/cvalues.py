@@ -1,6 +1,5 @@
 # c_value
 
-import time
 import math
 from typing import List, Mapping
 
