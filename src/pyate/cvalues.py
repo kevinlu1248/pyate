@@ -3,10 +3,10 @@
 import math
 from typing import List, Mapping
 
-from tqdm import tqdm
 import pandas as pd
+from tqdm import tqdm
 
-from .term_extraction import TermExtraction, add_term_extraction_method, Corpus
+from .term_extraction import Corpus, TermExtraction, add_term_extraction_method
 
 
 def helper_get_subsequences(s: str) -> List[str]:
