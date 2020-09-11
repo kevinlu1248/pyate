@@ -1,12 +1,14 @@
 # c_value
-
 import math
-from typing import List, Mapping
+from typing import List
+from typing import Mapping
 
 import pandas as pd
 from tqdm import tqdm
 
-from .term_extraction import Corpus, TermExtraction, add_term_extraction_method
+from .term_extraction import add_term_extraction_method
+from .term_extraction import Corpus
+from .term_extraction import TermExtraction
 
 
 def helper_get_subsequences(s: str) -> List[str]:
