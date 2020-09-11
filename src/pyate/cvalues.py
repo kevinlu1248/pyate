@@ -68,9 +68,9 @@ def cvalues(
         f, t, n, h = row
         length = TermExtraction.word_length(candidate)
         if length == TermExtraction.MAX_WORD_LENGTH:
-            c_val = math.log(length + smoothing) * f
+            c_val = math.log2(length + smoothing) * f
         else:
-            c_val = math.log(length + smoothing) * f
+            c_val = math.log2(length + smoothing) * f
             if h:
                 c_val -= t / n
         if c_val >= threshold:
