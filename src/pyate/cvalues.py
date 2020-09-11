@@ -44,7 +44,8 @@ def cvalues(
     )
 
     if not have_single_word:
-        order = list(filter(lambda s: TermExtraction.word_length(s) > 1, order))
+        order = list(
+            filter(lambda s: TermExtraction.word_length(s) > 1, order))
 
     technical_counts = technical_counts[order]
 
@@ -81,7 +82,8 @@ def cvalues(
                     df.loc[substring, "number_of_nested"] += f
                     df.loc[substring, "has_been_evaluated"] = True
 
-    srs = pd.Series(map(lambda s: s[1], output), index=map(lambda s: s[0], output))
+    srs = pd.Series(map(lambda s: s[1], output),
+                    index=map(lambda s: s[0], output))
     return srs.sort_values(ascending=False)
 
 
