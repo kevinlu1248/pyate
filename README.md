@@ -1,4 +1,5 @@
 # PYthon Automated Term Extraction
+[![Build Status](https://travis-ci.com/kevinlu1248/pyate.svg?branch=master)](https://travis-ci.com/kevinlu1248/pyate)
 [![PyPI pyversions](https://img.shields.io/pypi/pyversions/pyate.svg)](https://pypi.python.org/pypi/pyate/)
 [![PyPI version fury.io](https://badge.fury.io/py/pyate.svg)](https://pypi.python.org/pypi/pyate/)
 [![Downloads](https://pepy.tech/badge/pyate)](https://pepy.tech/project/pyate)
