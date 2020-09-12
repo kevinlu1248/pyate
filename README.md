@@ -112,6 +112,13 @@ Name: SECTION_TEXT, dtype: object
 """
 ```
 
+### Other Languages
+For switching languages, simply run `Term_Extraction.set_language({language})`. By default, the language is English. So far, only _English_ (en) and _Italian_ (it) are supported. 
+
+To add more languages, file an issue with a corpus of at least 3000 sentences of a general domain in the desired language (preferably wikipedia) named `default_general_domain.{lang}.csv` replacing lang with the ISO-639-1 code of the language, or the ISO-639-2 if the language does not have a ISO-639-1 code (can be found at https://www.loc.gov/standards/iso639-2/php/code_list.php). 
+
+Alternatively, place the file in `src/pyate` and file a pull request.
+
 ## :dart: Precision
 Here is the average precision of some of the implemented algorithms using the Average Precision (AvP) metric on seven distinct databases, as tested in Astrakhantsev 2016.
 ![Evaluation](evaluation.png)
@@ -122,8 +129,9 @@ This project was planned to be a tool to be connected to a Google Chrome Extensi
 Of the five implemented algorithms, none are expensive, in fact, the bottleneck of the space allocation and computation expense is from the spaCy model and spaCy POS tagging. This is because they mostly rely simply on POS patterns, word frequencies, and the existence of embedded term candidates. For example, the term candidate "breast cancer" implies that "malignant breast cancer" is probably not a term and simply a form of "breast cancer" that is "malignant" (implemented in C-Value).
 
 ## :pushpin: Todo
-* Add other languages
+* Add other languages and data encapsulation for set language
 * Add automated tests and CI/CD
+* Add a brief CLI
 * Make NER version of this using the datasets from the sources
 * Add PU-ATR algorithm since its precision is a lot higher, though more computationally expensive
 * Page Rank algorithm
