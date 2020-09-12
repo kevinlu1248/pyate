@@ -5,11 +5,8 @@ python:
   - "3.6"      # current default Python on Travis CI
   - "3.7"
   - "3.8"
-  # PyPy versions
   - "pypy3"  # currently Python 3.6.1,  PyPy 7.1.1-beta0
-# command to install dependencies
 install:
   - pip install -r requirements.txt
   - pip install src
-# command to run tests
 script: pytest
