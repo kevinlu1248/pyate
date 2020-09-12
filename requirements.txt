@@ -19,7 +19,6 @@ idna==2.9
 importlib-metadata==1.6.0
 iniconfig==1.0.1
 ipaddr==2.2.0
-it-core-news-sm==2.2.5
 jeepney==0.4.3
 keyring==21.2.1
 lockfile==0.12.2
