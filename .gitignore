@@ -11,3 +11,4 @@ src/pyate/pyate.egg-info
 venv
 universe.json
 __init__.py
+.pytest__cache

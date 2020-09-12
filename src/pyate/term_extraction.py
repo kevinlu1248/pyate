@@ -1,6 +1,6 @@
 # term_extraction.py
 
-import collections
+import collections.abc
 from collections import defaultdict
 import pkg_resources
 from multiprocessing import Pool
@@ -20,13 +20,16 @@ Corpus = Union[str, Sequence[str]]
 
 
 class TermExtraction:
+    # TODO: find some way to prevent redundant loading of csv files
     nlp = spacy.load("en_core_web_sm", parser=False, entity=False)
     matcher = Matcher(nlp.vocab)
+    language = "en"
     MAX_WORD_LENGTH = 6
-    DEFAULT_GENERAL_DOMAIN = pd.read_csv(
-        pkg_resources.resource_stream(__name__, "default_general_domain.en.csv")
-    )
     DEFAULT_GENERAL_DOMAIN_SIZE = 300
+    DEFAULT_GENERAL_DOMAIN = pd.read_csv(
+        pkg_resources.resource_stream(__name__, "default_general_domain.en.csv"),
+        nrows=DEFAULT_GENERAL_DOMAIN_SIZE,
+    )
 
     noun, adj, prep = (
         {"POS": "NOUN", "IS_PUNCT": False},
@@ -52,6 +55,7 @@ class TermExtraction:
         vocab: Sequence[str] = None,
         patterns=patterns,
         do_parallelize: bool = True,
+        language="en",
     ):
         """
         If corpus is a string, then find vocab sequentially, but if the corpus is an iterator,
@@ -64,19 +68,24 @@ class TermExtraction:
         self.vocab = vocab
         self.patterns = patterns
         self.do_parallelize = do_parallelize
+        TermExtraction.language = language
 
     @staticmethod
-    def set_language(language: str):
+    def set_language(language: str, model_name: str = ""):
         """
         For changing the language. Currently, the DEFAULT_GENERAL_DOMAIN is still in English only.
         If you have a good dataset in another language please put it in an issue on Github.
         """
-        TermExtraction.nlp = spacy.load(language)
+        if model_name == "":
+            model_name = language
+        TermExtraction.language = language
+        TermExtraction.nlp = spacy.load(model_name)
         TermExtraction.matcher = Matcher(TermExtraction.nlp.vocab)
         TermExtraction.DEFAULT_GENERAL_DOMAIN = pd.read_csv(
             pkg_resources.resource_stream(
                 __name__, f"default_general_domain.{language}.csv"
-            )
+            ),
+            nrows=TermExtraction.DEFAULT_GENERAL_DOMAIN_SIZE,
         )
 
     @staticmethod
@@ -125,8 +134,7 @@ class TermExtraction:
         if type(self.corpus) is str:
             self.__term_counts = pd.Series(self.count_terms_from_document(self.corpus))
             return self.__term_counts
-        # elif type(self.corpus) is list or type(self.corpus) is pd.Series:
-        elif isinstance(self.corpus, collections.Iterable):
+        elif isinstance(self.corpus, collections.abc.Iterable):
             if seperate:
                 term_counters = []
             else:

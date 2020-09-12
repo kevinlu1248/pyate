@@ -19,7 +19,8 @@ class TermExtractionPipeline:
         self.func = func
         self.args = args
         self.kwargs = kwargs
-        Doc.set_extension(self.func.__name__, default=None, force=force)
+        self.__name__ = self.func.__name__
+        Doc.set_extension(self.__name__, default=None, force=force)
 
     def __call__(self, doc: Doc):
         term_counter = defaultdict(int)
@@ -39,5 +40,5 @@ class TermExtractionPipeline:
             *self.args,
             **self.kwargs
         )
-        setattr(doc._, self.func.__name__, terms)
+        setattr(doc._, self.__name__, terms)
         return doc

@@ -1,5 +1,4 @@
-# from src import *
-from pyate import *
+from src import *
 import spacy
 
 if __name__ == "__main__":
