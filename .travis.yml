@@ -8,5 +8,6 @@ python:
   - "pypy3"  # currently Python 3.6.1,  PyPy 7.1.1-beta0
 install:
   - pip install -r requirements.txt
+  - python -m spacy download en_core_web_sm it_core_news_sm
   - pip install src
 script: pytest
