@@ -1,6 +1,5 @@
 language: python
 python:
-  - "3.4"
   - "3.5"
   - "3.6"      # current default Python on Travis CI
   - "3.7"
@@ -10,5 +9,5 @@ install:
   - pip install -r requirements.txt
   - python -m spacy download en_core_web_sm
   - python -m spacy download it_core_news_sm
-  - pip install src
+  - pip install .
 script: pytest
