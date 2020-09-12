@@ -13,7 +13,7 @@ setup(
     author="Kevin Lu",
     author_email="kevinlu1248@gmail.com",
     url="https://github.com/kevinlu1248/pyate",
-    download_url="https://github.com/kevinlu1248/pyate/archive/0.3.tar.gz",
+    download_url="https://github.com/kevinlu1248/pyate/archive/0.4.tar.gz",
     keywords=[
         "nlp",
         "python3",

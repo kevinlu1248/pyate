@@ -9,3 +9,5 @@ src/pyate/pyate.egg-info
 *.whl
 */RECORD
 venv
+universe.json
+__init__.py

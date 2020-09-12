@@ -55,7 +55,7 @@ class TermExtraction:
     ):
         """
         If corpus is a string, then find vocab sequentially, but if the corpus is an iterator,
-        compute in parallel. If there is a vocab list, only search for frequencies from the vocab list, 
+        compute in parallel. If there is a vocab list, only search for frequencies from the vocab list,
         otherwise search using the patterns.
 
         TODO: do_parallelize and do_lower
@@ -68,12 +68,16 @@ class TermExtraction:
     @staticmethod
     def set_language(language: str):
         """
-        For changing the language. Currently, the DEFAULT_GENERAL_DOMAIN is still in English only. 
-        If you have a good dataset in another language please put it in an issue on Github. 
+        For changing the language. Currently, the DEFAULT_GENERAL_DOMAIN is still in English only.
+        If you have a good dataset in another language please put it in an issue on Github.
         """
         TermExtraction.nlp = spacy.load(language)
         TermExtraction.matcher = Matcher(TermExtraction.nlp.vocab)
-        # TermExtraction.DEFAULT_GENERAL_DOMAIN = pd.read_csv(pkg_resources.resource_stream(__name__, f'default_general_domain.{language}.csv'))
+        TermExtraction.DEFAULT_GENERAL_DOMAIN = pd.read_csv(
+            pkg_resources.resource_stream(
+                __name__, f"default_general_domain.{language}.csv"
+            )
+        )
 
     @staticmethod
     def word_length(string: str):
@@ -193,7 +197,7 @@ def add_term_extraction_method(extractor: Callable[..., pd.Series]):
             self.corpus,
             technical_counts=self.count_terms_from_documents(),
             *args,
-            **kwargs
+            **kwargs,
         )
 
     setattr(TermExtraction, extractor.__name__, term_extraction_decoration)
@@ -206,10 +210,9 @@ if __name__ == "__main__":
     wiki = pd.read_pickle(PATH_TO_GENERAL_DOMAIN)
     pmc = pd.read_pickle(PATH_TO_TECHNICAL_DOMAIN)
     vocab = ["Cutaneous melanoma", "cancer", "secondary clusters", "bio"]
-#     start()
+    #     start()
     print(
         TermExtraction(pmc[:100]).count_terms_from_documents(
             seperate=True, verbose=True
         )
     )
-#     end()
