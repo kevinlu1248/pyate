@@ -122,12 +122,16 @@ This project was planned to be a tool to be connected to a Google Chrome Extensi
 Of the five implemented algorithms, none are expensive, in fact, the bottleneck of the space allocation and computation expense is from the spaCy model and spaCy POS tagging. This is because they mostly rely simply on POS patterns, word frequencies, and the existence of embedded term candidates. For example, the term candidate "breast cancer" implies that "malignant breast cancer" is probably not a term and simply a form of "breast cancer" that is "malignant" (implemented in C-Value).
 
 ## :pushpin: Todo
+* Add other languages
+* Add automated tests and CI/CD
+* Make NER version of this using the datasets from the sources
 * Add PU-ATR algorithm since its precision is a lot higher, though more computationally expensive
 * Page Rank algorithm
 * Add sources
 * Add voting algorithm and capabilities
-* Optimize perhaps using Cython, however, the bottleneck is POS tagging by Spacy so this will not help much
+* Optimize perhaps using Cython, however, the bottleneck is POS tagging by Spacy and word counting with Pandas and Numpy, which are already at C-level so this will not help much
 * Clearer documentation
+* Allow GPU acceleration with Cupy
 
 ## :bookmark_tabs: Sources
 I cannot seem to find the original Basic and Combo Basic papers but I found papers that referenced them. "ATR4S: Toolkit with State-of-the-art Automatic Terms Recognition Methods in Scala" more or less summarizes everything and incorporates several algorithms not incorporated in this package.
