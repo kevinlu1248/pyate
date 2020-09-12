@@ -1,4 +1,4 @@
-from src import *
+from pyate import *
 import spacy
 
 CORPUS = "Hello world! I am a term extractor"
