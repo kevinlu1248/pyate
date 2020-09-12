@@ -14,7 +14,6 @@ cymem==2.0.3
 distlib==0.3.0
 distro==1.4.0
 docutils==0.16
-en-core-web-sm==2.2.5
 html5lib==1.0.1
 idna==2.9
 importlib-metadata==1.6.0
