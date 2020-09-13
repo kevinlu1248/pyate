@@ -9,6 +9,7 @@ cffi==1.14.0
 chardet==3.0.4
 colorama==0.4.3
 contextlib2==0.6.0
+coverage==5.3
 cryptography==2.9.2
 cymem==2.0.3
 distlib==0.3.0
@@ -20,6 +21,7 @@ importlib-metadata==1.6.0
 iniconfig==1.0.1
 ipaddr==2.2.0
 jeepney==0.4.3
+keyring==21.2.1
 lockfile==0.12.2
 more-itertools==8.5.0
 msgpack==0.6.2
@@ -39,6 +41,7 @@ pycparser==2.20
 Pygments==2.6.1
 pyparsing==2.4.7
 pytest==6.0.2
+pytest-cov==2.10.1
 python-dateutil==2.8.1
 pytoml==0.1.21
 pytz==2020.1

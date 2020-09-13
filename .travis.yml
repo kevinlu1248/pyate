@@ -8,4 +8,6 @@ install:
   - python -m spacy download en_core_web_sm
   - python -m spacy download it_core_news_sm
   - pip install .
-script: pytest
+script: py.test --cov-report term --cov=tests/
+after_success:
+    - codecov
