@@ -116,7 +116,13 @@ Name: SECTION_TEXT, dtype: object
 ### Other Languages
 For switching languages, simply run `Term_Extraction.set_language({language}, {model_name})`, where `model_name` defaults to `language`. For example, `Term_Extraction.set_language("it", "it_core_news_sm"})` for Italian. By default, the language is English. So far, only _English_ (en) and _Italian_ (it) are supported. 
 
-To add more languages, file an issue with a corpus of at least 3000 sentences of a general domain in the desired language (preferably wikipedia) named `default_general_domain.{lang}.csv` replacing lang with the ISO-639-1 code of the language, or the ISO-639-2 if the language does not have a ISO-639-1 code (can be found at https://www.loc.gov/standards/iso639-2/php/code_list.php). 
+To add more languages, file an issue with a corpus of at least 3000 paragraphs of a general domain in the desired language (preferably wikipedia) named `default_general_domain.{lang}.csv` replacing lang with the ISO-639-1 code of the language, or the ISO-639-2 if the language does not have a ISO-639-1 code (can be found at https://www.loc.gov/standards/iso639-2/php/code_list.php). The file format should be of the following form to be parsable by Pandas. 
+```
+,SECTION_TEXT
+0,"{paragraph_0}"
+1,"{paragraph_1}"
+...
+```
 
 Alternatively, place the file in `src/pyate` and file a pull request.
 
