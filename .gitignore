@@ -12,3 +12,5 @@ venv
 universe.json
 __init__.py
 .pytest__cache
+.coverage
+coverage.xml
