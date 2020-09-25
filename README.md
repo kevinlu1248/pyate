@@ -149,7 +149,7 @@ Of the five implemented algorithms, none are expensive, in fact, the bottleneck 
 * Allow GPU acceleration with Cupy
 
 ## :bookmark_tabs: Sources
-I cannot seem to find the original Basic and Combo Basic papers but I found papers that referenced them. "ATR4S: Toolkit with State-of-the-art Automatic Terms Recognition Methods in Scala" more or less summarizes everything and incorporates several algorithms not incorporated in this package.
+I cannot seem to find the original Basic and Combo Basic papers but I found papers that referenced them. "ATR4S: Toolkit with State-of-the-art Automatic Terms Recognition Methods in Scala" more or less summarizes everything and incorporates several algorithms not in this package.
 * [Automatic Recognition of Multi-word Terms: The C-value/ NC-value Method](https://www.researchgate.net/publication/220387502_Automatic_Recognition_of_Multi-word_Terms_The_C-value_NC-value_Method)
 * [Domain-independent term extraction through domain modelling](https://aran.library.nuigalway.ie/handle/10379/4130)
 * [ATR4S: Toolkit with State-of-the-art Automatic Terms Recognition Methods in Scala](https://arxiv.org/abs/1611.07804)
