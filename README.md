@@ -128,7 +128,7 @@ Alternatively, place the file in `src/pyate` and file a pull request.
 
 ## :dart: Precision
 Here is the average precision of some of the implemented algorithms using the Average Precision (AvP) metric on seven distinct databases, as tested in Astrakhantsev 2016.
-![Evaluation](evaluation.png)
+![Evaluation](img/evaluation.png)
 
 ## :stars: Motivation
 This project was planned to be a tool to be connected to a Google Chrome Extension that highlights and defines key terms that the reader probably does not know of. Furthermore, term extraction is an area where there is not a lot of focused research on in comparison to other areas of NLP and especially recently is not viewed to be very practical due to the more general tool of NER tagging. However, modern NER tagging usually incorporates some combination of memorized words and deep learning which are spatially and computationally heavy. Furthermore, to generalize an algorithm to recognize terms to the ever growing areas of medical and AI research, a list of memorized words will not do.
