@@ -22,6 +22,32 @@ Using pip:
 pip install pyate https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-2.2.5/en_core_web_sm-2.2.5.tar.gz
 ```
 
+### Models
+Though this model was originally intended for symbolic AI algorithms (non-machine learning), I realized a spaCy model on term extraction can reach significantly higher performance levels, and thus decided to include a model here. 
+
+| URL | F-Score | Precision | Recall |
+| ------------- | ------------- | ------------- | ------------- |
+| https://github.com/kevinlu1248/pyate/releases/download/v0.4.2/en_acl_terms_sm-2.0.3.tar.gz  | 94.38 | 94.88 | 93.88 |
+
+The model was trained and evaluated on the ACL dataset, which is a computer science oriented dataset where the terms are manualy picked. This has not yet been tested on other fields yet, however. To install, run 
+
+```bash
+pip install https://github.com/kevinlu1248/pyate/releases/download/v0.4.2/en_acl_terms_sm-2.0.3.tar.gz
+```
+
+To extract terms,
+
+```python3
+import spacy
+
+nlp = spacy.load("en_acl_terms_sm")
+doc = nlp("Hello world, I am a term extraction algorithm.")
+print(doc.ents)
+"""
+(term extraction, algorithm)
+"""
+```
+
 ## :rocket: Quickstart
 To get started, simply call one of the implemented algorithms. According to Astrakhantsev 2016, `combo_basic` is the most precise of the five algorithms, though `basic` and `cvalues` is not too far behind (see Precision). The same study shows that PU-ATR and KeyConceptRel have higher precision than `combo_basic` but are not implemented and PU-ATR take significantly more time since it uses machine learning.
 ```python3
@@ -35,7 +61,7 @@ are responsible for many aspects of cancer development, they are not sufficient.
 dependent on ancillary processes provided by cells of the tumor environment but that are not necessarily cancerous 
 themselves. Inflammation has long been associated with the development of cancer. This review will discuss the reflexive 
 relationship between cancer and inflammation with particular focus on how considering the role of inflammation in physiologic 
-processes such as the maintenance of tissue homeostasis and repair may provide a logical framework for understanding the 
+processes such as the maintenance of tissue homeostasis and repair may provide a logical framework for understanding the U
 connection between the inflammatory response and cancer."""
 
 print(combo_basic(string).sort_values(ascending=False))
