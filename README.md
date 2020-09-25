@@ -23,7 +23,7 @@ pip install pyate https://github.com/explosion/spacy-models/releases/download/en
 ```
 
 ### Models
-Though this model was originally intended for symbolic AI algorithms (non-machine learning), I realized a spaCy model on term extraction can reach significantly higher performance levels, and thus decided to include a model here. 
+Though this model was originally intended for symbolic AI algorithms (non-machine learning), I realized a spaCy model on term extraction can reach significantly higher performance levels, and thus decided to include the model here. 
 
 | URL | F-Score | Precision | Recall |
 | ------------- | ------------- | ------------- | ------------- |
