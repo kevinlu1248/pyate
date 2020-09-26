@@ -25,7 +25,7 @@ pip install pyate https://github.com/explosion/spacy-models/releases/download/en
 ### Models
 Though this model was originally intended for symbolic AI algorithms (non-machine learning), I realized a spaCy model on term extraction can reach significantly higher performance, and thus decided to include the model here. 
 
-For a comparison with the symbolic AI algorithms, see https://github.com/kevinlu1248/pyate#dart-precision. Note that only the F-Score, accuracy and precision was taken here yet for the model, but for the algorithms the AvP was taken so directly comparing the metrics would not really make sense.
+For a comparison with the symbolic AI algorithms, see [Precision](https://github.com/kevinlu1248/pyate#dart-precision). Note that only the F-Score, accuracy and precision was taken here yet for the model, but for the algorithms the AvP was taken so directly comparing the metrics would not really make sense.
 
 | URL | F-Score | Precision | Recall |
 | ------------- | ------------- | ------------- | ------------- |
