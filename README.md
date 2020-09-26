@@ -27,9 +27,9 @@ Though this model was originally intended for symbolic AI algorithms (non-machin
 
 For a comparison with the symbolic AI algorithms, see [Precision](https://github.com/kevinlu1248/pyate#dart-precision). Note that only the F-Score, accuracy and precision was taken here yet for the model, but for the algorithms the AvP was taken so directly comparing the metrics would not really make sense.
 
-| URL | F-Score | Precision | Recall |
+| URL | F-Score (%) | Precision (%) | Recall (%) |
 | ------------- | ------------- | ------------- | ------------- |
-| https://github.com/kevinlu1248/pyate/releases/download/v0.4.2/en_acl_terms_sm-2.0.3.tar.gz  | 94.38 | 94.88 | 93.88 |
+| https://github.com/kevinlu1248/pyate/releases/download/v0.4.2/en_acl_terms_sm-2.0.4.tar.gz  | 94.71 | 95.41 | 94.03 |
 
 The model was trained and evaluated on the [ACL dataset](http://pars.ie/lr/acl-rd-tec-terminology/_acl_arc_comp), which is a computer science oriented dataset where the terms are manually picked. This has not yet been tested on other fields yet, however. 
 
