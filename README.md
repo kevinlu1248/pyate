@@ -23,13 +23,17 @@ pip install pyate https://github.com/explosion/spacy-models/releases/download/en
 ```
 
 ### Models
-Though this model was originally intended for symbolic AI algorithms (non-machine learning), I realized a spaCy model on term extraction can reach significantly higher performance levels, and thus decided to include the model here. 
+Though this model was originally intended for symbolic AI algorithms (non-machine learning), I realized a spaCy model on term extraction can reach significantly higher performance, and thus decided to include the model here. 
+
+For a comparison with the symbolic AI algorithms, see https://github.com/kevinlu1248/pyate#dart-precision. Note that only the F-Score, accuracy and precision was taken here yet for the model, but for the algorithms the AvP was taken so directly comparing the metrics would not really make sense.
 
 | URL | F-Score | Precision | Recall |
 | ------------- | ------------- | ------------- | ------------- |
 | https://github.com/kevinlu1248/pyate/releases/download/v0.4.2/en_acl_terms_sm-2.0.3.tar.gz  | 94.38 | 94.88 | 93.88 |
 
-The model was trained and evaluated on the ACL dataset, which is a computer science oriented dataset where the terms are manualy picked. This has not yet been tested on other fields yet, however. To install, run 
+The model was trained and evaluated on the [ACL dataset](http://pars.ie/lr/acl-rd-tec-terminology/_acl_arc_comp), which is a computer science oriented dataset where the terms are manually picked. This has not yet been tested on other fields yet, however. 
+
+This model does not come with PyATE. To install, run 
 
 ```bash
 pip install https://github.com/kevinlu1248/pyate/releases/download/v0.4.2/en_acl_terms_sm-2.0.3.tar.gz
