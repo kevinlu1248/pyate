@@ -126,12 +126,12 @@ Each of `cvalues, basic, combo_basic, weirdness` and `term_extractor` take in a 
 All functions only take the string of which you would like to extract terms from as the mandatory input (the `technical_corpus`), as well as other tweakable settings, including `general_corpus` (contrasting corpus for `weirdness` and `term_extractor`), `general_corpus_size`, `verbose` (whether to print a progress bar), `weights`, `smoothing`, `have_single_word` (whether to have a single word count as a phrase) and `threshold`. If you have not read the papers and are unfamiliar with the algorithms, I recommend just using the default settings. Again, use `help` to find the details regarding each algorithm since they are all different.
 
 ### General Corpus
-Under `path/to/site-packages/pyate/default_general_domain.csv`, there is a general CSV file of a general corpus, specifically, 3000 random sentences from Wikipedia. The source of it can be found at https://www.kaggle.com/mikeortman/wikipedia-sentences. Access it using it using the following after installing `pyate`.
+Under `path/to/site-packages/pyate/default_general_domain.en.csv`, there is a general CSV file of a general corpus, specifically, 3000 random sentences from Wikipedia. The source of it can be found at https://www.kaggle.com/mikeortman/wikipedia-sentences. Access it using it using the following after installing `pyate`.
 
 ```python3
 import pandas as pd
 from distutils.sysconfig import get_python_lib  
-df = pd.read_csv(get_python_lib() + "/pyate/default_general_domain.csv")["SECTION_TEXT"]
+df = pd.read_csv(get_python_lib() + "/pyate/default_general_domain.en.csv")["SECTION_TEXT"]
 print(df.head())
 """ (Output)
 0    '''Anarchism''' is a political philosophy that...
