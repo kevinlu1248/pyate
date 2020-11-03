@@ -1,5 +1,6 @@
-import spacy
 from pyate import *
+
+import spacy
 
 CORPUS = "Hello world! I am a term extractor"
 ALGORITHMS = (basic, combo_basic, cvalues, weirdness, term_extractor)
