@@ -26,8 +26,7 @@ class TermExtraction:
     MAX_WORD_LENGTH = 6
     DEFAULT_GENERAL_DOMAIN_SIZE = 300
     DEFAULT_GENERAL_DOMAIN = pd.read_csv(
-        pkg_resources.resource_stream(
-            __name__, "default_general_domain.en.csv"),
+        pkg_resources.resource_stream(__name__, "default_general_domain.en.csv"),
         nrows=DEFAULT_GENERAL_DOMAIN_SIZE,
     )
 
@@ -120,8 +119,7 @@ class TermExtraction:
             for i, pattern in enumerate(self.patterns):
                 new_matcher.add("term{}".format(i), add_to_counter, pattern)
 
-            doc = TermExtraction.nlp(
-                document.lower(), disable=["parser", "ner"])
+            doc = TermExtraction.nlp(document.lower(), disable=["parser", "ner"])
             matches = new_matcher(doc)
         else:
             for end_index, (insert_order, original_value) in self.trie.iter(
@@ -135,8 +133,7 @@ class TermExtraction:
             return self.__term_counts
 
         if type(self.corpus) is str:
-            self.__term_counts = pd.Series(
-                self.count_terms_from_document(self.corpus))
+            self.__term_counts = pd.Series(self.count_terms_from_document(self.corpus))
             return self.__term_counts
         elif isinstance(self.corpus, collections.abc.Iterable):
             if seperate:
