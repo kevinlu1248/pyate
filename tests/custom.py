@@ -7,7 +7,7 @@ if __name__ == "__main__":
 
     functions = (basic, combo_basic, cvalues)
     for func in functions:
-        nlp.add_pipe(TermExtractionPipeline(func), func.__name__)
+        nlp.add_pipe(TermExtractionPipeline(nlp, func), func.__name__)
     doc = nlp(corpus)
     for func in functions:
         print(func.__name__, "\n", getattr(doc._, func.__name__), "\n")
