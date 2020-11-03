@@ -1,5 +1,5 @@
-from src import *
 import spacy
+from src import *
 
 if __name__ == "__main__":
     corpus = "Hello world! I am a term extractor"

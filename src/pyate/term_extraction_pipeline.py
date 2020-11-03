@@ -2,11 +2,12 @@ from collections import defaultdict
 from typing import Callable
 
 import pandas as pd
+
+from spacy.matcher import Matcher
 from spacy.tokens import Doc
 
 from .combo_basic import combo_basic
 from .term_extraction import TermExtraction
-from spacy.matcher import Matcher
 
 
 class TermExtractionPipeline:

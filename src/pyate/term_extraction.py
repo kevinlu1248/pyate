@@ -2,16 +2,17 @@
 
 import collections.abc
 from collections import defaultdict
-import pkg_resources
 from multiprocessing import Pool
-from typing import Iterable, Union, Sequence, Callable
+from typing import Callable, Iterable, Sequence, Union
+
+import ahocorasick
+import numpy as np
+import pandas as pd
+import pkg_resources
+from tqdm import tqdm
 
 import spacy
 from spacy.matcher import Matcher
-from tqdm import tqdm
-import pandas as pd
-import ahocorasick
-import numpy as np
 
 start_ = 0
 tmp = 0
