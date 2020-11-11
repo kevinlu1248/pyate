@@ -22,7 +22,6 @@ Corpus = Union[str, Sequence[str]]
 class TermExtraction:
     # TODO: find some way to prevent redundant loading of csv files
     nlp = spacy.load("en_core_web_sm", parser=False, entity=False)
-    matcher = Matcher(nlp.vocab)
     language = "en"
     MAX_WORD_LENGTH = 6
     DEFAULT_GENERAL_DOMAIN_SIZE = 300
@@ -105,6 +104,8 @@ class TermExtraction:
         # for single documents
         term_counter = defaultdict(int)
         if self.vocab is None:
+            # initialize a Matcher here - not at the class level
+            new_matcher = Matcher(TermExtraction.nlp.vocab)
 
             def add_to_counter(matcher, doc, i, matches):
                 match_id, start, end = matches[i]
@@ -116,10 +117,10 @@ class TermExtraction:
                     term_counter[candidate] += 1
 
             for i, pattern in enumerate(self.patterns):
-                TermExtraction.matcher.add("term{}".format(i), add_to_counter, pattern)
+                new_matcher.add("term{}".format(i), add_to_counter, pattern)
 
             doc = TermExtraction.nlp(document.lower(), disable=["parser", "ner"])
-            matches = TermExtraction.matcher(doc)
+            matches = new_matcher(doc)
         else:
             for end_index, (insert_order, original_value) in self.trie.iter(
                 document.lower()

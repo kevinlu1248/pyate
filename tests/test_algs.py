@@ -13,7 +13,7 @@ def test_algs():
 
 def test_pipelines():
     for func in ALGORITHMS:
-        nlp.add_pipe(TermExtractionPipeline(func))
+        nlp.add_pipe(TermExtractionPipeline(nlp, func))
     doc = nlp(CORPUS)
     for func in ALGORITHMS:
         assert "term extractor" in getattr(doc._, func.__name__).index
