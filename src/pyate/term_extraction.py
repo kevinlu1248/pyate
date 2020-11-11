@@ -218,8 +218,7 @@ if __name__ == "__main__":
     PATH_TO_TECHNICAL_DOMAIN = "../data/pmc_testing.pkl"
     wiki = pd.read_pickle(PATH_TO_GENERAL_DOMAIN)
     pmc = pd.read_pickle(PATH_TO_TECHNICAL_DOMAIN)
-    vocab = ["Cutaneous melanoma", "cancer", "secondary clusters", "bio"]
-    #     start()
+    # vocab = ["Cutaneous melanoma", "cancer", "secondary clusters", "bio"]
     print(
         TermExtraction(pmc[:100]).count_terms_from_documents(
             seperate=True, verbose=True
