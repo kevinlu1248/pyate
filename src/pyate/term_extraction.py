@@ -1,9 +1,11 @@
 # term_extraction.py
-
 import collections.abc
 from collections import defaultdict
 from multiprocessing import Pool
-from typing import Callable, Iterable, Sequence, Union
+from typing import Callable
+from typing import Iterable
+from typing import Sequence
+from typing import Union
 
 import ahocorasick
 import numpy as np
