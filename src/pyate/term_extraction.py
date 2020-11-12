@@ -139,28 +139,21 @@ class TermExtraction:
             if seperate:
                 term_counters = []
             else:
-                term_counter = pd.Series(dtype="int64")
+                term_counter = defaultdict(int)
             if verbose:
                 pbar = tqdm(total=len(self.corpus))
 
-            def callback(counter_list):
+            def callback(counter_dict):
                 if verbose:
                     pbar.update(1)
                 if seperate:
                     term_counters.append(
-                        (tuple(counter_list.keys()), tuple(counter_list.values()))
+                        (tuple(counter_dict.keys()), tuple(counter_dict.values()))
                     )
                 else:
                     nonlocal term_counter
-                    # print(tuple(counter_list.values()))
-                    term_counter = term_counter.add(
-                        pd.Series(
-                            index=tuple(counter_list.keys()),
-                            data=tuple(counter_list.values()),
-                            dtype=np.int64,
-                        ),
-                        fill_value=0,
-                    ).astype(np.int64)
+                    for term, frequency in counter_dict.items():
+                        term_counter[term] += frequency
 
             def error_callback(e):
                 print(e)
@@ -196,7 +189,9 @@ class TermExtraction:
             )
             return self.__term_counter
         else:
-            self.__term_counter = term_counter
+            self.__term_counter = pd.Series(index=tuple(term_counter.keys()),
+                                            data=tuple(term_counter.values()),
+                                            dtype=np.int64)
             return self.__term_counter
 
 
