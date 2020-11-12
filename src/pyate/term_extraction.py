@@ -1,17 +1,20 @@
 # term_extraction.py
-
 import collections.abc
 from collections import defaultdict
-import pkg_resources
 from multiprocessing import Pool
-from typing import Iterable, Union, Sequence, Callable
+from typing import Callable
+from typing import Iterable
+from typing import Sequence
+from typing import Union
+
+import ahocorasick
+import numpy as np
+import pandas as pd
+import pkg_resources
+from tqdm import tqdm
 
 import spacy
 from spacy.matcher import Matcher
-from tqdm import tqdm
-import pandas as pd
-import ahocorasick
-import numpy as np
 
 start_ = 0
 tmp = 0
@@ -26,35 +29,63 @@ class TermExtraction:
     MAX_WORD_LENGTH = 6
     DEFAULT_GENERAL_DOMAIN_SIZE = 300
     DEFAULT_GENERAL_DOMAIN = pd.read_csv(
-        pkg_resources.resource_stream(__name__, "default_general_domain.en.csv"),
+        pkg_resources.resource_stream(__name__,
+                                      "default_general_domain.en.csv"),
         nrows=DEFAULT_GENERAL_DOMAIN_SIZE,
     )
 
     noun, adj, prep = (
-        {"POS": "NOUN", "IS_PUNCT": False},
-        {"POS": "ADJ", "IS_PUNCT": False},
-        {"POS": "DET", "IS_PUNCT": False},
+        {
+            "POS": "NOUN",
+            "IS_PUNCT": False
+        },
+        {
+            "POS": "ADJ",
+            "IS_PUNCT": False
+        },
+        {
+            "POS": "DET",
+            "IS_PUNCT": False
+        },
     )
 
     patterns = [
         [adj],
-        [{"POS": {"IN": ["ADJ", "NOUN"]}, "OP": "*", "IS_PUNCT": False}, noun],
+        [{
+            "POS": {
+                "IN": ["ADJ", "NOUN"]
+            },
+            "OP": "*",
+            "IS_PUNCT": False
+        }, noun],
         [
-            {"POS": {"IN": ["ADJ", "NOUN"]}, "OP": "*", "IS_PUNCT": False},
+            {
+                "POS": {
+                    "IN": ["ADJ", "NOUN"]
+                },
+                "OP": "*",
+                "IS_PUNCT": False
+            },
             noun,
             prep,
-            {"POS": {"IN": ["ADJ", "NOUN"]}, "OP": "*", "IS_PUNCT": False},
+            {
+                "POS": {
+                    "IN": ["ADJ", "NOUN"]
+                },
+                "OP": "*",
+                "IS_PUNCT": False
+            },
             noun,
         ],
     ]
 
     def __init__(
-        self,
-        corpus: Union[str, Iterable[str]],
-        vocab: Sequence[str] = None,
-        patterns=patterns,
-        do_parallelize: bool = True,
-        language="en",
+            self,
+            corpus: Union[str, Iterable[str]],
+            vocab: Sequence[str] = None,
+            patterns=patterns,
+            do_parallelize: bool = True,
+            language="en",
     ):
         """
         If corpus is a string, then find vocab sequentially, but if the corpus is an iterator,
@@ -82,8 +113,7 @@ class TermExtraction:
         TermExtraction.matcher = Matcher(TermExtraction.nlp.vocab)
         TermExtraction.DEFAULT_GENERAL_DOMAIN = pd.read_csv(
             pkg_resources.resource_stream(
-                __name__, f"default_general_domain.{language}.csv"
-            ),
+                __name__, f"default_general_domain.{language}.csv"),
             nrows=TermExtraction.DEFAULT_GENERAL_DOMAIN_SIZE,
         )
 
@@ -110,57 +140,51 @@ class TermExtraction:
             def add_to_counter(matcher, doc, i, matches):
                 match_id, start, end = matches[i]
                 candidate = str(doc[start:end])
-                if (
-                    TermExtraction.word_length(candidate)
-                    <= TermExtraction.MAX_WORD_LENGTH
-                ):
+                if (TermExtraction.word_length(candidate) <=
+                        TermExtraction.MAX_WORD_LENGTH):
                     term_counter[candidate] += 1
 
             for i, pattern in enumerate(self.patterns):
                 new_matcher.add("term{}".format(i), add_to_counter, pattern)
 
-            doc = TermExtraction.nlp(document.lower(), disable=["parser", "ner"])
+            doc = TermExtraction.nlp(document.lower(),
+                                     disable=["parser", "ner"])
             matches = new_matcher(doc)
         else:
             for end_index, (insert_order, original_value) in self.trie.iter(
-                document.lower()
-            ):
+                    document.lower()):
                 term_counter[original_value] += 1
         return term_counter
 
-    def count_terms_from_documents(self, seperate: bool = False, verbose: bool = False):
+    def count_terms_from_documents(self,
+                                   seperate: bool = False,
+                                   verbose: bool = False):
         if hasattr(self, "_TermExtraction__term_counts"):
             return self.__term_counts
 
         if type(self.corpus) is str:
-            self.__term_counts = pd.Series(self.count_terms_from_document(self.corpus))
+            self.__term_counts = pd.Series(
+                self.count_terms_from_document(self.corpus))
             return self.__term_counts
         elif isinstance(self.corpus, collections.abc.Iterable):
             if seperate:
                 term_counters = []
             else:
-                term_counter = pd.Series(dtype="int64")
+                term_counter = defaultdict(int)
             if verbose:
                 pbar = tqdm(total=len(self.corpus))
 
-            def callback(counter_list):
+            def callback(counter_dict):
                 if verbose:
                     pbar.update(1)
                 if seperate:
-                    term_counters.append(
-                        (tuple(counter_list.keys()), tuple(counter_list.values()))
-                    )
+                    term_counters.append((tuple(counter_dict.keys()),
+                                          tuple(counter_dict.values())))
                 else:
                     nonlocal term_counter
-                    # print(tuple(counter_list.values()))
-                    term_counter = term_counter.add(
-                        pd.Series(
-                            index=tuple(counter_list.keys()),
-                            data=tuple(counter_list.values()),
-                            dtype=np.int64,
-                        ),
-                        fill_value=0,
-                    ).astype(np.int64)
+                    # update the cumulative/overall term_counter
+                    for term, frequency in counter_dict.items():
+                        term_counter[term] += frequency
 
             def error_callback(e):
                 print(e)
@@ -186,17 +210,19 @@ class TermExtraction:
         if seperate:
 
             def counter_to_series(counter):
-                return pd.Series(data=counter[1], index=counter[0], dtype="int8")
+                return pd.Series(data=counter[1],
+                                 index=counter[0],
+                                 dtype="int8")
 
-            self.__term_counter = (
-                pd.DataFrame(data=map(counter_to_series, term_counters))
-                .fillna(0)
-                .astype("int8")
-                .T
-            )
+            self.__term_counter = (pd.DataFrame(data=map(
+                counter_to_series, term_counters)).fillna(0).astype("int8").T)
             return self.__term_counter
         else:
-            self.__term_counter = term_counter
+            self.__term_counter = pd.Series(
+                index=tuple(term_counter.keys()),
+                data=tuple(term_counter.values()),
+                dtype=np.int64,
+            )
             return self.__term_counter
 
 
@@ -220,7 +246,5 @@ if __name__ == "__main__":
     pmc = pd.read_pickle(PATH_TO_TECHNICAL_DOMAIN)
     # vocab = ["Cutaneous melanoma", "cancer", "secondary clusters", "bio"]
     print(
-        TermExtraction(pmc[:100]).count_terms_from_documents(
-            seperate=True, verbose=True
-        )
-    )
+        TermExtraction(pmc[:100]).count_terms_from_documents(seperate=True,
+                                                             verbose=True))
