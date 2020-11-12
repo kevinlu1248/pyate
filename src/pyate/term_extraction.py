@@ -152,6 +152,7 @@ class TermExtraction:
                     )
                 else:
                     nonlocal term_counter
+                    # update the cumulative/overall term_counter
                     for term, frequency in counter_dict.items():
                         term_counter[term] += frequency
 
