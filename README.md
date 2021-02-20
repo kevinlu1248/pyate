@@ -36,7 +36,7 @@ The model was trained and evaluated on the [ACL dataset](http://pars.ie/lr/acl-r
 This model does not come with PyATE. To install, run 
 
 ```bash
-pip install https://github.com/kevinlu1248/pyate/releases/download/v0.4.2/en_acl_terms_sm-2.0.3.tar.gz
+pip install https://github.com/kevinlu1248/pyate/releases/download/v0.4.2/en_acl_terms_sm-2.0.4.tar.gz
 ```
 
 To extract terms,
