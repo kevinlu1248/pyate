@@ -26,26 +26,27 @@ def helper_get_subsequences(s: str) -> List[str]:
 
 @add_term_extraction_method
 def cvalues(
-        technical_corpus: Corpus,
-        smoothing: float = 0.01,
-        verbose: bool = False,
-        have_single_word: bool = False,
-        technical_counts: Mapping[str, int] = None,
-        threshold: float = 0,
+    technical_corpus: Corpus,
+    smoothing: float = 0.01,
+    verbose: bool = False,
+    have_single_word: bool = False,
+    technical_counts: Mapping[str, int] = None,
+    threshold: float = 0,
 ):
 
     if technical_counts is None:
         technical_counts = (
-            TermExtraction(technical_corpus).count_terms_from_documents(
-                verbose=verbose).reindex())
+            TermExtraction(technical_corpus)
+            .count_terms_from_documents(verbose=verbose)
+            .reindex()
+        )
 
-    order = sorted(list(technical_counts.keys()),
-                   key=TermExtraction.word_length,
-                   reverse=True)
+    order = sorted(
+        list(technical_counts.keys()), key=TermExtraction.word_length, reverse=True
+    )
 
     if not have_single_word:
-        order = list(filter(lambda s: TermExtraction.word_length(s) > 1,
-                            order))
+        order = list(filter(lambda s: TermExtraction.word_length(s) > 1, order))
 
     technical_counts = technical_counts[order]
 
@@ -82,8 +83,7 @@ def cvalues(
                     df.loc[substring, "number_of_nested"] += f
                     df.loc[substring, "has_been_evaluated"] = True
 
-    srs = pd.Series(map(lambda s: s[1], output),
-                    index=map(lambda s: s[0], output))
+    srs = pd.Series(map(lambda s: s[1], output), index=map(lambda s: s[0], output))
     return srs.sort_values(ascending=False)
 
 
