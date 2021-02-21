@@ -20,6 +20,7 @@ def test_pipelines():
 
 
 def test_lang_change():
-    TermExtraction.set_language("it", "it_core_news_sm")  # italian
+    # TermExtraction.set_language("it", "it_core_news_sm")  # italian
+    TermExtraction.configure({"language": "it", "model_name": "it_core_news_sm"})
     for func in ALGORITHMS:
         func(CORPUS)

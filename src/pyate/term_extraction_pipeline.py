@@ -29,7 +29,7 @@ class TermExtractionPipeline:
         def add_to_counter(matcher, doc, i, matches) -> Doc:
             match_id, start, end = matches[i]
             candidate = str(doc[start:end])
-            if TermExtraction.word_length(candidate) <= TermExtraction.MAX_WORD_LENGTH:
+            if TermExtraction.word_length(candidate) <= TermExtraction.config["MAX_WORD_LENGTH"]:
                 self.term_counter[candidate] += 1
 
         for i, pattern in enumerate(TermExtraction.patterns):
@@ -38,7 +38,7 @@ class TermExtractionPipeline:
     def __call__(self, doc: Doc):
         self.term_counter = defaultdict(int)
 
-        matches = self.matcher(doc)
+        self.matcher(doc)
         terms = self.func(
             str(doc),
             technical_counts=pd.Series(self.term_counter),

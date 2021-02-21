@@ -69,7 +69,7 @@ def cvalues(
     for candidate, row in iterator:
         f, t, n, h = row
         length = TermExtraction.word_length(candidate)
-        if length == TermExtraction.MAX_WORD_LENGTH:
+        if length == TermExtraction.config["MAX_WORD_LENGTH"]:
             c_val = math.log2(length + smoothing) * f
         else:
             c_val = math.log2(length + smoothing) * f

@@ -10,7 +10,7 @@ from .term_extraction import TermExtraction, add_term_extraction_method, Corpus
 def weirdness(
     technical_corpus: Corpus,
     general_corpus: Corpus = None,
-    general_corpus_size=TermExtraction.DEFAULT_GENERAL_DOMAIN_SIZE,
+    general_corpus_size=TermExtraction.config["DEFAULT_GENERAL_DOMAIN_SIZE"],
     normalized: bool = False,
     technical_counts: Mapping[str, int] = None,
     verbose: bool = False,
@@ -18,9 +18,10 @@ def weirdness(
     # http://ceur-ws.org/Vol-1031/paper3.pdf
 
     if general_corpus is None:
-        general_corpus = TermExtraction.DEFAULT_GENERAL_DOMAIN[:general_corpus_size]
+        general_corpus = TermExtraction.get_general_domain()
 
     if technical_counts is None:
+        # this is the bulk of the calculations
         technical_counts = TermExtraction(technical_corpus).count_terms_from_documents(
             verbose=verbose
         )

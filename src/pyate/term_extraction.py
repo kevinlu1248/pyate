@@ -2,10 +2,8 @@
 import collections.abc
 from collections import defaultdict
 from multiprocessing import Pool
-from typing import Callable
-from typing import Iterable
-from typing import Sequence
-from typing import Union
+from typing import Callable, Iterable, Sequence, Union, Tuple, Any, Dict
+import warnings
 
 import ahocorasick
 import numpy as np
@@ -23,22 +21,29 @@ Corpus = Union[str, Sequence[str]]
 
 
 class TermExtraction:
-    # TODO: find some way to prevent redundant loading of csv files
-    nlp = spacy.load("en_core_web_sm", parser=False, entity=False)
-    language = "en"
-    MAX_WORD_LENGTH = 6
-    DEFAULT_GENERAL_DOMAIN_SIZE = 300
-    DEFAULT_GENERAL_DOMAIN = pd.read_csv(
-        pkg_resources.resource_stream(__name__, "default_general_domain.en.csv"),
-        nrows=DEFAULT_GENERAL_DOMAIN_SIZE,
-    )
-    dtype = np.int16
-
+    # Utility function for defining patterns
     noun, adj, prep = (
         {"POS": "NOUN", "IS_PUNCT": False},
         {"POS": "ADJ", "IS_PUNCT": False},
         {"POS": "DET", "IS_PUNCT": False},
     )
+
+    # Global settings for all instances of TermExtraction
+    config = {
+        "spacy_model": "en_core_web_sm",
+        "language": "en",
+        "MAX_WORD_LENGTH": 6,
+        "DEFAULT_GENERAL_DOMAIN_SIZE": 300,
+        "dtype": np.int16,
+    }
+
+    # nlp = spacy.load("en_core_web_sm", parser=False, entity=False)
+    nlps: Dict[str, Any] = {}
+    # language = "en"  # this is the default variable and can be changed
+    # MAX_WORD_LENGTH = 6
+    # DEFAULT_GENERAL_DOMAIN_SIZE = 300
+    DEFAULT_GENERAL_DOMAINS: Dict[Tuple[str, int], Any] = {}
+    # dtype = np.int16
 
     patterns = [
         [adj],
@@ -52,6 +57,37 @@ class TermExtraction:
         ],
     ]
 
+    @staticmethod
+    def get_nlp(language: str = None):
+        """
+        For getting the spaCy nlp.
+        """
+        if language is None:
+            language = TermExtraction.language
+        if language not in TermExtraction.nlps:
+            TermExtraction.nlps[language] = spacy.load(
+                TermExtraction.config["spacy_model"], parser=False, entity=False
+            )
+        return TermExtraction.nlps[language]
+
+    @staticmethod
+    def get_general_domain(language: str = None, size: int = None):
+        """
+        For getting a pandas Series of domains.
+        """
+        if language is None:
+            language = TermExtraction.config["language"]
+        if size is None:
+            size = TermExtraction.config["DEFAULT_GENERAL_DOMAIN_SIZE"]
+        if (language, size) not in TermExtraction.DEFAULT_GENERAL_DOMAINS:
+            TermExtraction.DEFAULT_GENERAL_DOMAINS[(language, size)] = pd.read_csv(
+                pkg_resources.resource_stream(
+                    __name__, f"default_general_domain.{language}.csv"
+                ),
+                nrows=size,
+            )
+        return TermExtraction.DEFAULT_GENERAL_DOMAINS[(language, size)]
+
     def __init__(
         self,
         corpus: Union[str, Iterable[str]],
@@ -59,10 +95,16 @@ class TermExtraction:
         patterns=patterns,
         do_parallelize: bool = True,
         language="en",
+        nlp=None,
+        default_domain=None,
+        default_domain_size: int = None,
+        max_word_length: int = None,
+        dtype: np.dtype = None,
     ):
         """
         If corpus is a string, then find vocab sequentially, but if the corpus is an iterator,
-        compute in parallel. If there is a vocab list, only search for frequencies from the vocab list,
+        compute through each of them, performing in parallel if do_parallel is set ot true.
+        If there is a vocab list, only search for frequencies from the vocab list,
         otherwise search using the patterns.
 
         TODO: do_parallelize and do_lower
@@ -71,67 +113,99 @@ class TermExtraction:
         self.vocab = vocab
         self.patterns = patterns
         self.do_parallelize = do_parallelize
-        TermExtraction.language = language
+        # TermExtraction.language = language
+        self.language = language
+        self.nlp = nlp
+        self.default_domain = default_domain
+        self.default_domain_size = default_domain_size
+        self.max_word_length = max_word_length
+        self.dtype = dtype
+        if self.default_domain_size is None:
+            self.default_domain_size = TermExtraction.config[
+                "DEFAULT_GENERAL_DOMAIN_SIZE"
+            ]
+        if self.nlp is None:
+            self.nlp = TermExtraction.get_nlp(self.language)
+        if self.default_domain is None:
+            self.default_domain = TermExtraction.get_general_domain(self.language)
+        if self.max_word_length is None:
+            self.max_word_length = TermExtraction.config["MAX_WORD_LENGTH"]
+        if self.dtype is None:
+            self.dtype = TermExtraction.config["dtype"]
 
     @staticmethod
-    def set_language(language: str, model_name: str = ""):
+    def set_language(language: str, model_name: str = None):
         """
-        For changing the language. Currently, the DEFAULT_GENERAL_DOMAIN is still in English only.
+        For changing the language. Currently, the DEFAULT_GENERAL_DOMAIN is still in English and Italian only.
         If you have a good dataset in another language please put it in an issue on Github.
         """
-        if model_name == "":
+        if model_name is None:
             model_name = language
-        TermExtraction.language = language
-        TermExtraction.nlp = spacy.load(model_name)
-        TermExtraction.matcher = Matcher(TermExtraction.nlp.vocab)
-        TermExtraction.DEFAULT_GENERAL_DOMAIN = pd.read_csv(
-            pkg_resources.resource_stream(
-                __name__, f"default_general_domain.{language}.csv"
-            ),
-            nrows=TermExtraction.DEFAULT_GENERAL_DOMAIN_SIZE,
-        )
+        if not model_name.startswith(language):
+            warnings.warn(
+                f"Model '{model_name}' and language '{language}' may not be compatible."
+            )
+        TermExtraction.config["language"] = language
 
     @staticmethod
-    def set_dtype(new_dtype: np.dtype):
+    def configure(new_settings: Dict[str, Any]):
         """
-        For changing the datatype stored by the pandas series.
+        Updates config settings, which include:
+        - `spacy_model`: str = "en_core_web_sm" (for changing the spacy model name to be used),
+        - "language": str = "en" (this is the default language),
+        - "MAX_WORD_LENGTH": int = 6 (this is the maximum word length to be considered a phrase),
+        - "DEFAULT_GENERAL_DOMAIN_SIZE": int = 300 (this is the number of sentences to be taken from the general domain file),
+        - "dtype": np.int16 (this is the date type for max Pandas series int size which are used as counters),
         """
-        TermExtraction.dtype = new_dtype
+        TermExtraction.config.update(new_settings)
+        if not TermExtraction.config["model_name"].startswith(TermExtraction.config["language"]):
+            warnings.warn(
+                f"Model '{TermExtraction.config['model_name']}' and language '{TermExtraction.config['language']}' may not be compatible."
+            )
 
     @staticmethod
     def word_length(string: str):
+        """
+        Utility function for quickly computing the number of words in a string.
+        """
         return string.count(" ") + 1
 
     @property
     def trie(self):
+        """
+        Returns an automaton using the Aho–Corasick algorithm using the pyachocorasick library (https://pypi.org/project/pyahocorasick/).
+        This method builds the automaton the first time and caches it for future use.
+        """
         if not hasattr(self, "_TermExtraction__trie"):
             self.__trie = ahocorasick.Automaton()
             for idx, key in enumerate(self.vocab):
                 self.__trie.add_word(key, (idx, key))
             self.__trie.make_automaton()
+        assert isinstance(self.__trie, ahocorasick.Automaton)
         return self.__trie
 
     def count_terms_from_document(self, document: str):
+        """
+                Counts the frequency of each term in the class and returns it as a default dict mapping each string to the number of occurences of the phrase, for each phrase in vocab.
+        .
+        """
         # for single documents
-        term_counter = defaultdict(int)
+        term_counter: defaultdict = defaultdict(int)
         if self.vocab is None:
             # initialize a Matcher here - not at the class level
-            new_matcher = Matcher(TermExtraction.nlp.vocab)
+            new_matcher = Matcher(self.nlp.vocab)
 
             def add_to_counter(matcher, doc, i, matches):
                 match_id, start, end = matches[i]
                 candidate = str(doc[start:end])
-                if (
-                    TermExtraction.word_length(candidate)
-                    <= TermExtraction.MAX_WORD_LENGTH
-                ):
+                if TermExtraction.word_length(candidate) <= self.max_word_length:
                     term_counter[candidate] += 1
 
             for i, pattern in enumerate(self.patterns):
                 new_matcher.add("term{}".format(i), add_to_counter, pattern)
 
-            doc = TermExtraction.nlp(document.lower(), disable=["parser", "ner"])
-            matches = new_matcher(doc)
+            doc = self.nlp(document.lower(), disable=["parser", "ner"])
+            new_matcher(doc)
         else:
             for end_index, (insert_order, original_value) in self.trie.iter(
                 document.lower()
@@ -140,11 +214,20 @@ class TermExtraction:
         return term_counter
 
     def count_terms_from_documents(self, seperate: bool = False, verbose: bool = False):
+        """
+        This is the main purpose of this class. Counts terms from the documents and returns a pandas Series.
+        If self.corpus is a string, then it is identical to count_terms_from_document.
+        If the corpus is an iterable (more specifically, collections.abc.Iterable) of strings, then it will perform the same thing but for each string in the iterable. If `seperate` is set to true, then it will return an iterable of default dicts; otherwise, it will return a single default dict with the sum of frequencies among all strings.
+        """
+        # TODO: further optimize
+        # TODO: add type annotations
         if hasattr(self, "_TermExtraction__term_counts"):
             return self.__term_counts
 
         if type(self.corpus) is str:
-            self.__term_counts = pd.Series(self.count_terms_from_document(self.corpus), dtype=TermExtraction.dtype)
+            self.__term_counts = pd.Series(
+                self.count_terms_from_document(self.corpus), dtype=self.dtype
+            )
             return self.__term_counts
         elif isinstance(self.corpus, collections.abc.Iterable):
             if seperate:
@@ -191,12 +274,12 @@ class TermExtraction:
         if seperate:
 
             def counter_to_series(counter):
-                return pd.Series(data=counter[1], index=counter[0], dtype="int8")
+                return pd.Series(data=counter[1], index=counter[0], dtype=self.dtype)
 
             self.__term_counter = (
                 pd.DataFrame(data=map(counter_to_series, term_counters))
                 .fillna(0)
-                .astype("int8")
+                .astype(self.dtype)
                 .T
             )
             return self.__term_counter
@@ -204,7 +287,7 @@ class TermExtraction:
             self.__term_counter = pd.Series(
                 index=tuple(term_counter.keys()),
                 data=tuple(term_counter.values()),
-                dtype=TermExtraction.dtype,
+                dtype=self.dtype,
             )
             return self.__term_counter
 

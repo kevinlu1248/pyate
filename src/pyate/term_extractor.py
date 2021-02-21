@@ -12,14 +12,14 @@ from .term_extraction import TermExtraction, add_term_extraction_method, Corpus
 def term_extractor(
     technical_corpus: Corpus,
     general_corpus: Corpus = None,
-    general_corpus_size=TermExtraction.DEFAULT_GENERAL_DOMAIN_SIZE,
+    general_corpus_size=TermExtraction.config["DEFAULT_GENERAL_DOMAIN_SIZE"],
     weights: Sequence[float] = None,
     verbose: bool = False,
     technical_counts: Mapping[str, int] = None,
 ):
 
     if general_corpus is None:
-        general_corpus = TermExtraction.DEFAULT_GENERAL_DOMAIN[:100]
+        general_corpus = TermExtraction.get_general_domain()
 
     # reused initializations
     technical_counts_seperate = TermExtraction(

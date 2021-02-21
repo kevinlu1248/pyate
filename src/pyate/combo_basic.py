@@ -40,7 +40,7 @@ def combo_basic(
         )
 
     if len(technical_counts) == 0:
-        return pd.Series(dtype=TermExtraction.dtype)
+        return pd.Series(dtype=TermExtraction.config["dtype"])
 
     order = sorted(
         list(technical_counts.keys()), key=TermExtraction.word_length, reverse=True
@@ -52,7 +52,7 @@ def combo_basic(
     technical_counts = technical_counts[order]
 
     if len(technical_counts) == 0:
-        return pd.Series(dtype=TermExtraction.dtype)
+        return pd.Series(dtype=TermExtraction.config["dtype"])
 
     df = pd.DataFrame(
         {
