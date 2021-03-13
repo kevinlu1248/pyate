@@ -8,6 +8,7 @@ from .combo_basic import combo_basic
 
 @add_term_extraction_method
 def basic(technical_corpus: str, *args, **kwargs):
+    # TODO: optimize
     weights = np.array([1, 3.5, 0])
     return combo_basic(technical_corpus, weights=weights, *args, **kwargs)
 

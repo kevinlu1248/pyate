@@ -1,4 +1,5 @@
 # term_extraction.py
+
 import collections.abc
 from collections import defaultdict
 from multiprocessing import Pool
@@ -37,13 +38,9 @@ class TermExtraction:
         "dtype": np.int16,
     }
 
-    # nlp = spacy.load("en_core_web_sm", parser=False, entity=False)
+    # Resources, will get more if necessary
     nlps: Dict[str, Any] = {}
-    # language = "en"  # this is the default variable and can be changed
-    # MAX_WORD_LENGTH = 6
-    # DEFAULT_GENERAL_DOMAIN_SIZE = 300
     DEFAULT_GENERAL_DOMAINS: Dict[Tuple[str, int], Any] = {}
-    # dtype = np.int16
 
     patterns = [
         [adj],
@@ -88,6 +85,14 @@ class TermExtraction:
             )
         return TermExtraction.DEFAULT_GENERAL_DOMAINS[(language, size)]
 
+    @staticmethod
+    def clear_resouces():
+        """
+        Clears cached spaCy nlp's and general domain documents.
+        """
+        TermExtraction.nlps = {}
+        TermExtraction.DEFAULT_GENERAL_DOMAINS = {}
+
     def __init__(
         self,
         corpus: Union[str, Iterable[str]],
@@ -102,18 +107,13 @@ class TermExtraction:
         dtype: np.dtype = None,
     ):
         """
-        If corpus is a string, then find vocab sequentially, but if the corpus is an iterator,
-        compute through each of them, performing in parallel if do_parallel is set ot true.
-        If there is a vocab list, only search for frequencies from the vocab list,
-        otherwise search using the patterns.
-
-        TODO: do_parallelize and do_lower
+        If corpus is a string, then find vocab sequentially, but if the corpus is an iterator, compute through each of them, performing in parallel if do_parallel is set to true. If there is a vocab list, only search for frequencies from the vocab list, otherwise search using the patterns.
         """
+        # TODO: find a way to cache counts for general domain
         self.corpus = corpus
         self.vocab = vocab
         self.patterns = patterns
         self.do_parallelize = do_parallelize
-        # TermExtraction.language = language
         self.language = language
         self.nlp = nlp
         self.default_domain = default_domain
@@ -136,8 +136,7 @@ class TermExtraction:
     @staticmethod
     def set_language(language: str, model_name: str = None):
         """
-        For changing the language. Currently, the DEFAULT_GENERAL_DOMAIN is still in English and Italian only.
-        If you have a good dataset in another language please put it in an issue on Github.
+        For changing the language. Currently, the DEFAULT_GENERAL_DOMAIN is still in English and Italian only. If you have a good dataset in another language please put it in an issue on Github.
         """
         if model_name is None:
             model_name = language
@@ -158,7 +157,9 @@ class TermExtraction:
         - "dtype": np.int16 (this is the date type for max Pandas series int size which are used as counters),
         """
         TermExtraction.config.update(new_settings)
-        if not TermExtraction.config["model_name"].startswith(TermExtraction.config["language"]):
+        if not TermExtraction.config["model_name"].startswith(
+            TermExtraction.config["language"]
+        ):
             warnings.warn(
                 f"Model '{TermExtraction.config['model_name']}' and language '{TermExtraction.config['language']}' may not be compatible."
             )
@@ -186,13 +187,12 @@ class TermExtraction:
 
     def count_terms_from_document(self, document: str):
         """
-                Counts the frequency of each term in the class and returns it as a default dict mapping each string to the number of occurences of the phrase, for each phrase in vocab.
-        .
+        Counts the frequency of each term in the class and returns it as a default dict mapping each string to the number of occurences of the phrase, for each phrase in vocab.
         """
-        # for single documents
         term_counter: defaultdict = defaultdict(int)
         if self.vocab is None:
             # initialize a Matcher here - not at the class level
+            # addressed in: https://github.com/kevinlu1248/pyate/issues/20
             new_matcher = Matcher(self.nlp.vocab)
 
             def add_to_counter(matcher, doc, i, matches):
@@ -293,7 +293,7 @@ class TermExtraction:
 
 
 def add_term_extraction_method(extractor: Callable[..., pd.Series]):
-    def term_extraction_decoration(self, *args, **kwargs):
+    def term_extraction_decorated(self, *args, **kwargs):
         return extractor(
             self.corpus,
             technical_counts=self.count_terms_from_documents(),
@@ -301,7 +301,7 @@ def add_term_extraction_method(extractor: Callable[..., pd.Series]):
             **kwargs,
         )
 
-    setattr(TermExtraction, extractor.__name__, term_extraction_decoration)
+    setattr(TermExtraction, extractor.__name__, term_extraction_decorated)
     return extractor
 
 

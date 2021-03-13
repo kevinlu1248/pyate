@@ -10,6 +10,9 @@ from spacy.matcher import Matcher
 
 
 class TermExtractionPipeline:
+    """
+    This is for adding PyATE as a spaCy pipeline component.
+    """
     def __init__(
         self,
         nlp,
@@ -18,6 +21,9 @@ class TermExtractionPipeline:
         *args,
         **kwargs
     ) -> None:
+        """
+        This is for initializing the TermExtractionPipeline.
+        """
         self.func = func
         self.args = args
         self.kwargs = kwargs
@@ -29,15 +35,20 @@ class TermExtractionPipeline:
         def add_to_counter(matcher, doc, i, matches) -> Doc:
             match_id, start, end = matches[i]
             candidate = str(doc[start:end])
-            if TermExtraction.word_length(candidate) <= TermExtraction.config["MAX_WORD_LENGTH"]:
+            if (
+                TermExtraction.word_length(candidate)
+                <= TermExtraction.config["MAX_WORD_LENGTH"]
+            ):
                 self.term_counter[candidate] += 1
 
         for i, pattern in enumerate(TermExtraction.patterns):
             self.matcher.add("term{}".format(i), add_to_counter, pattern)
 
     def __call__(self, doc: Doc):
+        """
+        This function will be called from within spaCy's utilities.
+        """
         self.term_counter = defaultdict(int)
-
         self.matcher(doc)
         terms = self.func(
             str(doc),
