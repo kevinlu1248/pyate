@@ -20,3 +20,4 @@ help:
 	@$(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
 	rm $(HTMLDIR)/* -r
 	cp $(BUILDDIR)/html/* $(HTMLDIR) -r
+	touch $(HTMLDIR)/.nojekyll
