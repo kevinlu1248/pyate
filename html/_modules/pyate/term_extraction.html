@@ -1,0 +1,517 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>pyate.term_extraction &mdash; PyATE 0.4.3 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> PyATE
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">pyate</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">PyATE</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>pyate.term_extraction</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for pyate.term_extraction</h1><div class="highlight"><pre>
+<span></span><span class="c1"># term_extraction.py</span>
+
+<span class="kn">import</span> <span class="nn">collections.abc</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">defaultdict</span>
+<span class="kn">from</span> <span class="nn">multiprocessing</span> <span class="kn">import</span> <span class="n">Pool</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+
+<span class="kn">import</span> <span class="nn">ahocorasick</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">pkg_resources</span>
+<span class="kn">from</span> <span class="nn">tqdm</span> <span class="kn">import</span> <span class="n">tqdm</span>
+
+<span class="kn">import</span> <span class="nn">spacy</span>
+<span class="kn">from</span> <span class="nn">spacy.matcher</span> <span class="kn">import</span> <span class="n">Matcher</span>
+
+<span class="n">start_</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">tmp</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">doctime</span><span class="p">,</span> <span class="n">matchertime</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span>
+<span class="n">Corpus</span> <span class="o">=</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span>
+
+
+<div class="viewcode-block" id="TermExtraction"><a class="viewcode-back" href="../../pyate.html#pyate.term_extraction.TermExtraction">[docs]</a><span class="k">class</span> <span class="nc">TermExtraction</span><span class="p">:</span>
+    <span class="c1"># Utility function for defining patterns</span>
+    <span class="n">noun</span><span class="p">,</span> <span class="n">adj</span><span class="p">,</span> <span class="n">prep</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="p">{</span><span class="s2">&quot;POS&quot;</span><span class="p">:</span> <span class="s2">&quot;NOUN&quot;</span><span class="p">,</span> <span class="s2">&quot;IS_PUNCT&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">},</span>
+        <span class="p">{</span><span class="s2">&quot;POS&quot;</span><span class="p">:</span> <span class="s2">&quot;ADJ&quot;</span><span class="p">,</span> <span class="s2">&quot;IS_PUNCT&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">},</span>
+        <span class="p">{</span><span class="s2">&quot;POS&quot;</span><span class="p">:</span> <span class="s2">&quot;DET&quot;</span><span class="p">,</span> <span class="s2">&quot;IS_PUNCT&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">},</span>
+    <span class="p">)</span>
+
+    <span class="c1"># Global settings for all instances of TermExtraction</span>
+    <span class="n">config</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;spacy_model&quot;</span><span class="p">:</span> <span class="s2">&quot;en_core_web_sm&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;language&quot;</span><span class="p">:</span> <span class="s2">&quot;en&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;MAX_WORD_LENGTH&quot;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span>
+        <span class="s2">&quot;DEFAULT_GENERAL_DOMAIN_SIZE&quot;</span><span class="p">:</span> <span class="mi">300</span><span class="p">,</span>
+        <span class="s2">&quot;dtype&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">int16</span><span class="p">,</span>
+    <span class="p">}</span>
+
+    <span class="c1"># Resources, will get more if necessary</span>
+    <span class="n">nlps</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">DEFAULT_GENERAL_DOMAINS</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="n">patterns</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">[</span><span class="n">adj</span><span class="p">],</span>
+        <span class="p">[{</span><span class="s2">&quot;POS&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;IN&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;ADJ&quot;</span><span class="p">,</span> <span class="s2">&quot;NOUN&quot;</span><span class="p">]},</span> <span class="s2">&quot;OP&quot;</span><span class="p">:</span> <span class="s2">&quot;*&quot;</span><span class="p">,</span> <span class="s2">&quot;IS_PUNCT&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">},</span> <span class="n">noun</span><span class="p">],</span>
+        <span class="p">[</span>
+            <span class="p">{</span><span class="s2">&quot;POS&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;IN&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;ADJ&quot;</span><span class="p">,</span> <span class="s2">&quot;NOUN&quot;</span><span class="p">]},</span> <span class="s2">&quot;OP&quot;</span><span class="p">:</span> <span class="s2">&quot;*&quot;</span><span class="p">,</span> <span class="s2">&quot;IS_PUNCT&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">},</span>
+            <span class="n">noun</span><span class="p">,</span>
+            <span class="n">prep</span><span class="p">,</span>
+            <span class="p">{</span><span class="s2">&quot;POS&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;IN&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;ADJ&quot;</span><span class="p">,</span> <span class="s2">&quot;NOUN&quot;</span><span class="p">]},</span> <span class="s2">&quot;OP&quot;</span><span class="p">:</span> <span class="s2">&quot;*&quot;</span><span class="p">,</span> <span class="s2">&quot;IS_PUNCT&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">},</span>
+            <span class="n">noun</span><span class="p">,</span>
+        <span class="p">],</span>
+    <span class="p">]</span>
+
+<div class="viewcode-block" id="TermExtraction.get_nlp"><a class="viewcode-back" href="../../pyate.html#pyate.term_extraction.TermExtraction.get_nlp">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">get_nlp</span><span class="p">(</span><span class="n">language</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        For getting the spaCy nlp.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">language</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">language</span> <span class="o">=</span> <span class="n">TermExtraction</span><span class="o">.</span><span class="n">language</span>
+        <span class="k">if</span> <span class="n">language</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">TermExtraction</span><span class="o">.</span><span class="n">nlps</span><span class="p">:</span>
+            <span class="n">TermExtraction</span><span class="o">.</span><span class="n">nlps</span><span class="p">[</span><span class="n">language</span><span class="p">]</span> <span class="o">=</span> <span class="n">spacy</span><span class="o">.</span><span class="n">load</span><span class="p">(</span>
+                <span class="n">TermExtraction</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;spacy_model&quot;</span><span class="p">],</span> <span class="n">parser</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">entity</span><span class="o">=</span><span class="kc">False</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="n">TermExtraction</span><span class="o">.</span><span class="n">nlps</span><span class="p">[</span><span class="n">language</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="TermExtraction.get_general_domain"><a class="viewcode-back" href="../../pyate.html#pyate.term_extraction.TermExtraction.get_general_domain">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">get_general_domain</span><span class="p">(</span><span class="n">language</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        For getting a pandas Series of domains.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">language</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">language</span> <span class="o">=</span> <span class="n">TermExtraction</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;language&quot;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">size</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">size</span> <span class="o">=</span> <span class="n">TermExtraction</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;DEFAULT_GENERAL_DOMAIN_SIZE&quot;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">language</span><span class="p">,</span> <span class="n">size</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">TermExtraction</span><span class="o">.</span><span class="n">DEFAULT_GENERAL_DOMAINS</span><span class="p">:</span>
+            <span class="n">TermExtraction</span><span class="o">.</span><span class="n">DEFAULT_GENERAL_DOMAINS</span><span class="p">[(</span><span class="n">language</span><span class="p">,</span> <span class="n">size</span><span class="p">)]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span>
+                <span class="n">pkg_resources</span><span class="o">.</span><span class="n">resource_stream</span><span class="p">(</span>
+                    <span class="vm">__name__</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;default_general_domain.</span><span class="si">{</span><span class="n">language</span><span class="si">}</span><span class="s2">.csv&quot;</span>
+                <span class="p">),</span>
+                <span class="n">nrows</span><span class="o">=</span><span class="n">size</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="n">TermExtraction</span><span class="o">.</span><span class="n">DEFAULT_GENERAL_DOMAINS</span><span class="p">[(</span><span class="n">language</span><span class="p">,</span> <span class="n">size</span><span class="p">)]</span></div>
+
+<div class="viewcode-block" id="TermExtraction.clear_resouces"><a class="viewcode-back" href="../../pyate.html#pyate.term_extraction.TermExtraction.clear_resouces">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">clear_resouces</span><span class="p">():</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Clears cached spaCy nlp&#39;s and general domain documents.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">TermExtraction</span><span class="o">.</span><span class="n">nlps</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">TermExtraction</span><span class="o">.</span><span class="n">DEFAULT_GENERAL_DOMAINS</span> <span class="o">=</span> <span class="p">{}</span></div>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">corpus</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span>
+        <span class="n">vocab</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">patterns</span><span class="o">=</span><span class="n">patterns</span><span class="p">,</span>
+        <span class="n">do_parallelize</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="n">language</span><span class="o">=</span><span class="s2">&quot;en&quot;</span><span class="p">,</span>
+        <span class="n">nlp</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">default_domain</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">default_domain_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">max_word_length</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">dtype</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        If corpus is a string, then find vocab sequentially, but if the corpus is an iterator, compute through each of them, performing in parallel if do_parallel is set to true. If there is a vocab list, only search for frequencies from the vocab list, otherwise search using the patterns.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># TODO: find a way to cache counts for general domain</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">corpus</span> <span class="o">=</span> <span class="n">corpus</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">vocab</span> <span class="o">=</span> <span class="n">vocab</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">patterns</span> <span class="o">=</span> <span class="n">patterns</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">do_parallelize</span> <span class="o">=</span> <span class="n">do_parallelize</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">language</span> <span class="o">=</span> <span class="n">language</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nlp</span> <span class="o">=</span> <span class="n">nlp</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">default_domain</span> <span class="o">=</span> <span class="n">default_domain</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">default_domain_size</span> <span class="o">=</span> <span class="n">default_domain_size</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">max_word_length</span> <span class="o">=</span> <span class="n">max_word_length</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dtype</span> <span class="o">=</span> <span class="n">dtype</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">default_domain_size</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">default_domain_size</span> <span class="o">=</span> <span class="n">TermExtraction</span><span class="o">.</span><span class="n">config</span><span class="p">[</span>
+                <span class="s2">&quot;DEFAULT_GENERAL_DOMAIN_SIZE&quot;</span>
+            <span class="p">]</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">nlp</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">nlp</span> <span class="o">=</span> <span class="n">TermExtraction</span><span class="o">.</span><span class="n">get_nlp</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">language</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">default_domain</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">default_domain</span> <span class="o">=</span> <span class="n">TermExtraction</span><span class="o">.</span><span class="n">get_general_domain</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">language</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_word_length</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">max_word_length</span> <span class="o">=</span> <span class="n">TermExtraction</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;MAX_WORD_LENGTH&quot;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dtype</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dtype</span> <span class="o">=</span> <span class="n">TermExtraction</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;dtype&quot;</span><span class="p">]</span>
+
+<div class="viewcode-block" id="TermExtraction.set_language"><a class="viewcode-back" href="../../pyate.html#pyate.term_extraction.TermExtraction.set_language">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">set_language</span><span class="p">(</span><span class="n">language</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">model_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        For changing the language. Currently, the DEFAULT_GENERAL_DOMAIN is still in English and Italian only. If you have a good dataset in another language please put it in an issue on Github.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">model_name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">model_name</span> <span class="o">=</span> <span class="n">language</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">model_name</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">language</span><span class="p">):</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Model &#39;</span><span class="si">{</span><span class="n">model_name</span><span class="si">}</span><span class="s2">&#39; and language &#39;</span><span class="si">{</span><span class="n">language</span><span class="si">}</span><span class="s2">&#39; may not be compatible.&quot;</span>
+            <span class="p">)</span>
+        <span class="n">TermExtraction</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;language&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">language</span></div>
+
+<div class="viewcode-block" id="TermExtraction.configure"><a class="viewcode-back" href="../../pyate.html#pyate.term_extraction.TermExtraction.configure">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">configure</span><span class="p">(</span><span class="n">new_settings</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Updates config settings, which include:</span>
+<span class="sd">        - `spacy_model`: str = &quot;en_core_web_sm&quot; (for changing the spacy model name to be used),</span>
+<span class="sd">        - &quot;language&quot;: str = &quot;en&quot; (this is the default language),</span>
+<span class="sd">        - &quot;MAX_WORD_LENGTH&quot;: int = 6 (this is the maximum word length to be considered a phrase),</span>
+<span class="sd">        - &quot;DEFAULT_GENERAL_DOMAIN_SIZE&quot;: int = 300 (this is the number of sentences to be taken from the general domain file),</span>
+<span class="sd">        - &quot;dtype&quot;: np.int16 (this is the date type for max Pandas series int size which are used as counters),</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">TermExtraction</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">new_settings</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">TermExtraction</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;model_name&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span>
+            <span class="n">TermExtraction</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;language&quot;</span><span class="p">]</span>
+        <span class="p">):</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Model &#39;</span><span class="si">{</span><span class="n">TermExtraction</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;model_name&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&#39; and language &#39;</span><span class="si">{</span><span class="n">TermExtraction</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;language&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&#39; may not be compatible.&quot;</span>
+            <span class="p">)</span></div>
+
+<div class="viewcode-block" id="TermExtraction.word_length"><a class="viewcode-back" href="../../pyate.html#pyate.term_extraction.TermExtraction.word_length">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">word_length</span><span class="p">(</span><span class="n">string</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Utility function for quickly computing the number of words in a string.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">string</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">trie</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns an automaton using the Aho–Corasick algorithm using the pyachocorasick library (https://pypi.org/project/pyahocorasick/).</span>
+<span class="sd">        This method builds the automaton the first time and caches it for future use.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;_TermExtraction__trie&quot;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__trie</span> <span class="o">=</span> <span class="n">ahocorasick</span><span class="o">.</span><span class="n">Automaton</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">key</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vocab</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__trie</span><span class="o">.</span><span class="n">add_word</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="p">(</span><span class="n">idx</span><span class="p">,</span> <span class="n">key</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__trie</span><span class="o">.</span><span class="n">make_automaton</span><span class="p">()</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__trie</span><span class="p">,</span> <span class="n">ahocorasick</span><span class="o">.</span><span class="n">Automaton</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__trie</span>
+
+<div class="viewcode-block" id="TermExtraction.count_terms_from_document"><a class="viewcode-back" href="../../pyate.html#pyate.term_extraction.TermExtraction.count_terms_from_document">[docs]</a>    <span class="k">def</span> <span class="nf">count_terms_from_document</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">document</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Counts the frequency of each term in the class and returns it as a default dict mapping each string to the number of occurences of the phrase, for each phrase in vocab.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">term_counter</span><span class="p">:</span> <span class="n">defaultdict</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">vocab</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># initialize a Matcher here - not at the class level</span>
+            <span class="c1"># addressed in: https://github.com/kevinlu1248/pyate/issues/20</span>
+            <span class="n">new_matcher</span> <span class="o">=</span> <span class="n">Matcher</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nlp</span><span class="o">.</span><span class="n">vocab</span><span class="p">)</span>
+
+            <span class="k">def</span> <span class="nf">add_to_counter</span><span class="p">(</span><span class="n">matcher</span><span class="p">,</span> <span class="n">doc</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">matches</span><span class="p">):</span>
+                <span class="n">match_id</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span> <span class="o">=</span> <span class="n">matches</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                <span class="n">candidate</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">doc</span><span class="p">[</span><span class="n">start</span><span class="p">:</span><span class="n">end</span><span class="p">])</span>
+                <span class="k">if</span> <span class="n">TermExtraction</span><span class="o">.</span><span class="n">word_length</span><span class="p">(</span><span class="n">candidate</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_word_length</span><span class="p">:</span>
+                    <span class="n">term_counter</span><span class="p">[</span><span class="n">candidate</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+
+            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">pattern</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">patterns</span><span class="p">):</span>
+                <span class="n">new_matcher</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;term</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="n">add_to_counter</span><span class="p">,</span> <span class="n">pattern</span><span class="p">)</span>
+
+            <span class="n">doc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">nlp</span><span class="p">(</span><span class="n">document</span><span class="o">.</span><span class="n">lower</span><span class="p">(),</span> <span class="n">disable</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;parser&quot;</span><span class="p">,</span> <span class="s2">&quot;ner&quot;</span><span class="p">])</span>
+            <span class="n">new_matcher</span><span class="p">(</span><span class="n">doc</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">end_index</span><span class="p">,</span> <span class="p">(</span><span class="n">insert_order</span><span class="p">,</span> <span class="n">original_value</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">trie</span><span class="o">.</span><span class="n">iter</span><span class="p">(</span>
+                <span class="n">document</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+            <span class="p">):</span>
+                <span class="n">term_counter</span><span class="p">[</span><span class="n">original_value</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">return</span> <span class="n">term_counter</span></div>
+
+<div class="viewcode-block" id="TermExtraction.count_terms_from_documents"><a class="viewcode-back" href="../../pyate.html#pyate.term_extraction.TermExtraction.count_terms_from_documents">[docs]</a>    <span class="k">def</span> <span class="nf">count_terms_from_documents</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">seperate</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This is the main purpose of this class. Counts terms from the documents and returns a pandas Series.</span>
+<span class="sd">        If self.corpus is a string, then it is identical to count_terms_from_document.</span>
+<span class="sd">        If the corpus is an iterable (more specifically, collections.abc.Iterable) of strings, then it will perform the same thing but for each string in the iterable. If `seperate` is set to true, then it will return an iterable of default dicts; otherwise, it will return a single default dict with the sum of frequencies among all strings.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># TODO: further optimize</span>
+        <span class="c1"># TODO: add type annotations</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;_TermExtraction__term_counts&quot;</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__term_counts</span>
+
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">corpus</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">str</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__term_counts</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">count_terms_from_document</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">corpus</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dtype</span>
+            <span class="p">)</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__term_counts</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">corpus</span><span class="p">,</span> <span class="n">collections</span><span class="o">.</span><span class="n">abc</span><span class="o">.</span><span class="n">Iterable</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">seperate</span><span class="p">:</span>
+                <span class="n">term_counters</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">term_counter</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+                <span class="n">pbar</span> <span class="o">=</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">total</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">corpus</span><span class="p">))</span>
+
+            <span class="k">def</span> <span class="nf">callback</span><span class="p">(</span><span class="n">counter_dict</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+                    <span class="n">pbar</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">seperate</span><span class="p">:</span>
+                    <span class="n">term_counters</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                        <span class="p">(</span><span class="nb">tuple</span><span class="p">(</span><span class="n">counter_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">()),</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">counter_dict</span><span class="o">.</span><span class="n">values</span><span class="p">()))</span>
+                    <span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">nonlocal</span> <span class="n">term_counter</span>
+                    <span class="c1"># update the cumulative/overall term_counter</span>
+                    <span class="k">for</span> <span class="n">term</span><span class="p">,</span> <span class="n">frequency</span> <span class="ow">in</span> <span class="n">counter_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                        <span class="n">term_counter</span><span class="p">[</span><span class="n">term</span><span class="p">]</span> <span class="o">+=</span> <span class="n">frequency</span>
+
+            <span class="k">def</span> <span class="nf">error_callback</span><span class="p">(</span><span class="n">e</span><span class="p">):</span>
+                <span class="nb">print</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+
+            <span class="n">P</span> <span class="o">=</span> <span class="n">Pool</span><span class="p">()</span>
+
+            <span class="k">for</span> <span class="n">document</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">corpus</span><span class="p">:</span>
+                <span class="n">P</span><span class="o">.</span><span class="n">apply_async</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">count_terms_from_document</span><span class="p">,</span>
+                    <span class="p">[</span><span class="n">document</span><span class="p">],</span>
+                    <span class="n">callback</span><span class="o">=</span><span class="n">callback</span><span class="p">,</span>
+                    <span class="n">error_callback</span><span class="o">=</span><span class="n">error_callback</span><span class="p">,</span>
+                <span class="p">)</span>
+            <span class="n">P</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+            <span class="n">P</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>
+
+            <span class="n">P</span><span class="o">.</span><span class="n">terminate</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+                <span class="n">pbar</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">seperate</span><span class="p">:</span>
+
+            <span class="k">def</span> <span class="nf">counter_to_series</span><span class="p">(</span><span class="n">counter</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">counter</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">index</span><span class="o">=</span><span class="n">counter</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">__term_counter</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="nb">map</span><span class="p">(</span><span class="n">counter_to_series</span><span class="p">,</span> <span class="n">term_counters</span><span class="p">))</span>
+                <span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+                <span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
+                <span class="o">.</span><span class="n">T</span>
+            <span class="p">)</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__term_counter</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__term_counter</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span>
+                <span class="n">index</span><span class="o">=</span><span class="nb">tuple</span><span class="p">(</span><span class="n">term_counter</span><span class="o">.</span><span class="n">keys</span><span class="p">()),</span>
+                <span class="n">data</span><span class="o">=</span><span class="nb">tuple</span><span class="p">(</span><span class="n">term_counter</span><span class="o">.</span><span class="n">values</span><span class="p">()),</span>
+                <span class="n">dtype</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__term_counter</span></div></div>
+
+
+<div class="viewcode-block" id="add_term_extraction_method"><a class="viewcode-back" href="../../pyate.html#pyate.term_extraction.add_term_extraction_method">[docs]</a><span class="k">def</span> <span class="nf">add_term_extraction_method</span><span class="p">(</span><span class="n">extractor</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">]):</span>
+    <span class="k">def</span> <span class="nf">term_extraction_decorated</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">extractor</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">corpus</span><span class="p">,</span>
+            <span class="n">technical_counts</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">count_terms_from_documents</span><span class="p">(),</span>
+            <span class="o">*</span><span class="n">args</span><span class="p">,</span>
+            <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="nb">setattr</span><span class="p">(</span><span class="n">TermExtraction</span><span class="p">,</span> <span class="n">extractor</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">term_extraction_decorated</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">extractor</span></div>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">PATH_TO_GENERAL_DOMAIN</span> <span class="o">=</span> <span class="s2">&quot;../data/wiki_testing.pkl&quot;</span>
+    <span class="n">PATH_TO_TECHNICAL_DOMAIN</span> <span class="o">=</span> <span class="s2">&quot;../data/pmc_testing.pkl&quot;</span>
+    <span class="n">wiki</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_pickle</span><span class="p">(</span><span class="n">PATH_TO_GENERAL_DOMAIN</span><span class="p">)</span>
+    <span class="n">pmc</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_pickle</span><span class="p">(</span><span class="n">PATH_TO_TECHNICAL_DOMAIN</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span>
+        <span class="n">TermExtraction</span><span class="p">(</span><span class="n">pmc</span><span class="p">[:</span><span class="mi">100</span><span class="p">])</span><span class="o">.</span><span class="n">count_terms_from_documents</span><span class="p">(</span>
+            <span class="n">seperate</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Kevin Lu.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
