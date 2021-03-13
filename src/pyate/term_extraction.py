@@ -182,7 +182,6 @@ class TermExtraction:
             for idx, key in enumerate(self.vocab):
                 self.__trie.add_word(key, (idx, key))
             self.__trie.make_automaton()
-        assert isinstance(self.__trie, ahocorasick.Automaton)
         return self.__trie
 
     def count_terms_from_document(self, document: str):
