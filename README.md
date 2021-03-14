@@ -192,3 +192,9 @@ Web Sites](https://www.aclweb.org/anthology/J04-2002.pdf)
 Semantic Relatedness With Personalised PageRank](https://arxiv.org/pdf/1711.03373.pdf)
 * [Term extraction: A Review
 Draft Version 091221](https://www.ida.liu.se/~larah03/Publications/tereview_v2.pdf)
+
+## :closed_book: Influences on Academia
+This package was used in the paper ([Unsupervised Technical Domain Terms Extraction using Term Extractor (Dowlagar and Mamidi, 2021)](https://arxiv.org/pdf/2101.09015.pdf).
+
+## :coffee: Buy Me a Coffee
+If my work helped you, please consider buying me a coffee at https://www.buymeacoffee.com/kevinlu1248.
