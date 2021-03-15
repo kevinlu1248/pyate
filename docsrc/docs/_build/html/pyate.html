@@ -1,0 +1,433 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>pyate package &mdash; PyATE 0.4.3 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="pyate" href="modules.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> PyATE
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="general.html">General Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="termextraction.html">TermExtraction API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="termextractionpipeline.html">TermExtractionPipeline API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="algorithms.html">Algorithms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="models.html">Models</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">pyate</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">pyate package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-pyate.basic">pyate.basic module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-pyate.combo_basic">pyate.combo_basic module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-pyate.cvalues">pyate.cvalues module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-pyate.term_extraction">pyate.term_extraction module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-pyate.term_extraction_pipeline">pyate.term_extraction_pipeline module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-pyate.term_extractor">pyate.term_extractor module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-pyate.weirdness">pyate.weirdness module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-pyate">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">PyATE</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="modules.html">pyate</a> &raquo;</li>
+        
+      <li>pyate package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/pyate.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="pyate-package">
+<h1>pyate package<a class="headerlink" href="#pyate-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-pyate.basic">
+<span id="pyate-basic-module"></span><h2>pyate.basic module<a class="headerlink" href="#module-pyate.basic" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="pyate.basic.basic">
+<code class="descclassname">pyate.basic.</code><code class="descname">basic</code><span class="sig-paren">(</span><em>technical_corpus: str</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyate/basic.html#basic"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyate.basic.basic" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-pyate.combo_basic">
+<span id="pyate-combo-basic-module"></span><h2>pyate.combo_basic module<a class="headerlink" href="#module-pyate.combo_basic" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="pyate.combo_basic.combo_basic">
+<code class="descclassname">pyate.combo_basic.</code><code class="descname">combo_basic</code><span class="sig-paren">(</span><em>technical_corpus: Union[str, Sequence[str]], smoothing: float = 0.01, verbose: bool = False, have_single_word: bool = False, technical_counts: Mapping[str, int] = None, weights: Sequence[float] = None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyate/combo_basic.html#combo_basic"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyate.combo_basic.combo_basic" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="pyate.combo_basic.helper_get_subsequences">
+<code class="descclassname">pyate.combo_basic.</code><code class="descname">helper_get_subsequences</code><span class="sig-paren">(</span><em>s: str</em><span class="sig-paren">)</span> &#x2192; List[str]<a class="reference internal" href="_modules/pyate/combo_basic.html#helper_get_subsequences"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyate.combo_basic.helper_get_subsequences" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-pyate.cvalues">
+<span id="pyate-cvalues-module"></span><h2>pyate.cvalues module<a class="headerlink" href="#module-pyate.cvalues" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="pyate.cvalues.cvalues">
+<code class="descclassname">pyate.cvalues.</code><code class="descname">cvalues</code><span class="sig-paren">(</span><em>technical_corpus: Union[str, Sequence[str]], smoothing: float = 0.01, verbose: bool = False, have_single_word: bool = False, technical_counts: Mapping[str, int] = None, threshold: float = 0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyate/cvalues.html#cvalues"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyate.cvalues.cvalues" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="pyate.cvalues.helper_get_subsequences">
+<code class="descclassname">pyate.cvalues.</code><code class="descname">helper_get_subsequences</code><span class="sig-paren">(</span><em>s: str</em><span class="sig-paren">)</span> &#x2192; List[str]<a class="reference internal" href="_modules/pyate/cvalues.html#helper_get_subsequences"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyate.cvalues.helper_get_subsequences" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-pyate.term_extraction">
+<span id="pyate-term-extraction-module"></span><h2>pyate.term_extraction module<a class="headerlink" href="#module-pyate.term_extraction" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="pyate.term_extraction.TermExtraction">
+<em class="property">class </em><code class="descclassname">pyate.term_extraction.</code><code class="descname">TermExtraction</code><span class="sig-paren">(</span><em>corpus: Union[str, Iterable[str]], vocab: Sequence[str] = None, patterns=[[{'POS': 'ADJ', 'IS_PUNCT': False}], [{'POS': {'IN': ['ADJ', 'NOUN']}, 'OP': '*', 'IS_PUNCT': False}, {'POS': 'NOUN', 'IS_PUNCT': False}], [{'POS': {'IN': ['ADJ', 'NOUN']}, 'OP': '*', 'IS_PUNCT': False}, {'POS': 'NOUN', 'IS_PUNCT': False}, {'POS': 'DET', 'IS_PUNCT': False}, {'POS': {'IN': ['ADJ', 'NOUN']}, 'OP': '*', 'IS_PUNCT': False}, {'POS': 'NOUN', 'IS_PUNCT': False}]], do_parallelize: bool = True, language='en', nlp=None, default_domain=None, default_domain_size: int = None, max_word_length: int = None, dtype: numpy.dtype = None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyate/term_extraction.html#TermExtraction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyate.term_extraction.TermExtraction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="attribute">
+<dt id="pyate.term_extraction.TermExtraction.DEFAULT_GENERAL_DOMAINS">
+<code class="descname">DEFAULT_GENERAL_DOMAINS</code><em class="property"> = {}</em><a class="headerlink" href="#pyate.term_extraction.TermExtraction.DEFAULT_GENERAL_DOMAINS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="pyate.term_extraction.TermExtraction.adj">
+<code class="descname">adj</code><em class="property"> = {'IS_PUNCT': False, 'POS': 'ADJ'}</em><a class="headerlink" href="#pyate.term_extraction.TermExtraction.adj" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pyate.term_extraction.TermExtraction.basic">
+<code class="descname">basic</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#pyate.term_extraction.TermExtraction.basic" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="staticmethod">
+<dt id="pyate.term_extraction.TermExtraction.clear_resouces">
+<em class="property">static </em><code class="descname">clear_resouces</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyate/term_extraction.html#TermExtraction.clear_resouces"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyate.term_extraction.TermExtraction.clear_resouces" title="Permalink to this definition">¶</a></dt>
+<dd><p>Clears cached spaCy nlp’s and general domain documents.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyate.term_extraction.TermExtraction.combo_basic">
+<code class="descname">combo_basic</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#pyate.term_extraction.TermExtraction.combo_basic" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="pyate.term_extraction.TermExtraction.config">
+<code class="descname">config</code><em class="property"> = {'DEFAULT_GENERAL_DOMAIN_SIZE': 300, 'MAX_WORD_LENGTH': 6, 'dtype': &lt;class 'numpy.int16'&gt;, 'language': 'en', 'spacy_model': 'en_core_web_sm'}</em><a class="headerlink" href="#pyate.term_extraction.TermExtraction.config" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="staticmethod">
+<dt id="pyate.term_extraction.TermExtraction.configure">
+<em class="property">static </em><code class="descname">configure</code><span class="sig-paren">(</span><em>new_settings: Dict[str, Any]</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyate/term_extraction.html#TermExtraction.configure"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyate.term_extraction.TermExtraction.configure" title="Permalink to this definition">¶</a></dt>
+<dd><p>Updates config settings, which include:
+- <cite>spacy_model</cite>: str = “en_core_web_sm” (for changing the spacy model name to be used),
+- “language”: str = “en” (this is the default language),
+- “MAX_WORD_LENGTH”: int = 6 (this is the maximum word length to be considered a phrase),
+- “DEFAULT_GENERAL_DOMAIN_SIZE”: int = 300 (this is the number of sentences to be taken from the general domain file),
+- “dtype”: np.int16 (this is the date type for max Pandas series int size which are used as counters),</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyate.term_extraction.TermExtraction.count_terms_from_document">
+<code class="descname">count_terms_from_document</code><span class="sig-paren">(</span><em>document: str</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyate/term_extraction.html#TermExtraction.count_terms_from_document"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyate.term_extraction.TermExtraction.count_terms_from_document" title="Permalink to this definition">¶</a></dt>
+<dd><p>Counts the frequency of each term in the class and returns it as a default dict mapping each string to the number of occurences of the phrase, for each phrase in vocab.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyate.term_extraction.TermExtraction.count_terms_from_documents">
+<code class="descname">count_terms_from_documents</code><span class="sig-paren">(</span><em>seperate: bool = False</em>, <em>verbose: bool = False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyate/term_extraction.html#TermExtraction.count_terms_from_documents"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyate.term_extraction.TermExtraction.count_terms_from_documents" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is the main purpose of this class. Counts terms from the documents and returns a pandas Series.
+If self.corpus is a string, then it is identical to count_terms_from_document.
+If the corpus is an iterable (more specifically, collections.abc.Iterable) of strings, then it will perform the same thing but for each string in the iterable. If <cite>seperate</cite> is set to true, then it will return an iterable of default dicts; otherwise, it will return a single default dict with the sum of frequencies among all strings.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyate.term_extraction.TermExtraction.cvalues">
+<code class="descname">cvalues</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#pyate.term_extraction.TermExtraction.cvalues" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="staticmethod">
+<dt id="pyate.term_extraction.TermExtraction.get_general_domain">
+<em class="property">static </em><code class="descname">get_general_domain</code><span class="sig-paren">(</span><em>language: str = None</em>, <em>size: int = None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyate/term_extraction.html#TermExtraction.get_general_domain"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyate.term_extraction.TermExtraction.get_general_domain" title="Permalink to this definition">¶</a></dt>
+<dd><p>For getting a pandas Series of domains.</p>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="pyate.term_extraction.TermExtraction.get_nlp">
+<em class="property">static </em><code class="descname">get_nlp</code><span class="sig-paren">(</span><em>language: str = None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyate/term_extraction.html#TermExtraction.get_nlp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyate.term_extraction.TermExtraction.get_nlp" title="Permalink to this definition">¶</a></dt>
+<dd><p>For getting the spaCy nlp.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyate.term_extraction.TermExtraction.nlps">
+<code class="descname">nlps</code><em class="property"> = {}</em><a class="headerlink" href="#pyate.term_extraction.TermExtraction.nlps" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="pyate.term_extraction.TermExtraction.noun">
+<code class="descname">noun</code><em class="property"> = {'IS_PUNCT': False, 'POS': 'NOUN'}</em><a class="headerlink" href="#pyate.term_extraction.TermExtraction.noun" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="pyate.term_extraction.TermExtraction.patterns">
+<code class="descname">patterns</code><em class="property"> = [[{'POS': 'ADJ', 'IS_PUNCT': False}], [{'POS': {'IN': ['ADJ', 'NOUN']}, 'OP': '*', 'IS_PUNCT': False}, {'POS': 'NOUN', 'IS_PUNCT': False}], [{'POS': {'IN': ['ADJ', 'NOUN']}, 'OP': '*', 'IS_PUNCT': False}, {'POS': 'NOUN', 'IS_PUNCT': False}, {'POS': 'DET', 'IS_PUNCT': False}, {'POS': {'IN': ['ADJ', 'NOUN']}, 'OP': '*', 'IS_PUNCT': False}, {'POS': 'NOUN', 'IS_PUNCT': False}]]</em><a class="headerlink" href="#pyate.term_extraction.TermExtraction.patterns" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="pyate.term_extraction.TermExtraction.prep">
+<code class="descname">prep</code><em class="property"> = {'IS_PUNCT': False, 'POS': 'DET'}</em><a class="headerlink" href="#pyate.term_extraction.TermExtraction.prep" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="staticmethod">
+<dt id="pyate.term_extraction.TermExtraction.set_language">
+<em class="property">static </em><code class="descname">set_language</code><span class="sig-paren">(</span><em>language: str</em>, <em>model_name: str = None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyate/term_extraction.html#TermExtraction.set_language"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyate.term_extraction.TermExtraction.set_language" title="Permalink to this definition">¶</a></dt>
+<dd><p>For changing the language. Currently, the DEFAULT_GENERAL_DOMAIN is still in English and Italian only. If you have a good dataset in another language please put it in an issue on Github.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyate.term_extraction.TermExtraction.term_extractor">
+<code class="descname">term_extractor</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#pyate.term_extraction.TermExtraction.term_extractor" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="pyate.term_extraction.TermExtraction.trie">
+<code class="descname">trie</code><a class="headerlink" href="#pyate.term_extraction.TermExtraction.trie" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns an automaton using the Aho–Corasick algorithm using the pyachocorasick library (<a class="reference external" href="https://pypi.org/project/pyahocorasick/">https://pypi.org/project/pyahocorasick/</a>).
+This method builds the automaton the first time and caches it for future use.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyate.term_extraction.TermExtraction.weirdness">
+<code class="descname">weirdness</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#pyate.term_extraction.TermExtraction.weirdness" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="staticmethod">
+<dt id="pyate.term_extraction.TermExtraction.word_length">
+<em class="property">static </em><code class="descname">word_length</code><span class="sig-paren">(</span><em>string: str</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyate/term_extraction.html#TermExtraction.word_length"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyate.term_extraction.TermExtraction.word_length" title="Permalink to this definition">¶</a></dt>
+<dd><p>Utility function for quickly computing the number of words in a string.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="pyate.term_extraction.add_term_extraction_method">
+<code class="descclassname">pyate.term_extraction.</code><code class="descname">add_term_extraction_method</code><span class="sig-paren">(</span><em>extractor: Callable[[...], pandas.core.series.Series]</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyate/term_extraction.html#add_term_extraction_method"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyate.term_extraction.add_term_extraction_method" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-pyate.term_extraction_pipeline">
+<span id="pyate-term-extraction-pipeline-module"></span><h2>pyate.term_extraction_pipeline module<a class="headerlink" href="#module-pyate.term_extraction_pipeline" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="pyate.term_extraction_pipeline.TermExtractionPipeline">
+<em class="property">class </em><code class="descclassname">pyate.term_extraction_pipeline.</code><code class="descname">TermExtractionPipeline</code><span class="sig-paren">(</span><em>nlp, func: Callable[[...], pandas.core.series.Series] = &lt;function combo_basic&gt;, force: bool = True, *args, **kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyate/term_extraction_pipeline.html#TermExtractionPipeline"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyate.term_extraction_pipeline.TermExtractionPipeline" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>This is for adding PyATE as a spaCy pipeline component.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-pyate.term_extractor">
+<span id="pyate-term-extractor-module"></span><h2>pyate.term_extractor module<a class="headerlink" href="#module-pyate.term_extractor" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="pyate.term_extractor.term_extractor">
+<code class="descclassname">pyate.term_extractor.</code><code class="descname">term_extractor</code><span class="sig-paren">(</span><em>technical_corpus: Union[str, Sequence[str]], general_corpus: Union[str, Sequence[str]] = None, general_corpus_size=300, weights: Sequence[float] = None, verbose: bool = False, technical_counts: Mapping[str, int] = None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyate/term_extractor.html#term_extractor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyate.term_extractor.term_extractor" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-pyate.weirdness">
+<span id="pyate-weirdness-module"></span><h2>pyate.weirdness module<a class="headerlink" href="#module-pyate.weirdness" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="pyate.weirdness.weirdness">
+<code class="descclassname">pyate.weirdness.</code><code class="descname">weirdness</code><span class="sig-paren">(</span><em>technical_corpus: Union[str, Sequence[str]], general_corpus: Union[str, Sequence[str]] = None, general_corpus_size=300, normalized: bool = False, technical_counts: Mapping[str, int] = None, verbose: bool = False</em><span class="sig-paren">)</span> &#x2192; pandas.core.series.Series<a class="reference internal" href="_modules/pyate/weirdness.html#weirdness"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyate.weirdness.weirdness" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-pyate">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-pyate" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="modules.html" class="btn btn-neutral float-left" title="pyate" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Kevin Lu.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
