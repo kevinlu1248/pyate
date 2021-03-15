@@ -15,7 +15,7 @@ def weirdness(
     technical_counts: Mapping[str, int] = None,
     verbose: bool = False,
 ) -> pd.Series:
-    # http://ceur-ws.org/Vol-1031/paper3.pdf
+    """The weirdness algorithm (Fedorenko, Astrakhantsev and Turdakov, 2013 from http://ceur-ws.org/Vol-1031/paper3.pdf)."""
 
     if general_corpus is None:
         general_corpus = TermExtraction.get_general_domain()

@@ -10,6 +10,7 @@ from .term_extraction import TermExtraction, add_term_extraction_method, Corpus
 
 
 def helper_get_subsequences(s: str) -> List[str]:
+    """Helper function to get all subsequences of a string."""
     sequence = s.split()
     if len(sequence) <= 2:
         return []
@@ -31,7 +32,7 @@ def combo_basic(
     technical_counts: Mapping[str, int] = None,
     weights: Sequence[float] = None,
 ):
-
+    """The ComboBasic algorithm (Astrakhantsev, 2016, from https://arxiv.org/abs/1611.07804)."""
     if technical_counts is None:
         technical_counts = (
             TermExtraction(technical_corpus)

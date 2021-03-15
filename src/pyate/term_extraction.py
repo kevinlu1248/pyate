@@ -35,7 +35,7 @@ class TermExtraction:
         "language": "en",
         "MAX_WORD_LENGTH": 6,
         "DEFAULT_GENERAL_DOMAIN_SIZE": 300,
-        "dtype": np.int16,
+        "dtype": np.uint16,
     }
 
     # Resources, will get more if necessary
@@ -154,7 +154,7 @@ class TermExtraction:
         - "language": str = "en" (this is the default language),
         - "MAX_WORD_LENGTH": int = 6 (this is the maximum word length to be considered a phrase),
         - "DEFAULT_GENERAL_DOMAIN_SIZE": int = 300 (this is the number of sentences to be taken from the general domain file),
-        - "dtype": np.int16 (this is the date type for max Pandas series int size which are used as counters),
+        - "dtype": np.uint16 (this is the date type for max Pandas series int size which are used as counters),
         """
         TermExtraction.config.update(new_settings)
         if not TermExtraction.config["model_name"].startswith(
@@ -292,6 +292,9 @@ class TermExtraction:
 
 
 def add_term_extraction_method(extractor: Callable[..., pd.Series]):
+    """
+    Adds a method to the TermExtraction class. Rarely called by the user. For example, running add_term_extraction_method(combo_basic) would add the 'combo_basic' attribute to the TermExtraction class, so that TermExtraction(some_corpus).combo_basic could be called. This is for optimization, since if combo_basic is ran multiple times it would only count the number of terms once.
+    """
     def term_extraction_decorated(self, *args, **kwargs):
         return extractor(
             self.corpus,

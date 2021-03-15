@@ -14,5 +14,5 @@ __init__.py
 .pytest__cache
 .coverage
 coverage.xml
-docs
 _docbuild
+doctrees

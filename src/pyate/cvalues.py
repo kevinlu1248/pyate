@@ -12,6 +12,7 @@ from .term_extraction import TermExtraction
 
 
 def helper_get_subsequences(s: str) -> List[str]:
+    """Helper function to get subsequences from a string."""
     sequence = s.split()
     if len(sequence) <= 2:
         return []
@@ -33,7 +34,7 @@ def cvalues(
     technical_counts: Mapping[str, int] = None,
     threshold: float = 0,
 ):
-
+    """The C-value algorithm (Frantzi, Ananiado and Mima, 2000 from https://www.researchgate.net/publication/220387502_Automatic_Recognition_of_Multi-word_Terms_The_C-value_NC-value_Method)."""
     if technical_counts is None:
         technical_counts = (
             TermExtraction(technical_corpus)

@@ -17,7 +17,7 @@ def term_extractor(
     verbose: bool = False,
     technical_counts: Mapping[str, int] = None,
 ):
-
+    """The TermExtractor algorithm (Sclano and Velardi 2007, from https://link.springer.com/chapter/10.1007/978-1-84628-858-6_32)."""
     if general_corpus is None:
         general_corpus = TermExtraction.get_general_domain()
 
