@@ -17,7 +17,6 @@ from spacy.matcher import Matcher
 
 start_ = 0
 tmp = 0
-doctime, matchertime = 0, 0
 Corpus = Union[str, Sequence[str]]
 
 
@@ -26,7 +25,7 @@ class TermExtraction:
     noun, adj, prep = (
         {"POS": "NOUN", "IS_PUNCT": False},
         {"POS": "ADJ", "IS_PUNCT": False},
-        {"POS": "DET", "IS_PUNCT": False},
+        {"POS": "ADP", "IS_PUNCT": False}
     )
 
     # Global settings for all instances of TermExtraction
@@ -41,7 +40,8 @@ class TermExtraction:
     # Resources, will get more if necessary
     nlps: Dict[str, Any] = {}
     DEFAULT_GENERAL_DOMAINS: Dict[Tuple[str, int], Any] = {}
-
+    
+    # The pattern to check against for filtering term candidates (Ahrenberg, L. (2009). Term extraction : A Review Draft Version 091221. retrieved from https://www.semanticscholar.org/paper/Term-extraction-%3A-A-Review-Draft-Version-091221-Ahrenberg/f032f744813345b8b57f2780b4df951e4fa6d22a).
     patterns = [
         [adj],
         [{"POS": {"IN": ["ADJ", "NOUN"]}, "OP": "*", "IS_PUNCT": False}, noun],
@@ -49,6 +49,7 @@ class TermExtraction:
             {"POS": {"IN": ["ADJ", "NOUN"]}, "OP": "*", "IS_PUNCT": False},
             noun,
             prep,
+            {"POS": "DET", "OP": "?", "IS_PUNCT": False},
             {"POS": {"IN": ["ADJ", "NOUN"]}, "OP": "*", "IS_PUNCT": False},
             noun,
         ],
