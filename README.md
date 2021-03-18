@@ -12,6 +12,8 @@
 
 Python implementation of term extraction algorithms such as C-Value, Basic, Combo Basic, Weirdness and Term Extractor using spaCy POS tagging.
 
+NEW: Documentation can be found at https://kevinlu1248.github.io/pyate/. The documentation so far is still missing two algorithms and details about the `TermExtraction` class but I will have it done soon.
+
 If you have a suggestion for another ATE algorithm you would like implemented in this package feel free to file it as an issue with the paper the algorithm is based on.
 
 For ATE packages implemented in Scala and Java, see [ATR4S](https://github.com/ispras/atr4s) and [JATE](https://github.com/ziqizhang/jate), respectively.
@@ -20,36 +22,6 @@ For ATE packages implemented in Scala and Java, see [ATR4S](https://github.com/i
 Using pip:
 ```bash
 pip install pyate https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-2.2.5/en_core_web_sm-2.2.5.tar.gz
-```
-
-### Models
-Though this model was originally intended for symbolic AI algorithms (non-machine learning), I realized a spaCy model on term extraction can reach significantly higher performance, and thus decided to include the model here. 
-
-For a comparison with the symbolic AI algorithms, see [Precision](https://github.com/kevinlu1248/pyate#dart-precision). Note that only the F-Score, accuracy and precision was taken here yet for the model, but for the algorithms the AvP was taken so directly comparing the metrics would not really make sense.
-
-| URL | F-Score (%) | Precision (%) | Recall (%) |
-| ------------- | ------------- | ------------- | ------------- |
-| https://github.com/kevinlu1248/pyate/releases/download/v0.4.2/en_acl_terms_sm-2.0.4.tar.gz  | 94.71 | 95.41 | 94.03 |
-
-The model was trained and evaluated on the [ACL dataset](http://pars.ie/lr/acl-rd-tec-terminology/_acl_arc_comp), which is a computer science oriented dataset where the terms are manually picked. This has not yet been tested on other fields yet, however. 
-
-This model does not come with PyATE. To install, run 
-
-```bash
-pip install https://github.com/kevinlu1248/pyate/releases/download/v0.4.2/en_acl_terms_sm-2.0.4.tar.gz
-```
-
-To extract terms,
-
-```python3
-import spacy
-
-nlp = spacy.load("en_acl_terms_sm")
-doc = nlp("Hello world, I am a term extraction algorithm.")
-print(doc.ents)
-"""
-(term extraction, algorithm)
-"""
 ```
 
 ## :rocket: Quickstart
@@ -155,6 +127,36 @@ To add more languages, file an issue with a corpus of at least 3000 paragraphs o
 ```
 
 Alternatively, place the file in `src/pyate` and file a pull request.
+
+### Models
+Though this model was originally intended for symbolic AI algorithms (non-machine learning), I realized a spaCy model on term extraction can reach significantly higher performance, and thus decided to include the model here. 
+
+For a comparison with the symbolic AI algorithms, see [Precision](https://github.com/kevinlu1248/pyate#dart-precision). Note that only the F-Score, accuracy and precision was taken here yet for the model, but for the algorithms the AvP was taken so directly comparing the metrics would not really make sense.
+
+| URL | F-Score (%) | Precision (%) | Recall (%) |
+| ------------- | ------------- | ------------- | ------------- |
+| https://github.com/kevinlu1248/pyate/releases/download/v0.4.2/en_acl_terms_sm-2.0.4.tar.gz  | 94.71 | 95.41 | 94.03 |
+
+The model was trained and evaluated on the [ACL dataset](http://pars.ie/lr/acl-rd-tec-terminology/_acl_arc_comp), which is a computer science oriented dataset where the terms are manually picked. This has not yet been tested on other fields yet, however. 
+
+This model does not come with PyATE. To install, run 
+
+```bash
+pip install https://github.com/kevinlu1248/pyate/releases/download/v0.4.2/en_acl_terms_sm-2.0.4.tar.gz
+```
+
+To extract terms,
+
+```python3
+import spacy
+
+nlp = spacy.load("en_acl_terms_sm")
+doc = nlp("Hello world, I am a term extraction algorithm.")
+print(doc.ents)
+"""
+(term extraction, algorithm)
+"""
+```
 
 ## :dart: Precision
 Here is the average precision of some of the implemented algorithms using the Average Precision (AvP) metric on seven distinct databases, as tested in Astrakhantsev 2016.
