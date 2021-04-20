@@ -61,7 +61,6 @@ def cvalues(
         index=technical_counts.index,
     )
 
-    # print(df)
     output = []
     indices = set(df.index)
 
@@ -73,9 +72,10 @@ def cvalues(
         if length == TermExtraction.config["MAX_WORD_LENGTH"]:
             c_val = math.log2(length + smoothing) * f
         else:
-            c_val = math.log2(length + smoothing) * f
+            c_val = f
             if h:
                 c_val -= t / n
+            c_val *= math.log2(length + smoothing)
         if c_val >= threshold:
             output.append((candidate, c_val))
             for substring in helper_get_subsequences(candidate):
