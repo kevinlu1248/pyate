@@ -16,6 +16,8 @@ NEW: Documentation can be found at https://kevinlu1248.github.io/pyate/. The doc
 
 If you have a suggestion for another ATE algorithm you would like implemented in this package feel free to file it as an issue with the paper the algorithm is based on.
 
+NOTE: Only spaCy v2 is currently supported. I am currently trying to integrate spaCy v3.
+
 For ATE packages implemented in Scala and Java, see [ATR4S](https://github.com/ispras/atr4s) and [JATE](https://github.com/ziqizhang/jate), respectively.
 
 ## :tada: Installation
