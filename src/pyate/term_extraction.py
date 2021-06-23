@@ -64,7 +64,8 @@ class TermExtraction:
             language = TermExtraction.language
         if language not in TermExtraction.nlps:
             TermExtraction.nlps[language] = spacy.load(
-                TermExtraction.config["spacy_model"], parser=False, entity=False
+                TermExtraction.config["spacy_model"],
+                disable=["parser", "entity"]
             )
         return TermExtraction.nlps[language]
 
