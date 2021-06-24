@@ -43,7 +43,8 @@ def test_algs_cached():
     # initiating te:
     start = time.time()
     te = TermExtraction(CORPUS)
-    print(f"Time to generate TermExtraction object: {time.time() - start:.5f}s")
+    print(
+        f"Time to generate TermExtraction object: {time.time() - start:.5f}s")
     start_of_counting = time.time()
     te.count_terms_from_documents()
     print(f"Time to count terms: {time.time() - start_of_counting:.5f}s")
