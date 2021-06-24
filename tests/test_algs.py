@@ -1,7 +1,8 @@
 import time
 
-from pyate import basic, combo_basic, cvalues, weirdness, term_extractor, TermExtraction
 import spacy
+from pyate import (TermExtraction, basic, combo_basic, cvalues, term_extractor,
+                   weirdness)
 
 # CORPUS = "Hello world! I am a term extractor"
 # source: https://www.ncbi.nlm.nih.gov/pmc/articles/PMC1994795/

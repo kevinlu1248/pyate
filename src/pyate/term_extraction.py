@@ -1,19 +1,19 @@
 # term_extraction.py
 
 import collections.abc
+import warnings
 from collections import defaultdict
 from multiprocessing import Pool
-from typing import Callable, Iterable, Sequence, Union, Tuple, Any, Dict
-import warnings
+from typing import Any, Callable, Dict, Iterable, Sequence, Tuple, Union
 
 import ahocorasick
 import numpy as np
 import pandas as pd
 import pkg_resources
+from spacy.matcher import Matcher
 from tqdm import tqdm
 
 import spacy
-from spacy.matcher import Matcher
 
 start_ = 0
 tmp = 0
