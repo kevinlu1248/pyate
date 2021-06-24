@@ -1,6 +1,6 @@
 import time
 
-from pyate import basic, combo_basic, cvalues, weirdness, term_extractor, TermExtraction, TermExtractionPipeline
+from pyate import basic, combo_basic, cvalues, weirdness, term_extractor, TermExtraction
 import spacy
 
 # CORPUS = "Hello world! I am a term extractor"
@@ -58,7 +58,6 @@ def test_pipelines():
     print("Testing algorithms in pipelines:")
     start = time.time()
     for func in ALGORITHMS:
-
         def decorated_algorithm(*args, **kwargs):
             start_of_alg = time.time()
             result = func(*args, **kwargs)
@@ -67,7 +66,8 @@ def test_pipelines():
             )
             return result
 
-        nlp.add_pipe(TermExtractionPipeline(nlp, func))
+        # nlp.add_pipe(TermExtractionPipeline(nlp, func))
+        nlp.add_pipe(func.__name__)
     nlp(CORPUS)
     print(f"Total time elapsed: {time.time() - start:.5f}s\n")
 

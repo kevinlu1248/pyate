@@ -5,9 +5,35 @@ import pandas as pd
 from spacy.tokens import Doc
 
 from .combo_basic import combo_basic
+from .basic import basic
+from .term_extractor import term_extractor
+from .weirdness import weirdness 
+from .cvalues import cvalues
+
 from .term_extraction import TermExtraction
 from spacy.matcher import Matcher
+from spacy.language import Language
 
+MAPPING_TO_FUNCTION = {
+    "combo_basic": combo_basic,
+    "basic": basic,
+    "term_extractor": term_extractor,
+    "weirdness": weirdness,
+    "cvalues": cvalues
+}
+
+for key, value in MAPPING_TO_FUNCTION.items():
+    @Language.factory(
+        key,
+        # "term_extraction_pipeline",
+        default_config={
+            "force": True,
+            "args": [],
+            "kwargs": {}
+        }
+    )
+    def term_extraction_pipeline(nlp: Language, name: str, force, args, kwargs):
+        return TermExtractionPipeline(nlp, value, force, *args, **kwargs)
 
 class TermExtractionPipeline:
     """
@@ -42,7 +68,7 @@ class TermExtractionPipeline:
                 self.term_counter[candidate] += 1
 
         for i, pattern in enumerate(TermExtraction.patterns):
-            self.matcher.add("term{}".format(i), add_to_counter, pattern)
+            self.matcher.add("term{}".format(i), [pattern], on_match=add_to_counter)
 
     def __call__(self, doc: Doc):
         """
@@ -58,3 +84,5 @@ class TermExtractionPipeline:
         )
         setattr(doc._, self.__name__, terms)
         return doc
+
+

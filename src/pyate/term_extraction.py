@@ -203,7 +203,7 @@ class TermExtraction:
                     term_counter[candidate] += 1
 
             for i, pattern in enumerate(self.patterns):
-                new_matcher.add("term{}".format(i), add_to_counter, pattern)
+                new_matcher.add("term{}".format(i), [pattern], on_match=add_to_counter)
 
             doc = self.nlp(document.lower(), disable=["parser", "ner"])
             new_matcher(doc)
