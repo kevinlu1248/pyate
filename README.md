@@ -14,7 +14,7 @@ Python implementation of term extraction algorithms such as C-Value, Basic, Comb
 
 NEW: Documentation can be found at https://kevinlu1248.github.io/pyate/. The documentation so far is still missing two algorithms and details about the `TermExtraction` class but I will have it done soon.
 
-NEW: spaCy V3 is supported! For spaCy V2, use `pyate==0.4.3`
+NEW: spaCy V3 is supported! For spaCy V2, use `pyate==0.4.3` and view the [spaCy V2 README.md file](README-spacy-v2.md)
 
 If you have a suggestion for another ATE algorithm you would like implemented in this package feel free to file it as an issue with the paper the algorithm is based on.
 
