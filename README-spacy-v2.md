@@ -1,5 +1,5 @@
 <h1 align="center">
-PyATE: Python Automated Term Extraction
+PyATE: Python Automated Term Extraction (for spaCy V2)
 </h1>
   
 [![Build Status](https://travis-ci.com/kevinlu1248/pyate.svg?branch=master)](https://travis-ci.com/kevinlu1248/pyate)
