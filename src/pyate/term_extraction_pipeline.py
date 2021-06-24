@@ -7,7 +7,7 @@ from spacy.tokens import Doc
 from .combo_basic import combo_basic
 from .basic import basic
 from .term_extractor import term_extractor
-from .weirdness import weirdness 
+from .weirdness import weirdness
 from .cvalues import cvalues
 
 from .term_extraction import TermExtraction
@@ -35,10 +35,12 @@ for key, value in MAPPING_TO_FUNCTION.items():
     def term_extraction_pipeline(nlp: Language, name: str, force, args, kwargs):
         return TermExtractionPipeline(nlp, value, force, *args, **kwargs)
 
+
 class TermExtractionPipeline:
     """
     This is for adding PyATE as a spaCy pipeline component.
     """
+
     def __init__(
         self,
         nlp,
@@ -68,7 +70,8 @@ class TermExtractionPipeline:
                 self.term_counter[candidate] += 1
 
         for i, pattern in enumerate(TermExtraction.patterns):
-            self.matcher.add("term{}".format(i), [pattern], on_match=add_to_counter)
+            self.matcher.add("term{}".format(
+                i), [pattern], on_match=add_to_counter)
 
     def __call__(self, doc: Doc):
         """
@@ -84,5 +87,3 @@ class TermExtractionPipeline:
         )
         setattr(doc._, self.__name__, terms)
         return doc
-
-

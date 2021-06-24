@@ -40,7 +40,7 @@ class TermExtraction:
     # Resources, will get more if necessary
     nlps: Dict[str, Any] = {}
     DEFAULT_GENERAL_DOMAINS: Dict[Tuple[str, int], Any] = {}
-    
+
     # The pattern to check against for filtering term candidates (Ahrenberg, L. (2009). Term extraction : A Review Draft Version 091221. retrieved from https://www.semanticscholar.org/paper/Term-extraction-%3A-A-Review-Draft-Version-091221-Ahrenberg/f032f744813345b8b57f2780b4df951e4fa6d22a).
     patterns = [
         [adj],
@@ -129,7 +129,8 @@ class TermExtraction:
         if self.nlp is None:
             self.nlp = TermExtraction.get_nlp(self.language)
         if self.default_domain is None:
-            self.default_domain = TermExtraction.get_general_domain(self.language)
+            self.default_domain = TermExtraction.get_general_domain(
+                self.language)
         if self.max_word_length is None:
             self.max_word_length = TermExtraction.config["MAX_WORD_LENGTH"]
         if self.dtype is None:
@@ -203,7 +204,8 @@ class TermExtraction:
                     term_counter[candidate] += 1
 
             for i, pattern in enumerate(self.patterns):
-                new_matcher.add("term{}".format(i), [pattern], on_match=add_to_counter)
+                new_matcher.add("term{}".format(
+                    i), [pattern], on_match=add_to_counter)
 
             doc = self.nlp(document.lower(), disable=["parser", "ner"])
             new_matcher(doc)
@@ -297,6 +299,7 @@ def add_term_extraction_method(extractor: Callable[..., pd.Series]):
     """
     Adds a method to the TermExtraction class. Rarely called by the user. For example, running add_term_extraction_method(combo_basic) would add the 'combo_basic' attribute to the TermExtraction class, so that TermExtraction(some_corpus).combo_basic could be called. This is for optimization, since if combo_basic is ran multiple times it would only count the number of terms once.
     """
+
     def term_extraction_decorated(self, *args, **kwargs):
         return extractor(
             self.corpus,
