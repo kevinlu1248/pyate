@@ -11,15 +11,15 @@
 [![Built with spaCy](https://img.shields.io/badge/made%20with%20❤%20and-spaCy-09a3d5.svg)](https://spacy.io)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
+NOTE: this is the introduction for spaCy V2, which is only accessible via
+`pyate<=0.4.3`, which uses different syntax for custom spaCy pipelines
+
 Python implementation of term extraction algorithms such as C-Value, Basic,
 Combo Basic, Weirdness and Term Extractor using spaCy POS tagging.
 
 NEW: Documentation can be found at https://kevinlu1248.github.io/pyate/. The
 documentation so far is still missing two algorithms and details about the
 `TermExtraction` class but I will have it done soon.
-
-NEW: spaCy V3 is supported! For spaCy V2, use `pyate==0.4.3` and view the
-[spaCy V2 README.md file](README-spacy-v2.md)
 
 If you have a suggestion for another ATE algorithm you would like implemented in
 this package feel free to file it as an issue with the paper the algorithm is
@@ -92,7 +92,7 @@ import spacy
 from pyate.term_extraction_pipeline import TermExtractionPipeline
 
 nlp = spacy.load("en_core_web_sm")
-nlp.add_pipe("combo_basic")
+nlp.add_pipe(TermExtractionPipeline())
 doc = nlp(string)
 print(doc._.combo_basic.sort_values(ascending=False).head(5))
 """ (Output)
