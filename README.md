@@ -71,7 +71,7 @@ import spacy
 from pyate.term_extraction_pipeline import TermExtractionPipeline
 
 nlp = spacy.load("en_core_web_sm")
-nlp.add_pipe(TermExtractionPipeline())
+nlp.add_pipe("combo_basic")
 doc = nlp(string)
 print(doc._.combo_basic.sort_values(ascending=False).head(5))
 """ (Output)
