@@ -2,27 +2,27 @@ from collections import defaultdict
 from typing import Callable
 
 import pandas as pd
-from spacy.tokens import Doc
 
-from .combo_basic import combo_basic
 from .basic import basic
-from .term_extractor import term_extractor
-from .weirdness import weirdness 
+from .combo_basic import combo_basic
 from .cvalues import cvalues
-
 from .term_extraction import TermExtraction
-from spacy.matcher import Matcher
+from .term_extractor import term_extractor
+from .weirdness import weirdness
 from spacy.language import Language
+from spacy.matcher import Matcher
+from spacy.tokens import Doc
 
 MAPPING_TO_FUNCTION = {
     "combo_basic": combo_basic,
     "basic": basic,
     "term_extractor": term_extractor,
     "weirdness": weirdness,
-    "cvalues": cvalues
+    "cvalues": cvalues,
 }
 
 for key, value in MAPPING_TO_FUNCTION.items():
+
     @Language.factory(
         key,
         # "term_extraction_pipeline",
@@ -30,23 +30,23 @@ for key, value in MAPPING_TO_FUNCTION.items():
             "force": True,
             "args": [],
             "kwargs": {}
-        }
+        },
     )
-    def term_extraction_pipeline(nlp: Language, name: str, force, args, kwargs):
+    def term_extraction_pipeline(nlp: Language, name: str, force, args,
+                                 kwargs):
         return TermExtractionPipeline(nlp, value, force, *args, **kwargs)
+
 
 class TermExtractionPipeline:
     """
     This is for adding PyATE as a spaCy pipeline component.
     """
-    def __init__(
-        self,
-        nlp,
-        func: Callable[..., pd.Series] = combo_basic,
-        force: bool = True,
-        *args,
-        **kwargs
-    ) -> None:
+    def __init__(self,
+                 nlp,
+                 func: Callable[..., pd.Series] = combo_basic,
+                 force: bool = True,
+                 *args,
+                 **kwargs) -> None:
         """
         This is for initializing the TermExtractionPipeline.
         """
@@ -61,14 +61,13 @@ class TermExtractionPipeline:
         def add_to_counter(matcher, doc, i, matches) -> Doc:
             match_id, start, end = matches[i]
             candidate = str(doc[start:end])
-            if (
-                TermExtraction.word_length(candidate)
-                <= TermExtraction.config["MAX_WORD_LENGTH"]
-            ):
+            if (TermExtraction.word_length(candidate) <=
+                    TermExtraction.config["MAX_WORD_LENGTH"]):
                 self.term_counter[candidate] += 1
 
         for i, pattern in enumerate(TermExtraction.patterns):
-            self.matcher.add("term{}".format(i), [pattern], on_match=add_to_counter)
+            self.matcher.add("term{}".format(i), [pattern],
+                             on_match=add_to_counter)
 
     def __call__(self, doc: Doc):
         """
@@ -76,13 +75,9 @@ class TermExtractionPipeline:
         """
         self.term_counter = defaultdict(int)
         self.matcher(doc)
-        terms = self.func(
-            str(doc),
-            technical_counts=pd.Series(self.term_counter),
-            *self.args,
-            **self.kwargs
-        )
+        terms = self.func(str(doc),
+                          technical_counts=pd.Series(self.term_counter),
+                          *self.args,
+                          **self.kwargs)
         setattr(doc._, self.__name__, terms)
         return doc
-
-
