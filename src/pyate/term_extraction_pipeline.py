@@ -2,9 +2,6 @@ from collections import defaultdict
 from typing import Callable
 
 import pandas as pd
-from spacy.language import Language
-from spacy.matcher import Matcher
-from spacy.tokens import Doc
 
 from .basic import basic
 from .combo_basic import combo_basic
@@ -12,6 +9,9 @@ from .cvalues import cvalues
 from .term_extraction import TermExtraction
 from .term_extractor import term_extractor
 from .weirdness import weirdness
+from spacy.language import Language
+from spacy.matcher import Matcher
+from spacy.tokens import Doc
 
 MAPPING_TO_FUNCTION = {
     "combo_basic": combo_basic,
