@@ -37,8 +37,7 @@ def test_algs_cached():
     # initiating te:
     start = time.time()
     te = TermExtraction(CORPUS)
-    print(
-        f"Time to generate TermExtraction object: {time.time() - start:.5f}s")
+    print(f"Time to generate TermExtraction object: {time.time() - start:.5f}s")
     start_of_counting = time.time()
     te.count_terms_from_documents()
     print(f"Time to count terms: {time.time() - start_of_counting:.5f}s")
@@ -59,6 +58,7 @@ def test_pipelines():
     print("Testing algorithms in pipelines:")
     start = time.time()
     for func in ALGORITHMS:
+
         def decorated_algorithm(*args, **kwargs):
             start_of_alg = time.time()
             result = func(*args, **kwargs)

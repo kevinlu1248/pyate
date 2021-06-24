@@ -19,18 +19,15 @@ MAPPING_TO_FUNCTION = {
     "basic": basic,
     "term_extractor": term_extractor,
     "weirdness": weirdness,
-    "cvalues": cvalues
+    "cvalues": cvalues,
 }
 
 for key, value in MAPPING_TO_FUNCTION.items():
+
     @Language.factory(
         key,
         # "term_extraction_pipeline",
-        default_config={
-            "force": True,
-            "args": [],
-            "kwargs": {}
-        }
+        default_config={"force": True, "args": [], "kwargs": {}},
     )
     def term_extraction_pipeline(nlp: Language, name: str, force, args, kwargs):
         return TermExtractionPipeline(nlp, value, force, *args, **kwargs)
@@ -70,8 +67,7 @@ class TermExtractionPipeline:
                 self.term_counter[candidate] += 1
 
         for i, pattern in enumerate(TermExtraction.patterns):
-            self.matcher.add("term{}".format(
-                i), [pattern], on_match=add_to_counter)
+            self.matcher.add("term{}".format(i), [pattern], on_match=add_to_counter)
 
     def __call__(self, doc: Doc):
         """

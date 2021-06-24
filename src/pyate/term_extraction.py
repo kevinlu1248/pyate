@@ -25,7 +25,7 @@ class TermExtraction:
     noun, adj, prep = (
         {"POS": "NOUN", "IS_PUNCT": False},
         {"POS": "ADJ", "IS_PUNCT": False},
-        {"POS": "ADP", "IS_PUNCT": False}
+        {"POS": "ADP", "IS_PUNCT": False},
     )
 
     # Global settings for all instances of TermExtraction
@@ -64,8 +64,7 @@ class TermExtraction:
             language = TermExtraction.language
         if language not in TermExtraction.nlps:
             TermExtraction.nlps[language] = spacy.load(
-                TermExtraction.config["spacy_model"],
-                disable=["parser", "entity"]
+                TermExtraction.config["spacy_model"], disable=["parser", "entity"]
             )
         return TermExtraction.nlps[language]
 
@@ -129,8 +128,7 @@ class TermExtraction:
         if self.nlp is None:
             self.nlp = TermExtraction.get_nlp(self.language)
         if self.default_domain is None:
-            self.default_domain = TermExtraction.get_general_domain(
-                self.language)
+            self.default_domain = TermExtraction.get_general_domain(self.language)
         if self.max_word_length is None:
             self.max_word_length = TermExtraction.config["MAX_WORD_LENGTH"]
         if self.dtype is None:
@@ -204,8 +202,7 @@ class TermExtraction:
                     term_counter[candidate] += 1
 
             for i, pattern in enumerate(self.patterns):
-                new_matcher.add("term{}".format(
-                    i), [pattern], on_match=add_to_counter)
+                new_matcher.add("term{}".format(i), [pattern], on_match=add_to_counter)
 
             doc = self.nlp(document.lower(), disable=["parser", "ner"])
             new_matcher(doc)
