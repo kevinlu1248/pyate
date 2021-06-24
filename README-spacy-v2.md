@@ -10,13 +10,13 @@
 [![Built with spaCy](https://img.shields.io/badge/made%20with%20❤%20and-spaCy-09a3d5.svg)](https://spacy.io)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
+NOTE: this is the introduction for spaCy V2, which is only accessible via `pyate<=0.4.3`, which uses different syntax for custom spaCy pipelines
+
 Python implementation of term extraction algorithms such as C-Value, Basic, Combo Basic, Weirdness and Term Extractor using spaCy POS tagging.
 
 NEW: Documentation can be found at https://kevinlu1248.github.io/pyate/. The documentation so far is still missing two algorithms and details about the `TermExtraction` class but I will have it done soon.
 
 If you have a suggestion for another ATE algorithm you would like implemented in this package feel free to file it as an issue with the paper the algorithm is based on.
-
-NOTE: Only spaCy v2 is currently supported. I am currently trying to integrate spaCy v3.
 
 For ATE packages implemented in Scala and Java, see [ATR4S](https://github.com/ispras/atr4s) and [JATE](https://github.com/ziqizhang/jate), respectively.
 
