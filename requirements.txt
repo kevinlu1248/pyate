@@ -16,7 +16,6 @@ cymem==2.0.3
 distlib==0.3.0
 distro==1.4.0
 docutils==0.16
-en-core-web-sm==3.0.0
 html5lib==1.0.1
 idna==2.9
 importlib-metadata==1.6.0
@@ -61,6 +60,7 @@ SecretStorage==3.1.2
 six==1.14.0
 smart-open==3.0.0
 spacy==3.0.0
+https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.0.0/en_core_web_sm-3.0.0.tar.gz#egg=en_core_web_sm
 spacy-legacy==3.0.6
 srsly==2.4.1
 thinc==8.0.6
