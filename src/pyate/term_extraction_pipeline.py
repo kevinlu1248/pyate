@@ -24,13 +24,13 @@ MAPPING_TO_FUNCTION = {
 
 for key, value in MAPPING_TO_FUNCTION.items():
 
-    def create_term_extraction_component(nlp: Language, name: str, force, args, kwargs, value=value):
-        return TermExtractionPipeline(nlp, value, force, *args, **kwargs)
+    def create_term_extraction_component(nlp: Language, name: str, force, args, kwargs, local_value=value):
+        # fix based on Cell variable defined in loop (PYL-W0640)
+        return TermExtractionPipeline(nlp, local_value, force, *args, **kwargs)
 
     Language.factory(
         key,
         func=copy.copy(create_term_extraction_component),
-        # "term_extraction_pipeline",
         default_config={
             "force": True,
             "args": [],
