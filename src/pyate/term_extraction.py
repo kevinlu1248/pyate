@@ -44,7 +44,7 @@ class TermExtraction:
 
     # Global settings for all instances of TermExtraction
     config = {
-        "spacy_model": "en_core_web_sm",
+        "model_name": "en_core_web_sm",
         "language": "en",
         "MAX_WORD_LENGTH": 6,
         "DEFAULT_GENERAL_DOMAIN_SIZE": 300,
@@ -100,7 +100,7 @@ class TermExtraction:
             language = TermExtraction.language
         if language not in TermExtraction.nlps:
             TermExtraction.nlps[language] = spacy.load(
-                TermExtraction.config["spacy_model"],
+                TermExtraction.config["model_name"],
                 disable=["parser", "entity"])
         return TermExtraction.nlps[language]
 
@@ -187,7 +187,7 @@ class TermExtraction:
     def configure(new_settings: Dict[str, Any]):
         """
         Updates config settings, which include:
-        - `spacy_model`: str = "en_core_web_sm" (for changing the spacy model name to be used),
+        - `model_name`: str = "en_core_web_sm" (for changing the spacy model name to be used),
         - "language": str = "en" (this is the default language),
         - "MAX_WORD_LENGTH": int = 6 (this is the maximum word length to be considered a phrase),
         - "DEFAULT_GENERAL_DOMAIN_SIZE": int = 300 (this is the number of sentences to be taken from the general domain file),
