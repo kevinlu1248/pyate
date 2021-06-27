@@ -76,7 +76,9 @@ def test_pipelines():
 
         # nlp.add_pipe(TermExtractionPipeline(nlp, func))
         nlp.add_pipe(func.__name__)
-    nlp(CORPUS)
+    doc = nlp(CORPUS)
+    for func in ALGORITHMS:
+        print(getattr(doc._, func.__name__))
     print(f"Total time elapsed: {time.time() - start:.5f}s\n")
 
 

@@ -1,5 +1,6 @@
 from collections import defaultdict
 from typing import Callable
+import copy
 
 import pandas as pd
 
@@ -23,8 +24,12 @@ MAPPING_TO_FUNCTION = {
 
 for key, value in MAPPING_TO_FUNCTION.items():
 
-    @Language.factory(
+    def create_term_extraction_component(nlp: Language, name: str, force, args, kwargs, value=value):
+        return TermExtractionPipeline(nlp, value, force, *args, **kwargs)
+
+    Language.factory(
         key,
+        func=copy.copy(create_term_extraction_component),
         # "term_extraction_pipeline",
         default_config={
             "force": True,
@@ -32,9 +37,6 @@ for key, value in MAPPING_TO_FUNCTION.items():
             "kwargs": {}
         },
     )
-    def term_extraction_pipeline(nlp: Language, name: str, force, args,
-                                 kwargs):
-        return TermExtractionPipeline(nlp, value, force, *args, **kwargs)
 
 
 class TermExtractionPipeline:
