@@ -1,16 +1,20 @@
-# PYthon Automated Term Extraction
-
+<h1 align="center">
+PyATE: Python Automated Term Extraction (for spaCy V2)
+</h1>
+  
 [![Build Status](https://travis-ci.com/kevinlu1248/pyate.svg?branch=master)](https://travis-ci.com/kevinlu1248/pyate)
 [![PyPI pyversions](https://img.shields.io/pypi/pyversions/pyate.svg)](https://pypi.python.org/pypi/pyate/)
 [![PyPI version fury.io](https://badge.fury.io/py/pyate.svg)](https://pypi.python.org/pypi/pyate/)
+
 [![Downloads](https://pepy.tech/badge/pyate)](https://pepy.tech/project/pyate)
 [![Downloads](https://pepy.tech/badge/pyate/month)](https://pepy.tech/project/pyate/month)
 [![Downloads](https://pepy.tech/badge/pyate/week)](https://pepy.tech/project/pyate/week)
-[![HitCount](http://hits.dwyl.com/kevinlu1248/pyate.svg)](http://hits.dwyl.com/kevinlu1248/pyate)
+<!-- [![HitCount](http://hits.dwyl.com/kevinlu1248/pyate.svg)](http://hits.dwyl.com/kevinlu1248/pyate) -->
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 [![Built with spaCy](https://img.shields.io/badge/made%20with%20❤%20and-spaCy-09a3d5.svg)](https://spacy.io)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
+  
 NOTE: this is the introduction for spaCy V2, which is only accessible via
 `pyate<=0.4.3`, which uses different syntax for custom spaCy pipelines
 
