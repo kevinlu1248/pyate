@@ -119,7 +119,7 @@ class TermExtraction:
                     pkg_resources.resource_stream(
                         __name__, f"default_general_domain.{language}.csv"),
                     nrows=size,
-                )
+                )["SECTION_TEXT"]
         return TermExtraction.DEFAULT_GENERAL_DOMAINS[(language, size)]
 
     @staticmethod
@@ -251,7 +251,8 @@ class TermExtraction:
 
     def count_terms_from_documents(self,
                                    seperate: bool = False,
-                                   verbose: bool = False):
+                                   verbose: bool = False,
+                                   doAsync: bool = True):
         """
         This is the main purpose of this class. Counts terms from the documents and returns a pandas Series.
         If self.corpus is a string, then it is identical to count_terms_from_document.
@@ -288,21 +289,27 @@ class TermExtraction:
                         term_counter[term] += frequency
 
             def error_callback(e):
-                print(e)
+                print("Error: " + e)
 
-            P = Pool()
+            if doAsync:
+                P = Pool()
 
-            for document in self.corpus:
-                P.apply_async(
-                    self.count_terms_from_document,
-                    [document],
-                    callback=callback,
-                    error_callback=error_callback,
-                )
-            P.close()
-            P.join()
+                for document in self.corpus:
+                    P.apply_async(
+                        self.count_terms_from_document,
+                        [document],
+                        callback=callback,
+                        error_callback=error_callback,
+                    )
+                P.close()
+                P.join()
 
-            P.terminate()
+                P.terminate()
+            else:
+                for document in self.corpus:
+                    counts = self.count_terms_from_document(document)
+                    callback(counts)
+
             if verbose:
                 pbar.close()
         else:
