@@ -295,7 +295,12 @@ incorporates several algorithms not in this package.
 - [SemRe-Rank: Improving Automatic Term Extraction By Incorporating Semantic Relatedness With Personalised PageRank](https://arxiv.org/pdf/1711.03373.pdf)
 - [Term extraction: A Review Draft Version 091221](https://www.ida.liu.se/~larah03/Publications/tereview_v2.pdf)
 
-## :closed_book: Influences on Academia
+## :closed_book: Academia
+
+### Citing
+If you publish work that uses PyATE, please let me know at kevinlu1248@gmail.com.
+
+### Influences on Academia
 
 This package was used in the paper
 ([Unsupervised Technical Domain Terms Extraction using Term Extractor (Dowlagar and Mamidi, 2021)](https://arxiv.org/pdf/2101.09015.pdf).
