@@ -3,6 +3,7 @@ PyATE: Python Automated Term Extraction
 </h1>
   
 [![Build Status](https://travis-ci.com/kevinlu1248/pyate.svg?branch=master)](https://travis-ci.com/kevinlu1248/pyate)
+[![Documentation Status](https://readthedocs.org/projects/ansicolortags/badge/?version=latest)](http://kevinlu1248.github.io/pyate)
 [![PyPI pyversions](https://img.shields.io/pypi/pyversions/pyate.svg)](https://pypi.python.org/pypi/pyate/)
 [![PyPI version fury.io](https://badge.fury.io/py/pyate.svg)](https://pypi.python.org/pypi/pyate/)
 
@@ -21,6 +22,8 @@ Combo Basic, Weirdness and Term Extractor using spaCy POS tagging.
 NEW: Documentation can be found at https://kevinlu1248.github.io/pyate/. The
 documentation so far is still missing two algorithms and details about the
 `TermExtraction` class but I will have it done soon.
+
+NEW: Try the algorithms out at https://pyate-demo.herokuapp.com/, a web app for demonstrating PyATE!
 
 NEW: spaCy V3 is supported! For spaCy V2, use `pyate==0.4.3` and view the
 [spaCy V2 README.md file](README-spacy-v2.md)
