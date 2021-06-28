@@ -304,16 +304,13 @@ Lu, Kevin. (2021, June 28). kevinlu1248/pyate: Python Automated Term Extraction 
 ```
 or equivalently with Bibtext:
 ```
-@article{lu,
+@software{pyate,
 	title        = {kevinlu1248/pyate: Python Automated Term Extraction},
 	author       = {Lu, Kevin},
 	year         = 2021,
 	month        = {Jun},
 	publisher    = {Zenodo},
-	doi          = {10.5281/zenodo.5039289},
-	note         = {To download and use PyATE, use pip instead. This release is for uploading this project to Zenodo, generating a DOI so that PyATE can be cited.},
-	kevin_2021,
-	abstractnote = {<p>PyATE is a Python implementation of term extraction algorithms such as C-Value, Basic, Combo Basic, Weirdness and Term Extractor using spaCy POS tagging.</p> <p>PyATE extracts term candidates from natural languages and assigns each of the candidates&nbsp;a &quot;termhood&quot;, a float which can be interpreted as the relative confidence of the candidate being a term.</p> <p>A distinction needs to be made between &quot;keywords&quot; and &quot;terms&quot;. Terms are technical and often specific to a domain and often includes jargon while keywords are mainly for categorizing documents. Formally,&nbsp;&ldquo;a term is the designation of a defined concept in a special language by a linguistic expression. A term may consist of one or more words.&quot; (ISO 1087)</p> <p>Documentation can be found at&nbsp;https://kevinlu1248.github.io/pyate/ and a web app demonstrating the algorithms can be found at&nbsp;https://pyate-demo.herokuapp.com/.</p>}
+	doi          = {10.5281/zenodo.5039289}
 }
 ```
 
