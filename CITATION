@@ -1,0 +1,8 @@
+@software{pyate,
+	title        = {kevinlu1248/pyate: Python Automated Term Extraction},
+	author       = {Lu, Kevin},
+	year         = 2021,
+	month        = {Jun},
+	publisher    = {Zenodo},
+	doi          = {10.5281/zenodo.5039289}
+}
