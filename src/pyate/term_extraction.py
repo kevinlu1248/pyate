@@ -247,7 +247,7 @@ class TermExtraction:
             for end_index, (insert_order, original_value) in self.trie.iter(
                     document.lower()):
                 term_counter[original_value] += 1
-        return term_counter
+        return dict(term_counter)
 
     def count_terms_from_documents(self,
                                    seperate: bool = False,
@@ -260,6 +260,7 @@ class TermExtraction:
         """
         # TODO: further optimize
         # TODO: add type annotations
+
         if hasattr(self, "_TermExtraction__term_counts"):
             return self.__term_counts
 
@@ -289,7 +290,7 @@ class TermExtraction:
                         term_counter[term] += frequency
 
             def error_callback(e):
-                print("Error: " + e)
+                print("Error: " + str(e))
 
             if doAsync:
                 P = Pool()
