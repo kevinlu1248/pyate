@@ -261,6 +261,9 @@ class TermExtraction:
         # TODO: further optimize
         # TODO: add type annotations
 
+        # Temporary fix, will fix later
+        doAsync = False
+
         if hasattr(self, "_TermExtraction__term_counts"):
             return self.__term_counts
 
