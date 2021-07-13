@@ -28,15 +28,16 @@ def test_lang(lang):
     Tests language change.
     """
     print(f"Testing algorithms for language {lang}:")
-    testfile = os.path.join(
-        os.path.dirname(__file__), os.path.join("data", lang + ".txt")
-    )
+    testfile = os.path.join(os.path.dirname(__file__),
+                            os.path.join("data", lang + ".txt"))
     with open(testfile, "r") as fin:
         CORPUS = fin.read()
         start = time.time()
-        TermExtraction.configure(
-            {"language": lang, "model_name": MODELS[lang], "MAX_WORD_LENGTH": 8}
-        )
+        TermExtraction.configure({
+            "language": lang,
+            "model_name": MODELS[lang],
+            "MAX_WORD_LENGTH": 8
+        })
         try:
             TermExtraction.get_nlp(lang)
             for func in ALGORITHMS:
