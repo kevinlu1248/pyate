@@ -3,12 +3,8 @@ import time
 
 import pytest as pytest
 
-from pyate import TermExtraction
-from pyate import basic
-from pyate import combo_basic
-from pyate import cvalues
-from pyate import term_extractor
-from pyate import weirdness
+from pyate import (TermExtraction, basic, combo_basic, cvalues, term_extractor,
+                   weirdness)
 
 MODELS = {
     "en": "en_core_web_sm",
