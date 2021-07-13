@@ -140,7 +140,7 @@ class TermExtraction:
                         __name__, f"default_general_domain.{language}.zip"),
                     compression='zip',
                     nrows=size,
-                )["SECTION_TEXT"]
+            )["SECTION_TEXT"]
         return TermExtraction.DEFAULT_GENERAL_DOMAINS[(language, size)]
 
     @staticmethod
@@ -293,7 +293,7 @@ class TermExtraction:
         if type(self.corpus) is str:
             self.__term_counts = pd.Series(self.count_terms_from_document(
                 self.corpus),
-                                           dtype=self.dtype)
+                dtype=self.dtype)
             return self.__term_counts
         elif isinstance(self.corpus, collections.abc.Iterable):
             if seperate:
@@ -366,6 +366,7 @@ def add_term_extraction_method(extractor: Callable[..., pd.Series]):
     """
     Adds a method to the TermExtraction class. Rarely called by the user. For example, running add_term_extraction_method(combo_basic) would add the 'combo_basic' attribute to the TermExtraction class, so that TermExtraction(some_corpus).combo_basic could be called. This is for optimization, since if combo_basic is ran multiple times it would only count the number of terms once.
     """
+
     def term_extraction_decorated(self, *args, **kwargs):
         return extractor(
             self.corpus,
