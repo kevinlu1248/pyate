@@ -1,7 +1,7 @@
 <h1 align="center">
 PyATE: Python Automated Term Extraction
 </h1>
-  
+
 [![Build Status](https://travis-ci.com/kevinlu1248/pyate.svg?branch=master)](https://travis-ci.com/kevinlu1248/pyate)
 [![Documentation Status](https://readthedocs.org/projects/ansicolortags/badge/?version=latest)](http://kevinlu1248.github.io/pyate)
 [![PyPI pyversions](https://img.shields.io/pypi/pyversions/pyate.svg)](https://pypi.python.org/pypi/pyate/)
