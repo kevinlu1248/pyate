@@ -3,14 +3,12 @@ import time
 
 import pytest as pytest
 
+from pyate import TermExtraction
 from pyate import basic
 from pyate import combo_basic
 from pyate import cvalues
 from pyate import term_extractor
-from pyate import TermExtraction
 from pyate import weirdness
-
-import spacy
 
 MODELS = {
     "en": "en_core_web_sm",
@@ -37,7 +35,7 @@ def test_lang(lang):
         start = time.time()
         TermExtraction.configure({"language": lang, "model_name": MODELS[lang], "MAX_WORD_LENGTH": 8})
         try:
-            nlp = TermExtraction.get_nlp(lang)
+            TermExtraction.get_nlp(lang)
             for func in ALGORITHMS:
                 result = func(CORPUS)
                 print(
@@ -45,5 +43,5 @@ def test_lang(lang):
                 )
                 print(result.sort_values(ascending=False).head(10))
             print(f"Total time elapsed: {time.time() - start:.5f}s\n")
-        except:
+        except IOError:
             print(f"You need to install the missing model with: python -m spacy download {MODELS[lang]}")
