@@ -233,7 +233,7 @@
         <span class="k">if</span> <span class="p">(</span><span class="n">language</span><span class="p">,</span> <span class="n">size</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">TermExtraction</span><span class="o">.</span><span class="n">DEFAULT_GENERAL_DOMAINS</span><span class="p">:</span>
             <span class="n">TermExtraction</span><span class="o">.</span><span class="n">DEFAULT_GENERAL_DOMAINS</span><span class="p">[(</span><span class="n">language</span><span class="p">,</span> <span class="n">size</span><span class="p">)]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span>
                 <span class="n">pkg_resources</span><span class="o">.</span><span class="n">resource_stream</span><span class="p">(</span>
-                    <span class="vm">__name__</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;default_general_domain.</span><span class="si">{</span><span class="n">language</span><span class="si">}</span><span class="s2">.csv&quot;</span>
+                    <span class="vm">__name__</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;default_general_domain.</span><span class="si">{</span><span class="n">language</span><span class="si">}</span><span class="s2">.zip&quot;</span>
                 <span class="p">),</span>
                 <span class="n">nrows</span><span class="o">=</span><span class="n">size</span><span class="p">,</span>
             <span class="p">)</span>

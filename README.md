@@ -150,7 +150,7 @@ all different.
 
 ### General Corpus
 
-Under `path/to/site-packages/pyate/default_general_domain.en.csv`, there is a
+Under `path/to/site-packages/pyate/default_general_domain.en.zip`, there is a
 general CSV file of a general corpus, specifically, 3000 random sentences from
 Wikipedia. The source of it can be found at
 https://www.kaggle.com/mikeortman/wikipedia-sentences. Access it using it using
@@ -159,7 +159,7 @@ the following after installing `pyate`.
 ```python3
 import pandas as pd
 from distutils.sysconfig import get_python_lib
-df = pd.read_csv(get_python_lib() + "/pyate/default_general_domain.en.csv")["SECTION_TEXT"]
+df = pd.read_csv(get_python_lib() + "/pyate/default_general_domain.en.zip")["SECTION_TEXT"]
 print(df.head())
 """ (Output)
 0    '''Anarchism''' is a political philosophy that...
@@ -177,12 +177,20 @@ For switching languages, simply run
 `Term_Extraction.set_language({language}, {model_name})`, where `model_name`
 defaults to `language`. For example,
 `Term_Extraction.set_language("it", "it_core_news_sm"})` for Italian. By
-default, the language is English. So far, only _English_ (en) and _Italian_ (it)
-are supported.
+default, the language is English.
+So far, the list of supported languages is:
+- _English_ (en)
+- _Dutch_ (nl)
+- _French_ (fr)
+- _German_ (de)
+- _Italian_ (it)
+- _Portuguese_ (pt)
+- _Russian_ (ru)
+- _Spanish_ (es)
 
 To add more languages, file an issue with a corpus of at least 3000 paragraphs
 of a general domain in the desired language (preferably wikipedia) named
-`default_general_domain.{lang}.csv` replacing lang with the ISO-639-1 code of
+`default_general_domain.{lang}.zip` replacing lang with the ISO-639-1 code of
 the language, or the ISO-639-2 if the language does not have a ISO-639-1 code
 (can be found at https://www.loc.gov/standards/iso639-2/php/code_list.php). The
 file format should be of the following form to be parsable by Pandas.

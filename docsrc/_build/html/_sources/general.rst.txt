@@ -10,7 +10,7 @@ All functions only take the string of which you would like to extract terms from
 
 General Corpus
 ########
-Under path/to/site-packages/pyate/default_general_domain.en.csv, there is a general CSV file of a general corpus, specifically, 3000 random sentences from Wikipedia. The source of it can be found at https://www.kaggle.com/mikeortman/wikipedia-sentences. Access it using it using the following after installing pyate.
+Under path/to/site-packages/pyate/default_general_domain.en.zip, there is a general CSV file of a general corpus, specifically, 3000 random sentences from Wikipedia. The source of it can be found at https://www.kaggle.com/mikeortman/wikipedia-sentences. Access it using it using the following after installing pyate.
 
 ::
      
@@ -30,7 +30,7 @@ Other Languages
 ########
 For switching languages, simply run TermExtraction.set_language({language}, {model_name}), where model_name defaults to language. For example, Term_Extraction.set_language("it", "it_core_news_sm"}) for Italian. By default, the language is English. So far, only English (en) and Italian (it) are supported.
 
-To add more languages, file an issue with a corpus of at least 3000 paragraphs of a general domain in the desired language (preferably wikipedia) named default_general_domain.{lang}.csv replacing lang with the ISO-639-1 code of the language, or the ISO-639-2 if the language does not have a ISO-639-1 code (can be found at https://www.loc.gov/standards/iso639-2/php/code_list.php). The file format should be of the following form to be parsable by Pandas.
+To add more languages, file an issue with a corpus of at least 3000 paragraphs of a general domain in the desired language (preferably wikipedia) named default_general_domain.{lang}.zip replacing lang with the ISO-639-1 code of the language, or the ISO-639-2 if the language does not have a ISO-639-1 code (can be found at https://www.loc.gov/standards/iso639-2/php/code_list.php). The file format should be of the following form to be parsable by Pandas.
 
 ::
     

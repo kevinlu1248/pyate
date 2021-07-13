@@ -22,7 +22,7 @@ setup(
     ],  # Keywords that define your package best
     packages=find_packages(where="src"),
     package_dir={"": "src"},
-    package_data={"": ["*.csv"]},
+    package_data={"": ["*.csv", "*.zip"]},
     install_requires=[
         "pandas>=1.0.3",
         "numpy>=1.18.4",

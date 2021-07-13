@@ -15,10 +15,9 @@ import ahocorasick
 import numpy as np
 import pandas as pd
 import pkg_resources
-from tqdm import tqdm
-
 import spacy
 from spacy.matcher import Matcher
+from tqdm import tqdm
 
 start_ = 0
 tmp = 0
@@ -89,6 +88,27 @@ class TermExtraction:
             },
             noun,
         ],
+        [
+            {
+                "POS": {
+                    "IN": ["ADJ", "NOUN"]
+                },
+                "IS_PUNCT": False
+            },
+            {
+                "POS": {
+                    "IN": ["ADJ", "NOUN", "DET", "ADP"]
+                },
+                "OP": "*",
+                "IS_PUNCT": False
+            },
+            {
+                "POS": {
+                    "IN": ["ADJ", "NOUN"]
+                },
+                "IS_PUNCT": False
+            },
+        ],
     ]
 
     @staticmethod
@@ -117,7 +137,8 @@ class TermExtraction:
             TermExtraction.DEFAULT_GENERAL_DOMAINS[(
                 language, size)] = pd.read_csv(
                     pkg_resources.resource_stream(
-                        __name__, f"default_general_domain.{language}.csv"),
+                        __name__, f"default_general_domain.{language}.zip"),
+                    compression='zip',
                     nrows=size,
                 )["SECTION_TEXT"]
         return TermExtraction.DEFAULT_GENERAL_DOMAINS[(language, size)]
@@ -136,7 +157,7 @@ class TermExtraction:
         vocab: Sequence[str] = None,
         patterns=patterns,
         do_parallelize: bool = True,
-        language="en",
+        language=None,
         nlp=None,
         default_domain=None,
         default_domain_size: int = None,
@@ -157,6 +178,9 @@ class TermExtraction:
         self.default_domain_size = default_domain_size
         self.max_word_length = max_word_length
         self.dtype = dtype
+        if self.language is None:
+            self.language = TermExtraction.config[
+                "language"]
         if self.default_domain_size is None:
             self.default_domain_size = TermExtraction.config[
                 "DEFAULT_GENERAL_DOMAIN_SIZE"]
@@ -233,8 +257,7 @@ class TermExtraction:
             def add_to_counter(matcher, doc, i, matches):
                 match_id, start, end = matches[i]
                 candidate = str(doc[start:end])
-                if TermExtraction.word_length(
-                        candidate) <= self.max_word_length:
+                if end - start <= self.max_word_length:
                     term_counter[candidate] += 1
 
             for i, pattern in enumerate(self.patterns):
