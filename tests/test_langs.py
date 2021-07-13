@@ -18,7 +18,7 @@ MODELS = {
     "es": "es_core_news_sm",
     "ru": "ru_core_news_sm",
     "nl": "nl_core_news_sm",
-    "pt": "pt_core_news_sm"
+    "pt": "pt_core_news_sm",
 }
 ALGORITHMS = (basic, combo_basic, cvalues, weirdness, term_extractor)
 
@@ -29,13 +29,15 @@ def test_lang(lang):
     Tests language change.
     """
     print(f"Testing algorithms for language {lang}:")
-    testfile = os.path.join(os.path.dirname(__file__),
-                            os.path.join('data', lang + '.txt'))
+    testfile = os.path.join(
+        os.path.dirname(__file__), os.path.join("data", lang + ".txt")
+    )
     with open(testfile, "r") as fin:
         CORPUS = fin.read()
         start = time.time()
         TermExtraction.configure(
-            {"language": lang, "model_name": MODELS[lang], "MAX_WORD_LENGTH": 8})
+            {"language": lang, "model_name": MODELS[lang], "MAX_WORD_LENGTH": 8}
+        )
         try:
             TermExtraction.get_nlp(lang)
             for func in ALGORITHMS:
@@ -47,4 +49,5 @@ def test_lang(lang):
             print(f"Total time elapsed: {time.time() - start:.5f}s\n")
         except IOError:
             print(
-                f"You need to install the missing model with: python -m spacy download {MODELS[lang]}")
+                f"You need to install the missing model with: python -m spacy download {MODELS[lang]}"
+            )
