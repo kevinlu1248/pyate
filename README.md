@@ -1,7 +1,7 @@
 <h1 align="center">
 PyATE: Python Automated Term Extraction
 </h1>
-  
+
 [![Build Status](https://travis-ci.com/kevinlu1248/pyate.svg?branch=master)](https://travis-ci.com/kevinlu1248/pyate)
 [![Documentation Status](https://readthedocs.org/projects/ansicolortags/badge/?version=latest)](http://kevinlu1248.github.io/pyate)
 [![PyPI pyversions](https://img.shields.io/pypi/pyversions/pyate.svg)](https://pypi.python.org/pypi/pyate/)
@@ -10,12 +10,14 @@ PyATE: Python Automated Term Extraction
 [![Downloads](https://pepy.tech/badge/pyate)](https://pepy.tech/project/pyate)
 [![Downloads](https://pepy.tech/badge/pyate/month)](https://pepy.tech/project/pyate/month)
 [![Downloads](https://pepy.tech/badge/pyate/week)](https://pepy.tech/project/pyate/week)
+
 <!-- [![HitCount](http://hits.dwyl.com/kevinlu1248/pyate.svg)](http://hits.dwyl.com/kevinlu1248/pyate) -->
+
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 [![Built with spaCy](https://img.shields.io/badge/made%20with%20❤%20and-spaCy-09a3d5.svg)](https://spacy.io)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.5039289.svg)](https://doi.org/10.5281/zenodo.5039289)
-  
+
 Python implementation of term extraction algorithms such as C-Value, Basic,
 Combo Basic, Weirdness and Term Extractor using spaCy POS tagging.
 
@@ -23,7 +25,8 @@ NEW: Documentation can be found at https://kevinlu1248.github.io/pyate/. The
 documentation so far is still missing two algorithms and details about the
 `TermExtraction` class but I will have it done soon.
 
-NEW: Try the algorithms out at https://pyate-demo.herokuapp.com/, a web app for demonstrating PyATE!
+NEW: Try the algorithms out at https://pyate-demo.herokuapp.com/, a web app for
+demonstrating PyATE!
 
 NEW: spaCy V3 is supported! For spaCy V2, use `pyate==0.4.3` and view the
 [spaCy V2 README.md file](README-spacy-v2.md)
@@ -150,7 +153,7 @@ all different.
 
 ### General Corpus
 
-Under `path/to/site-packages/pyate/default_general_domain.en.csv`, there is a
+Under `path/to/site-packages/pyate/default_general_domain.en.zip`, there is a
 general CSV file of a general corpus, specifically, 3000 random sentences from
 Wikipedia. The source of it can be found at
 https://www.kaggle.com/mikeortman/wikipedia-sentences. Access it using it using
@@ -159,7 +162,7 @@ the following after installing `pyate`.
 ```python3
 import pandas as pd
 from distutils.sysconfig import get_python_lib
-df = pd.read_csv(get_python_lib() + "/pyate/default_general_domain.en.csv")["SECTION_TEXT"]
+df = pd.read_csv(get_python_lib() + "/pyate/default_general_domain.en.zip")["SECTION_TEXT"]
 print(df.head())
 """ (Output)
 0    '''Anarchism''' is a political philosophy that...
@@ -177,12 +180,20 @@ For switching languages, simply run
 `Term_Extraction.set_language({language}, {model_name})`, where `model_name`
 defaults to `language`. For example,
 `Term_Extraction.set_language("it", "it_core_news_sm"})` for Italian. By
-default, the language is English. So far, only _English_ (en) and _Italian_ (it)
-are supported.
+default, the language is English. So far, the list of supported languages is:
+
+- _English_ (en)
+- _Dutch_ (nl)
+- _French_ (fr)
+- _German_ (de)
+- _Italian_ (it)
+- _Portuguese_ (pt)
+- _Russian_ (ru)
+- _Spanish_ (es)
 
 To add more languages, file an issue with a corpus of at least 3000 paragraphs
 of a general domain in the desired language (preferably wikipedia) named
-`default_general_domain.{lang}.csv` replacing lang with the ISO-639-1 code of
+`default_general_domain.{lang}.zip` replacing lang with the ISO-639-1 code of
 the language, or the ISO-639-2 if the language does not have a ISO-639-1 code
 (can be found at https://www.loc.gov/standards/iso639-2/php/code_list.php). The
 file format should be of the following form to be parsable by Pandas.
@@ -298,11 +309,16 @@ incorporates several algorithms not in this package.
 ## :closed_book: Academia
 
 ### Citing
-If you publish work that uses PyATE, please let me know at kevinlu1248@gmail.com and cite as:
+
+If you publish work that uses PyATE, please let me know at kevinlu1248@gmail.com
+and cite as:
+
 ```
 Lu, Kevin. (2021, June 28). kevinlu1248/pyate: Python Automated Term Extraction (Version v0.5.3). Zenodo. http://doi.org/10.5281/zenodo.5039289
 ```
+
 or equivalently with Bibtext:
+
 ```
 @software{pyate,
 	title        = {kevinlu1248/pyate: Python Automated Term Extraction},
