@@ -18,8 +18,7 @@ def weirdness(
     """The weirdness algorithm (Fedorenko, Astrakhantsev and Turdakov, 2013 from http://ceur-ws.org/Vol-1031/paper3.pdf)."""
 
     if general_corpus is None:
-        general_corpus = TermExtraction.get_general_domain(
-            size=general_corpus_size)
+        general_corpus = TermExtraction.get_general_domain(size=general_corpus_size)
 
     if technical_counts is None:
         # this is the bulk of the calculations
@@ -29,8 +28,7 @@ def weirdness(
     general_counts = TermExtraction(
         general_corpus, technical_counts.index
     ).count_terms_from_documents()
-    technical_word_count = TermExtraction.word_length(
-        "\n".join(technical_corpus))
+    technical_word_count = TermExtraction.word_length("\n".join(technical_corpus))
     general_word_count = TermExtraction.word_length("\n".join(general_corpus))
 
     zero_division_preventer = pd.Series(index=technical_counts.index, data=1)
