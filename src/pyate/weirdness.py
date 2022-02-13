@@ -1,9 +1,10 @@
 # weirdness.py
 
 from typing import Mapping
+
 import pandas as pd
 
-from .term_extraction import TermExtraction, add_term_extraction_method, Corpus
+from .term_extraction import Corpus, TermExtraction, add_term_extraction_method
 
 
 @add_term_extraction_method
