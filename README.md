@@ -44,7 +44,8 @@ For ATE packages implemented in Scala and Java, see
 Using pip:
 
 ```bash
-pip install pyate https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-2.2.5/en_core_web_sm-2.2.5.tar.gz
+pip install pyate 
+spacy download en_core_web_sm
 ```
 
 ## :rocket: Quickstart
