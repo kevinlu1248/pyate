@@ -59,7 +59,7 @@ def combo_basic(
         {
             "xlogx_score": technical_counts.reset_index()
             .apply(
-                lambda s: math.log(TermExtraction.word_length(s["index"])) * s[0],
+                lambda s: math.log(TermExtraction.word_length(s["index"])) * math.log(s[0]),
                 axis=1,
             )
             .values,
