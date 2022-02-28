@@ -18,7 +18,7 @@ def weirdness(
     """The weirdness algorithm (Fedorenko, Astrakhantsev and Turdakov, 2013 from http://ceur-ws.org/Vol-1031/paper3.pdf)."""
 
     if general_corpus is None:
-        general_corpus = TermExtraction.get_general_domain()
+        general_corpus = TermExtraction.get_general_domain(size = general_corpus_size)
 
     if technical_counts is None:
         # this is the bulk of the calculations
