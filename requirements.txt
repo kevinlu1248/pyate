@@ -29,7 +29,7 @@ MarkupSafe==2.0.1
 more-itertools==8.5.0
 msgpack==0.6.2
 murmurhash==1.0.2
-numpy==1.18.4
+numpy==1.21.0
 packaging==20.3
 pandas==1.0.3
 pathy==0.5.2
