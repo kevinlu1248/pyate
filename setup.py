@@ -7,7 +7,7 @@ with open("README.md", "r", encoding="utf8") as f:
 setup(
     name="pyate",
     version=
-    "0.5.3",  # Start with a small number and increase it with every change you make
+    "0.5.5",  # Start with a small number and increase it with every change you make
     license=
     "MIT",  # Chose a license from here: https://help.github.com/articles/licensing-a-repository
     # Give a short description about your library
@@ -26,7 +26,7 @@ setup(
     ],  # Keywords that define your package best
     packages=find_packages(where="src"),
     package_dir={"": "src"},
-    package_data={"": ["*.csv", "*.zip"]},
+    package_data={"": ["*.zip"]},
     install_requires=[
         "pandas>=1.0.3",
         "numpy>=1.18.4",
