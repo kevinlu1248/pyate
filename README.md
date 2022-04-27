@@ -210,6 +210,8 @@ Alternatively, place the file in `src/pyate` and file a pull request.
 
 ### Models
 
+*Warning: The model only works with spaCy v2.*
+
 Though this model was originally intended for symbolic AI algorithms
 (non-machine learning), I realized a spaCy model on term extraction can reach
 significantly higher performance, and thus decided to include the model here.
