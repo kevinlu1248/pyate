@@ -6,8 +6,10 @@ with open("README.md", "r", encoding="utf8") as f:
 
 setup(
     name="pyate",
-    version="0.5.5",  # Start with a small number and increase it with every change you make
-    license="MIT",  # Chose a license from here: https://help.github.com/articles/licensing-a-repository
+    version=
+    "0.5.5",  # Start with a small number and increase it with every change you make
+    license=
+    "MIT",  # Chose a license from here: https://help.github.com/articles/licensing-a-repository
     # Give a short description about your library
     description="PYthon Automated Term Extraction",
     long_description=long_description,
