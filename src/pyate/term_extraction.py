@@ -138,7 +138,7 @@ class TermExtraction:
             TermExtraction.DEFAULT_GENERAL_DOMAINS[(
                 language, size)] = pd.read_csv(
                     pkg_resources.resource_stream(
-                        __name__, f"default_general_domain.{language}.zip"),
+                        __name__, f"resources/default_general_domain.{language}.zip"),
                     compression="zip",
                     nrows=size,
                 )["SECTION_TEXT"]
