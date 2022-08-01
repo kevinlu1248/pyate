@@ -138,7 +138,8 @@ class TermExtraction:
             TermExtraction.DEFAULT_GENERAL_DOMAINS[(
                 language, size)] = pd.read_csv(
                     pkg_resources.resource_stream(
-                        __name__, f"default_general_domain.{language}.zip"),
+                        __name__,
+                        f"resources/default_general_domain.{language}.zip"),
                     compression="zip",
                     nrows=size,
                 )["SECTION_TEXT"]
@@ -366,6 +367,7 @@ def add_term_extraction_method(extractor: Callable[..., pd.Series]):
     """
     Adds a method to the TermExtraction class. Rarely called by the user. For example, running add_term_extraction_method(combo_basic) would add the 'combo_basic' attribute to the TermExtraction class, so that TermExtraction(some_corpus).combo_basic could be called. This is for optimization, since if combo_basic is ran multiple times it would only count the number of terms once.
     """
+
     def term_extraction_decorated(self, *args, **kwargs):
         return extractor(
             self.corpus,
