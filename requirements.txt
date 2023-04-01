@@ -68,7 +68,7 @@ toml==0.10.1
 tqdm==4.46.0
 twine==3.1.1
 typer==0.3.2
-urllib3==1.25.9
+urllib3==1.26.5
 wasabi==0.8.2
 webencodings==0.5.1
 zipp==3.1.0
